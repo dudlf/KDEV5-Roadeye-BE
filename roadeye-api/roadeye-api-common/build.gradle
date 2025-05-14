@@ -1,6 +1,4 @@
 dependencies {
-    api project(":roadeye-api:roadeye-api-common")
-
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
