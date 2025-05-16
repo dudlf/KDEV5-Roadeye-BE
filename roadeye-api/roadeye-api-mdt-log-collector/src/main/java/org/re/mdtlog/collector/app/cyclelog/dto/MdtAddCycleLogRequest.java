@@ -16,12 +16,15 @@ import java.util.List;
 
 public record MdtAddCycleLogRequest(
     @JsonProperty("mdn")
+    @NotNull
     String carId,
 
     @JsonProperty("tid")
+    @NotNull
     String terminalId,
 
     @JsonProperty("mid")
+    @NotNull
     String manufacturerId,
 
     @JsonProperty("pv")
@@ -30,10 +33,12 @@ public record MdtAddCycleLogRequest(
     int packetVersion,
 
     @JsonProperty("did")
+    @NotNull
     String deviceId,
 
     @JsonProperty("oTime")
     @JsonFormat(pattern = "yyyyMMddHHmm")
+    @NotNull
     LocalDateTime occurredAt,
 
     @JsonProperty("cCnt")
@@ -80,16 +85,19 @@ public record MdtAddCycleLogRequest(
 
         @JsonProperty("gcd")
         @JsonDeserialize(using = MdtLogGpsConditionDeserializer.class)
+        @NotNull
         MdtLogGpsCondition gpsCondition,
 
         @JsonProperty("lat")
         @DecimalMin(value = "-90.0")
         @DecimalMax(value = "90.0")
+        @NotNull
         BigDecimal gpsLatitude,
 
         @JsonProperty("lon")
         @DecimalMin(value = "-180.0")
         @DecimalMax(value = "180.0")
+        @NotNull
         BigDecimal gpsLongitude,
 
         @JsonProperty("ang")
