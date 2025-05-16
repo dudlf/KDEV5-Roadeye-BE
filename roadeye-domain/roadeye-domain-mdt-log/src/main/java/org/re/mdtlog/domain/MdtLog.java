@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.mdtlog.converter.MdtLogEventTypeConverter;
 import org.re.mdtlog.converter.MdtLogGpsConditionConverter;
+import org.re.mdtlog.converter.MdtTransactionIdConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class MdtLog {
     @Column(name = "log_id", columnDefinition = "BINARY(16)", nullable = false)
     private UUID logId;
 
-    @Column(name = "packet_ver", nullable = false)
+    @Column(name = "packet_ver", nullable = false, columnDefinition = "SMALLINT UNSIGNED")
     private int packetVer;
 
     @Convert(converter = MdtLogEventTypeConverter.class)
@@ -56,16 +57,16 @@ public class MdtLog {
     @Column(name = "gps_lon", precision = 10, scale = 6, nullable = false)
     private BigDecimal gpsLon;
 
-    @Column(name = "mdt_angle", nullable = false)
+    @Column(name = "mdt_angle", nullable = false, columnDefinition = "SMALLINT UNSIGNED")
     private int mdtAngle;
 
-    @Column(name = "mdt_speed", nullable = false)
+    @Column(name = "mdt_speed", nullable = false, columnDefinition = "TINYINT UNSIGNED")
     private int mdtSpeed;
 
-    @Column(name = "mdt_mileage_sum", nullable = false)
+    @Column(name = "mdt_mileage_sum", nullable = false, columnDefinition = "MEDIUMINT UNSIGNED")
     private int mdtMileageSum;
 
-    @Column(name = "mdt_battery_voltage")
+    @Column(name = "mdt_battery_voltage", columnDefinition = "SMALLINT UNSIGNED")
     private Integer mdtBatteryVoltage;
 
     @Column(name = "mdt_ignition_onTime")
