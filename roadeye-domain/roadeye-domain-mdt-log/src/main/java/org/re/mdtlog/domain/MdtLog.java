@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.mdtlog.converter.MdtLogGpsConditionConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,8 +43,9 @@ public class MdtLog {
     @Column(name = "device_id", length = 16, nullable = false)
     private String deviceId;
 
+    @Convert(converter = MdtLogGpsConditionConverter.class)
     @Column(name = "gps_cond", length = 1, nullable = false)
-    private String gpsCond;
+    private MdtLogGpsCondition gpsCond;
 
     @Column(name = "gps_lat", precision = 9, scale = 6, nullable = false)
     private BigDecimal gpsLat;
@@ -79,7 +81,7 @@ public class MdtLog {
     private LocalDateTime receivedAt;
 
     @Builder
-    MdtLog(int packetVer, String eventType, byte[] txUid, String carId, String terminalId, String manufactureId, String deviceId, String gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
+    MdtLog(int packetVer, String eventType, byte[] txUid, String carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
         this.packetVer = packetVer;
         this.eventType = eventType;
         this.txUid = txUid;
