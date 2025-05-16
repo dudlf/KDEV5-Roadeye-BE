@@ -1,0 +1,111 @@
+package org.re.mdtlog.collector.app.cyclelog.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.validation.constraints.*;
+import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
+import org.re.mdtlog.domain.MdtLog;
+import org.re.mdtlog.domain.MdtLogGpsCondition;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record MdtAddCycleLogRequest(
+    @JsonProperty("mdn")
+    String carId,
+
+    @JsonProperty("tid")
+    String terminalId,
+
+    @JsonProperty("mid")
+    String manufacturerId,
+
+    @JsonProperty("pv")
+    @Min(0)
+    @Max(65535)
+    int packetVersion,
+
+    @JsonProperty("did")
+    String deviceId,
+
+    @JsonProperty("oTime")
+    @JsonFormat(pattern = "yyyyMMddHHmm")
+    LocalDateTime occurredAt,
+
+    @JsonProperty("cCnt")
+    int cycleCount,
+
+    @JsonProperty("cList")
+    @NotNull
+    List<MdtCycleLogItem> cycleLogList
+) {
+    public MdtAddCycleLogRequest {
+        if (cycleCount != cycleLogList.size()) {
+            throw new IllegalArgumentException("Cycle count mismatch");
+        }
+    }
+
+    public List<MdtLog> toMdtLogList() {
+        return cycleLogList.stream()
+            .map((item) -> {
+                    var occurredAtWithSec = occurredAt.plusSeconds(item.sec);
+                    return MdtLog.builder()
+                        .carId(carId)
+                        .terminalId(terminalId)
+                        .manufactureId(manufacturerId)
+                        .packetVer(packetVersion)
+                        .deviceId(deviceId)
+                        .gpsCond(item.gpsCondition)
+                        .gpsLat(item.gpsLatitude)
+                        .gpsLon(item.gpsLongitude)
+                        .mdtAngle(item.mdtAngle)
+                        .mdtSpeed(item.mdtSpeed)
+                        .mdtMileageSum(item.mdtMileageSum)
+                        .occurredAt(occurredAtWithSec)
+                        .build();
+                }
+            )
+            .toList();
+    }
+
+    public record MdtCycleLogItem(
+        int sec,
+
+        @JsonProperty("gcd")
+        @JsonDeserialize(using = MdtLogGpsConditionDeserializer.class)
+        MdtLogGpsCondition gpsCondition,
+
+        @JsonProperty("lat")
+        @DecimalMin(value = "-90.0")
+        @DecimalMax(value = "90.0")
+        BigDecimal gpsLatitude,
+
+        @JsonProperty("lon")
+        @DecimalMin(value = "-180.0")
+        @DecimalMax(value = "180.0")
+        BigDecimal gpsLongitude,
+
+        @JsonProperty("ang")
+        @Min(0)
+        @Max(365)
+        int mdtAngle,
+
+        @JsonProperty("spd")
+        @Min(0)
+        @Max(255)
+        int mdtSpeed,
+
+        @JsonProperty("sum")
+        @Min(0)
+        @Max(9999999)
+        int mdtMileageSum,
+
+        @JsonProperty("bat")
+        @Min(0)
+        @Max(9999)
+        int batteryVoltage
+    ) {
+    }
+}
