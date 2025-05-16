@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.re.mdtlog.collector.app.ignition.MdtIgnitionController;
 import org.re.mdtlog.collector.app.ignition.MdtIgnitionService;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
+import org.re.mdtlog.collector.exception.MdtLogExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MdtIgnitionController.class)
@@ -34,17 +36,14 @@ class MdtIgnitionControllerTest {
     MdtIgnitionService mdtIgnitionService;
 
     @Test
-    @DisplayName("시동 ON 로그가 성공적으로 적재되어야 한다.")
+    @DisplayName("시동 ON 로그 적재 성공")
     void post_ignitionOn() throws Exception {
         // given
         var params = createIgnitionOnRequest();
 
         var requestBody = objectMapper.writeValueAsString(params);
 
-        Mockito.doAnswer((invocation) -> {
-                var dto = invocation.getArgument(0, MdtIgnitionOnRequest.class);
-                return null;
-            })
+        Mockito.doAnswer((invocation) -> null)
             .when(mdtIgnitionService)
             .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class));
 
@@ -55,7 +54,10 @@ class MdtIgnitionControllerTest {
 
         // then
         mockMvc.perform(req)
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.rstCd").value(MdtLogExceptionCode.Success.getCode()))
+            .andExpect(jsonPath("$.rstMsg").value(MdtLogExceptionCode.Success.getMessage()))
+            .andExpect(jsonPath("$.mdn").value(params.get("mdn")));
     }
 
     @ParameterizedTest
