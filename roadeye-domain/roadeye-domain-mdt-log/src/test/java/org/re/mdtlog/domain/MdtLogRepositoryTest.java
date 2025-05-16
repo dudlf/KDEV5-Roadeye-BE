@@ -21,7 +21,7 @@ class MdtLogRepositoryTest {
         MdtLog mdtLog = MdtLog.builder()
             .packetVer(1)
             .eventType("TEST")
-            .txUid(new byte[36])
+            .txUid(new byte[16])
             .carId("TEST_CAR")
             .terminalId("TERM123")
             .manufactureId("MANUF123")
