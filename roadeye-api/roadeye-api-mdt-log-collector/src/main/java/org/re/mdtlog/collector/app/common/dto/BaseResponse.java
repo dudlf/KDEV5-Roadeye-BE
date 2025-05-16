@@ -1,4 +1,4 @@
-package org.re.mdtlog.collector.app.common;
+package org.re.mdtlog.collector.app.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -2,7 +2,7 @@ package org.re.mdtlog.collector.app.ignition;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.re.mdtlog.collector.app.common.BaseMdtLogResponse;
+import org.re.mdtlog.collector.app.common.dto.BaseMdtLogResponse;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.springframework.http.MediaType;
