@@ -1,8 +1,10 @@
 package org.re.mdtlog.collector.app.cyclelog;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.re.mdtlog.collector.app.common.dto.BaseMdtLogResponse;
+import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.cyclelog.dto.MdtAddCycleLogRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +18,11 @@ public class MdtCycleLogController {
     private final MdtCycleLogService cycleLogService;
 
     @PostMapping
-    public BaseMdtLogResponse addCycleLogs(@Valid @RequestBody MdtAddCycleLogRequest dto) {
-        cycleLogService.addCycleLogs(dto);
+    public BaseMdtLogResponse addCycleLogs(
+        @Valid @RequestBody MdtAddCycleLogRequest dto,
+        @NotNull MdtLogRequestTimeInfo timeInfo
+    ) {
+        cycleLogService.addCycleLogs(dto, timeInfo);
         return new BaseMdtLogResponse(dto.carId());
     }
 }

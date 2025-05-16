@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.re.mdtlog.collector.exception.MdtLogExceptionCode;
@@ -44,7 +45,7 @@ class MdtIgnitionControllerTest {
 
         Mockito.doAnswer((invocation) -> null)
             .when(mdtIgnitionService)
-            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class));
+            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
 
         // when
         var req = post("/api/ignition/on")
@@ -59,7 +60,7 @@ class MdtIgnitionControllerTest {
             .andExpect(jsonPath("$.mdn").value(params.get("mdn")));
 
         Mockito.verify(mdtIgnitionService, Mockito.times(1))
-            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class));
+            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
     }
 
     @ParameterizedTest
@@ -213,7 +214,7 @@ class MdtIgnitionControllerTest {
 
         Mockito.doAnswer((invocation) -> null)
             .when(mdtIgnitionService)
-            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class));
+            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
 
         // when
         var req = post("/api/ignition/off")
@@ -228,7 +229,7 @@ class MdtIgnitionControllerTest {
             .andExpect(jsonPath("$.mdn").value(params.get("mdn")));
 
         Mockito.verify(mdtIgnitionService, Mockito.times(1))
-            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class));
+            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
     }
 
     private Map<String, Object> createIgnitionOnRequest() {

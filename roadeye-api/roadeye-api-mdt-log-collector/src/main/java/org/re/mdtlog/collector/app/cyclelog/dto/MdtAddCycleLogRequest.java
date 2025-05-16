@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
+import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
@@ -48,7 +49,7 @@ public record MdtAddCycleLogRequest(
         }
     }
 
-    public List<MdtLog> toMdtLogList() {
+    public List<MdtLog> toMdtLogList(MdtLogRequestTimeInfo timeInfo) {
         return cycleLogList.stream()
             .map((item) -> {
                     var occurredAtWithSec = occurredAt.plusSeconds(item.sec);
@@ -66,6 +67,8 @@ public record MdtAddCycleLogRequest(
                         .mdtSpeed(item.mdtSpeed)
                         .mdtMileageSum(item.mdtMileageSum)
                         .occurredAt(occurredAtWithSec)
+                        .sentAt(timeInfo.sentAt())
+                        .receivedAt(timeInfo.receivedAt())
                         .build();
                 }
             )

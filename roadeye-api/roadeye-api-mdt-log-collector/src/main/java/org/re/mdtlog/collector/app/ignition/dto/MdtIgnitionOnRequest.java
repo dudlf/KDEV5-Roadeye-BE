@@ -7,6 +7,7 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
@@ -66,7 +67,7 @@ public record MdtIgnitionOnRequest(
     @Max(9999999)
     int mdtMileageSum
 ) {
-    public MdtLog toMdtLog() {
+    public MdtLog toMdtLog(MdtLogRequestTimeInfo tInfo) {
         return MdtLog.builder()
             .eventType(MdtLogEventType.Ignition)
             .carId(carId)
@@ -81,6 +82,9 @@ public record MdtIgnitionOnRequest(
             .mdtAngle(mdtAngle)
             .mdtSpeed(mdtSpeed)
             .mdtMileageSum(mdtMileageSum)
+            .occurredAt(ignitionOnTime)
+            .sentAt(tInfo.sentAt())
+            .receivedAt(tInfo.receivedAt())
             .build();
     }
 }

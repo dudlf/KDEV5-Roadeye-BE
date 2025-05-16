@@ -1,8 +1,10 @@
 package org.re.mdtlog.collector.app.ignition;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.re.mdtlog.collector.app.common.dto.BaseMdtLogResponse;
+import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.springframework.http.MediaType;
@@ -23,8 +25,11 @@ public class MdtIgnitionController {
         value = "/on",
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public BaseMdtLogResponse ignitionOn(@Valid @RequestBody MdtIgnitionOnRequest dto) {
-        mdtIgnitionService.ignitionOn(dto);
+    public BaseMdtLogResponse ignitionOn(
+        @Valid @RequestBody MdtIgnitionOnRequest dto,
+        @NotNull MdtLogRequestTimeInfo timeInfo
+    ) {
+        mdtIgnitionService.ignitionOn(dto, timeInfo);
         return new BaseMdtLogResponse(dto.carId());
     }
 
@@ -32,8 +37,11 @@ public class MdtIgnitionController {
         value = "/off",
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public BaseMdtLogResponse ignitionOn(@Valid @RequestBody MdtIgnitionOffRequest dto) {
-        mdtIgnitionService.ignitionOff(dto);
+    public BaseMdtLogResponse ignitionOn(
+        @Valid @RequestBody MdtIgnitionOffRequest dto,
+        @NotNull MdtLogRequestTimeInfo timeInfo
+    ) {
+        mdtIgnitionService.ignitionOff(dto, timeInfo);
         return new BaseMdtLogResponse(dto.carId());
     }
 }
