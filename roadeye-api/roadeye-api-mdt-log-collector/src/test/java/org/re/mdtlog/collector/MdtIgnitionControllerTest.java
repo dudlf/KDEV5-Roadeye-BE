@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,19 +35,7 @@ class MdtIgnitionControllerTest {
     @DisplayName("시동 ON 로그가 성공적으로 적재되어야 한다.")
     void post_ignitionOn() throws Exception {
         // given
-        var params = new HashMap<String, Object>();
-        params.put("mdn", "car-001");
-        params.put("tid", "term-002");
-        params.put("mid", "manu-003");
-        params.put("pv", 1);
-        params.put("did", "dev-004");
-        params.put("onTime", "20250516120000");
-        params.put("gcd", "A");
-        params.put("lat", 37.123456);
-        params.put("lon", 127.123456);
-        params.put("ang", 90);
-        params.put("spd", 60);
-        params.put("sum", 1000);
+        var params = createIgnitionOnRequest();
 
         var requestBody = objectMapper.writeValueAsString(params);
 
@@ -65,5 +54,22 @@ class MdtIgnitionControllerTest {
         // then
         mockMvc.perform(req)
             .andExpect(status().isOk());
+    }
+
+    private Map<String, Object> createIgnitionOnRequest() {
+        var params = new HashMap<String, Object>();
+        params.put("mdn", "car-001");
+        params.put("tid", "term-002");
+        params.put("mid", "manu-003");
+        params.put("pv", 1);
+        params.put("did", "dev-004");
+        params.put("onTime", "20250516120000");
+        params.put("gcd", "A");
+        params.put("lat", 37.123456);
+        params.put("lon", 127.123456);
+        params.put("ang", 90);
+        params.put("spd", 60);
+        params.put("sum", 1000);
+        return params;
     }
 }
