@@ -3,6 +3,7 @@ package org.re.mdtlog.collector.app.ignition;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.re.mdtlog.collector.app.common.BaseMdtLogResponse;
+import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,15 @@ public class MdtIgnitionController {
     )
     public BaseMdtLogResponse ignitionOn(@Valid @RequestBody MdtIgnitionOnRequest dto) {
         mdtIgnitionService.ignitionOn(dto);
+        return new BaseMdtLogResponse(dto.carId());
+    }
+
+    @PostMapping(
+        value = "/off",
+        consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public BaseMdtLogResponse ignitionOn(@Valid @RequestBody MdtIgnitionOffRequest dto) {
+        mdtIgnitionService.ignitionOff(dto);
         return new BaseMdtLogResponse(dto.carId());
     }
 }

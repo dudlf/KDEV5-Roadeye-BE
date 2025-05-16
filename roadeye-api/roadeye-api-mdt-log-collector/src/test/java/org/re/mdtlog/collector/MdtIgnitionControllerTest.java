@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.re.mdtlog.collector.app.ignition.MdtIgnitionController;
 import org.re.mdtlog.collector.app.ignition.MdtIgnitionService;
+import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.re.mdtlog.collector.exception.MdtLogExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,6 +202,34 @@ class MdtIgnitionControllerTest {
             .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @DisplayName("시동 Off 로그 적재 성공")
+    void post_ignitionOff() throws Exception {
+        // given
+        var params = createIgnitionOffRequest();
+
+        var requestBody = objectMapper.writeValueAsString(params);
+
+        Mockito.doAnswer((invocation) -> null)
+            .when(mdtIgnitionService)
+            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class));
+
+        // when
+        var req = post("/api/ignition/off")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody);
+
+        // then
+        mockMvc.perform(req)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.rstCd").value(MdtLogExceptionCode.Success.getCode()))
+            .andExpect(jsonPath("$.rstMsg").value(MdtLogExceptionCode.Success.getMessage()))
+            .andExpect(jsonPath("$.mdn").value(params.get("mdn")));
+
+        Mockito.verify(mdtIgnitionService, Mockito.times(1))
+            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class));
+    }
+
     private Map<String, Object> createIgnitionOnRequest() {
         var params = new HashMap<String, Object>();
         params.put("mdn", "car-001");
@@ -209,6 +238,24 @@ class MdtIgnitionControllerTest {
         params.put("pv", 1);
         params.put("did", "dev-004");
         params.put("onTime", "20250516120000");
+        params.put("gcd", "A");
+        params.put("lat", 37.123456);
+        params.put("lon", 127.123456);
+        params.put("ang", 90);
+        params.put("spd", 60);
+        params.put("sum", 1000);
+        return params;
+    }
+
+    private Map<String, Object> createIgnitionOffRequest() {
+        var params = new HashMap<String, Object>();
+        params.put("mdn", "car-001");
+        params.put("tid", "term-002");
+        params.put("mid", "manu-003");
+        params.put("pv", 1);
+        params.put("did", "dev-004");
+        params.put("onTime", "20250516120000");
+        params.put("offTime", "20250516130000");
         params.put("gcd", "A");
         params.put("lat", 37.123456);
         params.put("lon", 127.123456);

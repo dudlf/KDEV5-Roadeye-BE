@@ -77,6 +77,7 @@ public record MdtIgnitionOffRequest(
             .packetVer(packetVersion)
             .deviceId(deviceId)
             .mdtIgnitionOnTime(ignitionOnTime)
+            .mdtIgnitionOffTime(ignitionOffTime)
             .gpsCond(gpsCondition)
             .gpsLat(gpsLatitude)
             .gpsLon(gpsLongitude)
