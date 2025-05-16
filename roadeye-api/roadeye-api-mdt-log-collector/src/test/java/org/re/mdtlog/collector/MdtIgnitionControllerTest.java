@@ -3,6 +3,8 @@ package org.re.mdtlog.collector;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.re.mdtlog.collector.app.ignition.MdtIgnitionController;
 import org.re.mdtlog.collector.app.ignition.MdtIgnitionService;
@@ -54,6 +56,27 @@ class MdtIgnitionControllerTest {
         // then
         mockMvc.perform(req)
             .andExpect(status().isOk());
+    }
+
+
+    @ParameterizedTest
+    @DisplayName("패킷 버전이 올바르지 않은 경우 400 에러가 발생해야 한다.")
+    @ValueSource(ints = {-1, 65536})
+    void post_ignitionOn_invalidPacketVersion(int packetVersion) throws Exception {
+        // given
+        var params = createIgnitionOnRequest();
+        params.put("pv", packetVersion);
+
+        var requestBody = objectMapper.writeValueAsString(params);
+
+        // when
+        var req = post("/api/ignition/on")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody);
+
+        // then
+        mockMvc.perform(req)
+            .andExpect(status().isBadRequest());
     }
 
     private Map<String, Object> createIgnitionOnRequest() {

@@ -3,6 +3,8 @@ package org.re.mdtlog.collector.app.ignition.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
@@ -21,6 +23,8 @@ public record MdtIgnitionOnRequest(
     String manufacturerId,
 
     @JsonProperty("pv")
+    @Min(0)
+    @Max(65535)
     int packetVersion,
 
     @JsonProperty("did")
