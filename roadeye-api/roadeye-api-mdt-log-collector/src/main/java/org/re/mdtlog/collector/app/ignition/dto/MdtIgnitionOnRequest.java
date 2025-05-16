@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
+import org.re.mdtlog.domain.MdtLogEventType;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
 
 import java.math.BigDecimal;
@@ -67,6 +68,7 @@ public record MdtIgnitionOnRequest(
 ) {
     public MdtLog toMdtLog() {
         return MdtLog.builder()
+            .eventType(MdtLogEventType.Ignition)
             .carId(carId)
             .terminalId(terminalId)
             .manufactureId(manufacturerId)

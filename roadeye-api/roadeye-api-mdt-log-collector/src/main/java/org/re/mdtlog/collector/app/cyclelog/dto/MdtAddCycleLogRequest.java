@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
 import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
+import org.re.mdtlog.domain.MdtLogEventType;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
 
 import java.math.BigDecimal;
@@ -52,6 +53,7 @@ public record MdtAddCycleLogRequest(
             .map((item) -> {
                     var occurredAtWithSec = occurredAt.plusSeconds(item.sec);
                     return MdtLog.builder()
+                        .eventType(MdtLogEventType.CycleLog)
                         .carId(carId)
                         .terminalId(terminalId)
                         .manufactureId(manufacturerId)
