@@ -75,7 +75,7 @@ public class MdtLog {
     @Column(name = "mdt_ignition_offTime")
     private LocalDateTime mdtIgnitionOffTime;
 
-    @Column(name = "occured_at", nullable = false)
+    @Column(name = "occurred_at", nullable = false)
     private LocalDateTime occurredAt;
 
     @Column(name = "sent_at", nullable = false)
