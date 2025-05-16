@@ -56,6 +56,8 @@ public record MdtIgnitionOnRequest(
     int mdtAngle,
 
     @JsonProperty("spd")
+    @Min(0)
+    @Max(255)
     int mdtSpeed,
 
     @JsonProperty("sum")
