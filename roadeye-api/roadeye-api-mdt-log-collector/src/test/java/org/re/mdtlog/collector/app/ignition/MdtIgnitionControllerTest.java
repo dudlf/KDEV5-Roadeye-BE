@@ -10,6 +10,7 @@ import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.re.mdtlog.collector.exception.MdtLogExceptionCode;
+import org.re.mdtlog.domain.MdtTransactionId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -45,7 +46,11 @@ class MdtIgnitionControllerTest {
 
         Mockito.doAnswer((invocation) -> null)
             .when(mdtIgnitionService)
-            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
+            .ignitionOn(
+                Mockito.any(MdtTransactionId.class),
+                Mockito.any(MdtIgnitionOnRequest.class),
+                Mockito.any(MdtLogRequestTimeInfo.class)
+            );
 
         // when
         var req = post("/api/ignition/on")
@@ -60,7 +65,11 @@ class MdtIgnitionControllerTest {
             .andExpect(jsonPath("$.mdn").value(params.get("mdn")));
 
         Mockito.verify(mdtIgnitionService, Mockito.times(1))
-            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
+            .ignitionOn(
+                Mockito.any(MdtTransactionId.class),
+                Mockito.any(MdtIgnitionOnRequest.class),
+                Mockito.any(MdtLogRequestTimeInfo.class)
+            );
     }
 
     @ParameterizedTest
@@ -214,7 +223,11 @@ class MdtIgnitionControllerTest {
 
         Mockito.doAnswer((invocation) -> null)
             .when(mdtIgnitionService)
-            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
+            .ignitionOff(
+                Mockito.any(MdtTransactionId.class),
+                Mockito.any(MdtIgnitionOffRequest.class),
+                Mockito.any(MdtLogRequestTimeInfo.class)
+            );
 
         // when
         var req = post("/api/ignition/off")
@@ -229,7 +242,11 @@ class MdtIgnitionControllerTest {
             .andExpect(jsonPath("$.mdn").value(params.get("mdn")));
 
         Mockito.verify(mdtIgnitionService, Mockito.times(1))
-            .ignitionOff(Mockito.any(MdtIgnitionOffRequest.class), Mockito.any(MdtLogRequestTimeInfo.class));
+            .ignitionOff(
+                Mockito.any(MdtTransactionId.class),
+                Mockito.any(MdtIgnitionOffRequest.class),
+                Mockito.any(MdtLogRequestTimeInfo.class)
+            );
     }
 
     private Map<String, Object> createIgnitionOnRequest() {

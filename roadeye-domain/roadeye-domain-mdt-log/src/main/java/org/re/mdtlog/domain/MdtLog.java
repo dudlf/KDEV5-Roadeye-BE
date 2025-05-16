@@ -30,8 +30,9 @@ public class MdtLog {
     @Column(name = "event_type", length = 10, nullable = false)
     private MdtLogEventType eventType;
 
+    @Convert(converter = MdtTransactionIdConverter.class)
     @Column(name = "tx_uid", columnDefinition = "BINARY(16)", nullable = false)
-    private byte[] txUid;
+    private MdtTransactionId txUid;
 
     @Column(name = "car_id", length = 32, nullable = false)
     private String carId;
@@ -83,7 +84,7 @@ public class MdtLog {
     private LocalDateTime receivedAt;
 
     @Builder
-    MdtLog(int packetVer, MdtLogEventType eventType, byte[] txUid, String carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
+    MdtLog(int packetVer, MdtLogEventType eventType, MdtTransactionId txUid, String carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
         this.packetVer = packetVer;
         this.eventType = eventType;
         this.txUid = txUid;

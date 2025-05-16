@@ -9,6 +9,7 @@ import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
+import org.re.mdtlog.domain.MdtTransactionId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -54,12 +55,13 @@ public record MdtAddCycleLogRequest(
         }
     }
 
-    public List<MdtLog> toMdtLogList(MdtLogRequestTimeInfo timeInfo) {
+    public List<MdtLog> toMdtLogList(MdtTransactionId tuid, MdtLogRequestTimeInfo timeInfo) {
         return cycleLogList.stream()
             .map((item) -> {
                     var occurredAtWithSec = occurredAt.plusSeconds(item.sec);
                     return MdtLog.builder()
                         .eventType(MdtLogEventType.CycleLog)
+                        .txUid(tuid)
                         .carId(carId)
                         .terminalId(terminalId)
                         .manufactureId(manufacturerId)
