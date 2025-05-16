@@ -59,6 +59,9 @@ class MdtIgnitionControllerTest {
             .andExpect(jsonPath("$.rstCd").value(MdtLogExceptionCode.Success.getCode()))
             .andExpect(jsonPath("$.rstMsg").value(MdtLogExceptionCode.Success.getMessage()))
             .andExpect(jsonPath("$.mdn").value(params.get("mdn")));
+
+        Mockito.verify(mdtIgnitionService, Mockito.times(1))
+            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class));
     }
 
     @ParameterizedTest
