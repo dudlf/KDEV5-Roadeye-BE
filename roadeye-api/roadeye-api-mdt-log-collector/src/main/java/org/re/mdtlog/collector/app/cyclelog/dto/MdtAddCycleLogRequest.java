@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder(access = AccessLevel.PACKAGE)
 public record MdtAddCycleLogRequest(
     @JsonProperty("mdn")
     @NotNull
@@ -82,6 +85,7 @@ public record MdtAddCycleLogRequest(
             .toList();
     }
 
+    @Builder(access = AccessLevel.PACKAGE)
     public record MdtCycleLogItem(
         int sec,
 
