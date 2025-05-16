@@ -58,6 +58,26 @@ class MdtIgnitionControllerTest {
             .andExpect(status().isOk());
     }
 
+    @ParameterizedTest
+    @DisplayName("GPS 상태가 올바르지 않은 경우 400 에러가 발생해야 한다.")
+    @ValueSource(strings = {"Z", "F", "3", "A1"})
+    void post_ignitionOn_invalidGpsCondition(String gpsCondition) throws Exception {
+        // given
+        var params = createIgnitionOnRequest();
+        params.put("gcd", gpsCondition);
+
+        var requestBody = objectMapper.writeValueAsString(params);
+
+        // when
+        var req = post("/api/ignition/on")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody);
+
+        // then
+        mockMvc.perform(req)
+            .andExpect(status().isBadRequest());
+    }
+
 
     @ParameterizedTest
     @DisplayName("패킷 버전이 올바르지 않은 경우 400 에러가 발생해야 한다.")
