@@ -3,6 +3,8 @@ package org.re.mdtlog.collector.app.ignition.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
@@ -39,6 +41,8 @@ public record MdtIgnitionOnRequest(
     MdtLogGpsCondition gpsCondition,
 
     @JsonProperty("lat")
+    @DecimalMin(value = "-90.0")
+    @DecimalMax(value = "90.0")
     BigDecimal gpsLatitude,
 
     @JsonProperty("lon")

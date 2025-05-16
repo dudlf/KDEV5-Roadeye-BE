@@ -99,6 +99,26 @@ class MdtIgnitionControllerTest {
             .andExpect(status().isBadRequest());
     }
 
+    @ParameterizedTest
+    @DisplayName("위도 값이 올바르지 않은 경우 400 에러가 발생해야 한다.")
+    @ValueSource(doubles = {-90.1, 90.1})
+    void post_ignitionOn_invalidLatitude(double latitude) throws Exception {
+        // given
+        var params = createIgnitionOnRequest();
+        params.put("lat", latitude);
+
+        var requestBody = objectMapper.writeValueAsString(params);
+
+        // when
+        var req = post("/api/ignition/on")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody);
+
+        // then
+        mockMvc.perform(req)
+            .andExpect(status().isBadRequest());
+    }
+
     private Map<String, Object> createIgnitionOnRequest() {
         var params = new HashMap<String, Object>();
         params.put("mdn", "car-001");
