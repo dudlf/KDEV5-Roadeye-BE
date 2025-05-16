@@ -1,4 +1,4 @@
-package org.re.mdtlog.collector;
+package org.re.mdtlog.collector.app.ignition;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
-import org.re.mdtlog.collector.app.ignition.MdtIgnitionController;
-import org.re.mdtlog.collector.app.ignition.MdtIgnitionService;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.re.mdtlog.collector.exception.MdtLogExceptionCode;
