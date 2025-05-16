@@ -43,7 +43,7 @@ public class MdtLog {
     private String deviceId;
 
     @Column(name = "gps_cond", length = 1, nullable = false)
-    private String gpsCond;
+    private MdtLogGpsCondition gpsCond;
 
     @Column(name = "gps_lat", precision = 9, scale = 6, nullable = false)
     private BigDecimal gpsLat;
@@ -79,7 +79,7 @@ public class MdtLog {
     private LocalDateTime receivedAt;
 
     @Builder
-    MdtLog(int packetVer, String eventType, byte[] txUid, String carId, String terminalId, String manufactureId, String deviceId, String gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
+    MdtLog(int packetVer, String eventType, byte[] txUid, String carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
         this.packetVer = packetVer;
         this.eventType = eventType;
         this.txUid = txUid;

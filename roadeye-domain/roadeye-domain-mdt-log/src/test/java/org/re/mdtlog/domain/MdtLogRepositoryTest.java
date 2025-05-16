@@ -26,7 +26,7 @@ class MdtLogRepositoryTest {
             .terminalId("TERM123")
             .manufactureId("MANUF123")
             .deviceId("DEV123")
-            .gpsCond("A")
+            .gpsCond(MdtLogGpsCondition.Normal)
             .gpsLat(new BigDecimal("37.123456"))
             .gpsLon(new BigDecimal("127.123456"))
             .mdtAngle(90)
