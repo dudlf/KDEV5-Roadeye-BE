@@ -179,6 +179,26 @@ class MdtIgnitionControllerTest {
             .andExpect(status().isBadRequest());
     }
 
+    @ParameterizedTest
+    @DisplayName("MDT 주행 거리 합계가 올바르지 않은 경우 400 에러가 발생해야 한다.")
+    @ValueSource(ints = {-1, 10000000})
+    void post_ignitionOn_invalidMdtMileageSum(int mdtMileageSum) throws Exception {
+        // given
+        var params = createIgnitionOnRequest();
+        params.put("sum", mdtMileageSum);
+
+        var requestBody = objectMapper.writeValueAsString(params);
+
+        // when
+        var req = post("/api/ignition/on")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody);
+
+        // then
+        mockMvc.perform(req)
+            .andExpect(status().isBadRequest());
+    }
+
     private Map<String, Object> createIgnitionOnRequest() {
         var params = new HashMap<String, Object>();
         params.put("mdn", "car-001");

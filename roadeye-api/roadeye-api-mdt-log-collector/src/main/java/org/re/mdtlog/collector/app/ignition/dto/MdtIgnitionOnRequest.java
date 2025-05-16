@@ -61,6 +61,8 @@ public record MdtIgnitionOnRequest(
     int mdtSpeed,
 
     @JsonProperty("sum")
+    @Min(0)
+    @Max(9999999)
     int mdtMileageSum
 ) {
     public MdtLog toMdtLog() {
