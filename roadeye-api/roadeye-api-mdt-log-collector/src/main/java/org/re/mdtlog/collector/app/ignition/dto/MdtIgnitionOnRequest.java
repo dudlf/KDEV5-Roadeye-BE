@@ -46,6 +46,8 @@ public record MdtIgnitionOnRequest(
     BigDecimal gpsLatitude,
 
     @JsonProperty("lon")
+    @DecimalMin(value = "-180.0")
+    @DecimalMax(value = "180.0")
     BigDecimal gpsLongitude,
 
     @JsonProperty("ang")
