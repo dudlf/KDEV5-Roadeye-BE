@@ -1,0 +1,69 @@
+package org.re.mdtlog.collector;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.re.mdtlog.collector.app.ignition.MdtIgnitionController;
+import org.re.mdtlog.collector.app.ignition.MdtIgnitionService;
+import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashMap;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(MdtIgnitionController.class)
+@DisplayName("[단위 테스트] MDT 시동 Controller")
+class MdtIgnitionControllerTest {
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @MockitoBean
+    MdtIgnitionService mdtIgnitionService;
+
+    @Test
+    @DisplayName("시동 ON 로그가 성공적으로 적재되어야 한다.")
+    void post_ignitionOn() throws Exception {
+        // given
+        var params = new HashMap<String, Object>();
+        params.put("mdn", "car-001");
+        params.put("tid", "term-002");
+        params.put("mid", "manu-003");
+        params.put("pv", 1);
+        params.put("did", "dev-004");
+        params.put("onTime", "20250516120000");
+        params.put("gcd", "A");
+        params.put("lat", 37.123456);
+        params.put("lon", 127.123456);
+        params.put("ang", 90);
+        params.put("spd", 60);
+        params.put("sum", 1000);
+
+        var requestBody = objectMapper.writeValueAsString(params);
+
+        Mockito.doAnswer((invocation) -> {
+                var dto = invocation.getArgument(0, MdtIgnitionOnRequest.class);
+                return null;
+            })
+            .when(mdtIgnitionService)
+            .ignitionOn(Mockito.any(MdtIgnitionOnRequest.class));
+
+        // when
+        var req = post("/api/ignition/on")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody);
+
+        // then
+        mockMvc.perform(req)
+            .andExpect(status().isOk());
+    }
+}
