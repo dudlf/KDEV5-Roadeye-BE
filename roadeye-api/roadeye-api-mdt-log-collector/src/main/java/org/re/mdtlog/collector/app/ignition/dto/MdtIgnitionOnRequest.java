@@ -51,6 +51,8 @@ public record MdtIgnitionOnRequest(
     BigDecimal gpsLongitude,
 
     @JsonProperty("ang")
+    @Min(0)
+    @Max(365)
     int mdtAngle,
 
     @JsonProperty("spd")
