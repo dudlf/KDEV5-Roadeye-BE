@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.mdtlog.converter.MdtLogEventTypeConverter;
 import org.re.mdtlog.converter.MdtLogGpsConditionConverter;
 
 import java.math.BigDecimal;
@@ -25,8 +26,9 @@ public class MdtLog {
     @Column(name = "packet_ver", nullable = false)
     private int packetVer;
 
+    @Convert(converter = MdtLogEventTypeConverter.class)
     @Column(name = "event_type", length = 10, nullable = false)
-    private String eventType;
+    private MdtLogEventType eventType;
 
     @Column(name = "tx_uid", columnDefinition = "BINARY(16)", nullable = false)
     private byte[] txUid;
@@ -44,7 +46,7 @@ public class MdtLog {
     private String deviceId;
 
     @Convert(converter = MdtLogGpsConditionConverter.class)
-    @Column(name = "gps_cond", length = 1, nullable = false)
+    @Column(name = "gps_cond", length = 1, nullable = false, columnDefinition = "CHAR(1)")
     private MdtLogGpsCondition gpsCond;
 
     @Column(name = "gps_lat", precision = 9, scale = 6, nullable = false)
@@ -81,7 +83,7 @@ public class MdtLog {
     private LocalDateTime receivedAt;
 
     @Builder
-    MdtLog(int packetVer, String eventType, byte[] txUid, String carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
+    MdtLog(int packetVer, MdtLogEventType eventType, byte[] txUid, String carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
         this.packetVer = packetVer;
         this.eventType = eventType;
         this.txUid = txUid;
