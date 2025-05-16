@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.mdtlog.converter.MdtLogGpsConditionConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class MdtLog {
     @Column(name = "device_id", length = 16, nullable = false)
     private String deviceId;
 
+    @Convert(converter = MdtLogGpsConditionConverter.class)
     @Column(name = "gps_cond", length = 1, nullable = false)
     private MdtLogGpsCondition gpsCond;
 
