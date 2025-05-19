@@ -48,8 +48,8 @@
             "Accept": "application/json; charset=utf-8",
             "Cache-Control": "no-cache",
             "Accept-Encoding": "gzip, deflate",
-            "Timestamp": new Date().toISOString(),
-            "TUID": crypto.randomUUID(),
+            "X-Timestamp": new Date().toISOString(),
+            "X-TUID": crypto.randomUUID(),
             "Key-Version": "1.0",
             "Token": "test-token"
         };
@@ -88,7 +88,7 @@
                     cCnt: driveData.length,
                     cList: driveData
                 };
-                sendRequest("/api/driving", body);
+                sendRequest("/api/cycle-log", body);
                 driveData = [];
             }
 
@@ -135,6 +135,9 @@
             sendRequest("/api/ignition/on", payload);
         }
 
+        else if (type === "OFF") {
+            sendRequest("/api/ignition/off", payload);  // ✅ OFF 전송 추가
+        }
     }
 
     function startDriving() {
@@ -180,7 +183,7 @@
                     cCnt: 60,
                     cList: driveData
                 };
-                sendRequest("/api/driving", body);
+                sendRequest("/api/cycle-log", body);
                 driveData = [];
             }
         }, 1000);
