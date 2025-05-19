@@ -2,3 +2,4 @@ rootProject.name = 'Roadeye'
 
 include 'roadeye-api:roadeye-api-common'
 include 'roadeye-api:roadeye-api-hq'
+include 'roadeye-api:roadeye-emulator'
