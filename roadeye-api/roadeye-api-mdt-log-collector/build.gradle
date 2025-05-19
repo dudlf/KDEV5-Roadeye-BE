@@ -1,6 +1,11 @@
+plugins {
+    id("roadeye-jib")
+}
+
 dependencies {
     api project(":roadeye-api:roadeye-api-common")
     implementation project(":roadeye-domain:roadeye-domain-mdt-log")
+    implementation project(":roadeye-monitoring")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -9,4 +14,10 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+jib {
+    container {
+        mainClass = "org.re.MdtCollectorApplication"
+    }
 }
