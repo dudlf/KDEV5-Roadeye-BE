@@ -1,12 +1,9 @@
-package org.re.mdtlog.collector;
+package org.re;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {
-    "org.re.mdtlog.collector",
-    "org.re.mdtlog.domain"
-})
+@SpringBootApplication
 public class MdtCollectorApplication {
     public static void main(String[] args) {
         SpringApplication.run(MdtCollectorApplication.class, args);

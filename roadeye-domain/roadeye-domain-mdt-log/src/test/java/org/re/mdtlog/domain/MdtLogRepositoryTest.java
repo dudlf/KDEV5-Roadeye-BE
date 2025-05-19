@@ -20,7 +20,7 @@ class MdtLogRepositoryTest {
         var now = LocalDateTime.now();
         MdtLog mdtLog = MdtLog.builder()
             .packetVer(1)
-            .eventType("TEST")
+            .eventType(MdtLogEventType.CycleLog)
             .txUid(new byte[16])
             .carId("TEST_CAR")
             .terminalId("TERM123")
