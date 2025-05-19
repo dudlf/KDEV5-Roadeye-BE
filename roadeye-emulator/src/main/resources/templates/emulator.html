@@ -11,6 +11,10 @@
 </head>
 <body>
 <h1>차량 데이터 시뮬레이터</h1>
+<label for="host-url">API 서버 주소:</label>
+<input type="text" id="host-url" value="http://localhost:8080" style="width: 300px;" />
+<br><br>
+
 <button id="btn-ignition-on" onclick="sendIgnition('ON')">시동 ON</button>
 <button id="btn-drive" onclick="startDriving()" disabled>주행 시작</button>
 <button id="btn-ignition-off" onclick="sendIgnition('OFF')">시동 OFF</button>
@@ -42,13 +46,16 @@
         logArea.scrollTop = logArea.scrollHeight;
     }
 
-    function sendRequest(url, body) {
+    function sendRequest(endpoint, body) {
+        const baseUrl = document.getElementById("host-url").value || "http://localhost:8080";
+        const url = `${baseUrl}${endpoint}`;
+
         const headers = {
             "Content-Type": "application/json; charset=utf-8",
             "Accept": "application/json; charset=utf-8",
             "Cache-Control": "no-cache",
             "Accept-Encoding": "gzip, deflate",
-            "X-Timestamp": new Date().toISOString(),
+            "X-Timestamp": getFormattedTime(),
             "X-TUID": crypto.randomUUID(),
             "Key-Version": "1.0",
             "Token": "test-token"
@@ -60,6 +67,21 @@
             headers: headers,
             body: JSON.stringify(body)
         }).then(res => log(`응답 상태: ${res.status}`));
+    }
+
+    function getFormattedTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더함
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const milliseconds = String(now.getMilliseconds()).padStart(3, '0'); // 밀리초는 000까지 출력해야 합니다.
+
+        const ts = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+        console.log("add Timestamp to header : " + ts);
+        return ts;
     }
 
     function formatTime(date) {
