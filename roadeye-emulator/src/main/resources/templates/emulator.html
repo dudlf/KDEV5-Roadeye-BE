@@ -11,9 +11,9 @@
 </head>
 <body>
 <h1>차량 데이터 시뮬레이터</h1>
-<button onclick="sendIgnition('ON')">시동 ON</button>
-<button onclick="startDriving()">주행 시작</button>
-<button onclick="sendIgnition('OFF')">시동 OFF</button>
+<button id="btn-ignition-on" onclick="sendIgnition('ON')">시동 ON</button>
+<button id="btn-drive" onclick="startDriving()" disabled>주행 시작</button>
+<button id="btn-ignition-off" onclick="sendIgnition('OFF')">시동 OFF</button>
 <textarea id="log" readonly></textarea>
 
 <script>
@@ -26,15 +26,15 @@
     let lastLat = 37.5665;
     let lastLon = 126.9780;
     let drivingInterval = null;
-
-    let lastShutdownData = null; // { lat, lon, sum } / 마지막 시동 OFF 시 좌표(lat, lon)와 누적거리(sum)를 저장.
+    let lastShutdownData = null;
 
     const commonFields = {
-        tid: "A001",
-        mid: "6",
-        pv: "5",
-        did: "1"
+        tid: "A001", mid: "6", pv: "5", did: "1"
     };
+
+    const btnIgnitionOn = document.getElementById("btn-ignition-on");
+    const btnIgnitionOff = document.getElementById("btn-ignition-off");
+    const btnDrive = document.getElementById("btn-drive");
 
     function log(msg) {
         const logArea = document.getElementById("log");
@@ -68,7 +68,13 @@
             date.getDate().toString().padStart(2, '0') +
             date.getHours().toString().padStart(2, '0') +
             date.getMinutes().toString().padStart(2, '0') +
-            date.getSeconds().toString().padStart(2, '0'); // 현재 시간 초
+            date.getSeconds().toString().padStart(2, '0');
+    }
+
+    function updateButtonStates() {
+        btnIgnitionOn.disabled = ignitionTime !== null;
+        btnDrive.disabled = ignitionTime === null || driving;
+        btnIgnitionOff.disabled = ignitionTime === null;
     }
 
     function sendIgnition(type) {
@@ -76,45 +82,71 @@
         const onTime = ignitionTime || formatTime(now);
         const offTime = formatTime(now);
 
-        if (type === "OFF" && driving) {
-            clearInterval(drivingInterval);
-            driving = false;
-
-            if (driveData.length > 0) {
-                const body = {
-                    ...commonFields,
-                    mdn: vehicleId,
-                    oTime: formatTime(now).slice(0, 12),
-                    cCnt: driveData.length,
-                    cList: driveData
-                };
-                sendRequest("/api/cycle-log", body);
-                driveData = [];
+        if (type === "OFF") {
+            if (!ignitionTime) {
+                log("⚠️ 시동이 꺼져 있습니다. OFF 요청 불가.");
+                return;
             }
 
-            lastShutdownData = {
-                lat: lastLat,
-                lon: lastLon,
-                sum: cumulativeDistance
+            if (driving) {
+                clearInterval(drivingInterval);
+                driving = false;
+
+                if (driveData.length > 0) {
+                    const body = {
+                        ...commonFields,
+                        mdn: vehicleId,
+                        oTime: formatTime(now).slice(0, 12),
+                        cCnt: driveData.length,
+                        cList: driveData
+                    };
+                    sendRequest("/api/cycle-log", body);
+                    driveData = [];
+                }
+
+                lastShutdownData = {
+                    lat: lastLat,
+                    lon: lastLon,
+                    sum: cumulativeDistance
+                };
+
+                log("주행 종료 (시동 OFF로 종료)");
+            }
+
+            const payload = {
+                ...commonFields,
+                mdn: vehicleId,
+                onTime: ignitionTime,
+                offTime: offTime,
+                gcd: gpsStatus,
+                lat: lastLat.toFixed(6),
+                lon: lastLon.toFixed(6),
+                sum: Math.floor(cumulativeDistance)
             };
 
-            log("주행 종료 (시동 OFF로 종료)");
+            sendRequest("/api/ignition/off", payload);
+            ignitionTime = null;
+            updateButtonStates();
+            log("🛑 시동 OFF");
+            return;
         }
 
-
-        const payload = {
-            ...commonFields,
-            mdn: vehicleId,
-            onTime: type === 'ON' ? onTime : ignitionTime,
-            offTime: type === 'OFF' ? offTime : '',
-            gcd: gpsStatus,
-            lat: lastLat.toFixed(6),
-            lon: lastLon.toFixed(6),
-            sum: Math.floor(cumulativeDistance)
-        };
-
         if (type === "ON") {
-            ignitionTime = onTime;
+            if (ignitionTime) {
+                log("⚠️ 이미 시동이 켜져 있습니다.");
+                return;
+            }
+
+            const payload = {
+                ...commonFields,
+                mdn: vehicleId,
+                onTime: onTime,
+                offTime: '',
+                gcd: gpsStatus,
+                lat: lastLat.toFixed(6),
+                lon: lastLon.toFixed(6),
+                sum: Math.floor(cumulativeDistance)
+            };
 
             if (lastShutdownData) {
                 const distanceFromLast = getDistance(
@@ -132,11 +164,10 @@
                 }
             }
 
+            ignitionTime = onTime;
             sendRequest("/api/ignition/on", payload);
-        }
-
-        else if (type === "OFF") {
-            sendRequest("/api/ignition/off", payload);  // ✅ OFF 전송 추가
+            updateButtonStates();
+            log("🔑 시동 ON");
         }
     }
 
@@ -153,6 +184,7 @@
 
         driving = true;
         driveData = [];
+        updateButtonStates();
         log("🚗 주행 시작");
 
         drivingInterval = setInterval(() => {
@@ -188,14 +220,17 @@
             }
         }, 1000);
     }
+
     function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371000; // 지구 반지름 (m)
+        const R = 6371000;
         const toRad = x => x * Math.PI / 180;
         const dLat = toRad(lat2 - lat1);
         const dLon = toRad(lon2 - lon1);
-        const a = Math.sin(dLat/2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2) ** 2;
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
         return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
+
+    updateButtonStates(); // 초기 버튼 상태 설정
 </script>
 
 </body>
