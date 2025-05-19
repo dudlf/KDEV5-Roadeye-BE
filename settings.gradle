@@ -14,4 +14,6 @@ include 'roadeye-api:roadeye-api-mdt-log-collector'
 
 include 'roadeye-domain:roadeye-domain-mdt-log'
 
+include 'roadeye-emulator'
+
 include 'roadeye-monitoring'
