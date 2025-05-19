@@ -1,7 +1,18 @@
+plugins {
+    id("roadeye-jib")
+}
+
 dependencies {
     api project(":roadeye-api:roadeye-api-common")
 
+    implementation project(":roadeye-monitoring")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+jib {
+    container {
+        mainClass = "org.re.RoadEyeApiApplication"
+    }
 }
