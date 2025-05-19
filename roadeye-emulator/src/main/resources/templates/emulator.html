@@ -15,9 +15,9 @@
 <input type="text" id="host-url" value="http://localhost:8080" style="width: 300px;" />
 <br><br>
 
-<button id="btn-ignition-on" onclick="sendIgnition('ON')">시동 ON</button>
+<button id="btn-ignition-on" onclick="handleIgnitionOn()">시동 ON</button>
 <button id="btn-drive" onclick="startDriving()" disabled>주행 시작</button>
-<button id="btn-ignition-off" onclick="sendIgnition('OFF')">시동 OFF</button>
+<button id="btn-ignition-off" onclick="handleIgnitionOff()">시동 OFF</button>
 <textarea id="log" readonly></textarea>
 
 <script>
@@ -31,6 +31,8 @@
     let lastLon = 126.9780;
     let drivingInterval = null;
     let lastShutdownData = null;
+
+    let globalTuid = null;  // 시동 ON ~ OFF 세트 동안 유지할 TUID
 
     const commonFields = {
         tid: "A001", mid: "6", pv: "5", did: "1"
@@ -56,7 +58,7 @@
             "Cache-Control": "no-cache",
             "Accept-Encoding": "gzip, deflate",
             "X-Timestamp": getFormattedTime(),
-            "X-TUID": crypto.randomUUID(),
+            "X-TUID": globalTuid ?? crypto.randomUUID(),  // 시동 ON일 때만 새로 생성
             "Key-Version": "1.0",
             "Token": "test-token"
         };
@@ -99,99 +101,104 @@
         btnIgnitionOff.disabled = ignitionTime === null;
     }
 
-    function sendIgnition(type) {
+    function handleIgnitionOn() {
         const now = new Date();
-        const onTime = ignitionTime || formatTime(now);
-        const offTime = formatTime(now);
+        const onTime = formatTime(now);
 
-        if (type === "OFF") {
-            if (!ignitionTime) {
-                log("⚠️ 시동이 꺼져 있습니다. OFF 요청 불가.");
-                return;
-            }
-
-            if (driving) {
-                clearInterval(drivingInterval);
-                driving = false;
-
-                if (driveData.length > 0) {
-                    const body = {
-                        ...commonFields,
-                        mdn: vehicleId,
-                        oTime: formatTime(now).slice(0, 12),
-                        cCnt: driveData.length,
-                        cList: driveData
-                    };
-                    sendRequest("/api/cycle-log", body);
-                    driveData = [];
-                }
-
-                lastShutdownData = {
-                    lat: lastLat,
-                    lon: lastLon,
-                    sum: cumulativeDistance
-                };
-
-                log("주행 종료 (시동 OFF로 종료)");
-            }
-
-            const payload = {
-                ...commonFields,
-                mdn: vehicleId,
-                onTime: ignitionTime,
-                offTime: offTime,
-                gcd: gpsStatus,
-                lat: lastLat.toFixed(6),
-                lon: lastLon.toFixed(6),
-                sum: Math.floor(cumulativeDistance)
-            };
-
-            sendRequest("/api/ignition/off", payload);
-            ignitionTime = null;
-            updateButtonStates();
-            log("🛑 시동 OFF");
+        if (ignitionTime) {
+            log("⚠️ 이미 시동이 켜져 있습니다.");
             return;
         }
 
-        if (type === "ON") {
-            if (ignitionTime) {
-                log("⚠️ 이미 시동이 켜져 있습니다.");
-                return;
+        globalTuid = crypto.randomUUID(); // ✅ 새로운 세트 시작
+
+        if (lastShutdownData) {
+            const distanceFromLast = getDistance(
+                lastShutdownData.lat,
+                lastShutdownData.lon,
+                lastLat,
+                lastLon
+            );
+
+            if (distanceFromLast < 80) {
+                cumulativeDistance = lastShutdownData.sum + distanceFromLast;
+            } else {
+                log(`🟡 시동 ON 거리 (${Math.round(distanceFromLast)}m)가 80m 초과로 무시됨`);
+                cumulativeDistance = lastShutdownData.sum;
+            }
+        }
+
+        ignitionTime = onTime;
+
+        const payload = {
+            ...commonFields,
+            mdn: vehicleId,
+            onTime: ignitionTime,
+            offTime: '',
+            gcd: gpsStatus,
+            lat: lastLat.toFixed(6),
+            lon: lastLon.toFixed(6),
+            sum: Math.floor(cumulativeDistance)
+        };
+
+        sendRequest("/api/ignition/on", payload);
+        updateButtonStates();
+        log("🔑 시동 ON");
+    }
+
+    function handleIgnitionOff() {
+        const now = new Date();
+        const offTime = formatTime(now);
+
+        if (!ignitionTime) {
+            log("⚠️ 시동이 꺼져 있습니다. OFF 요청 불가.");
+            return;
+        }
+
+        if (driving) {
+            clearInterval(drivingInterval);
+            driving = false;
+
+            if (driveData.length > 0) {
+                const body = {
+                    ...commonFields,
+                    mdn: vehicleId,
+                    oTime: formatTime(now).slice(0, 12),
+                    cCnt: driveData.length,
+                    cList: driveData
+                };
+                sendRequest("/api/cycle-log", body);
+                driveData = [];
             }
 
-            const payload = {
-                ...commonFields,
-                mdn: vehicleId,
-                onTime: onTime,
-                offTime: '',
-                gcd: gpsStatus,
-                lat: lastLat.toFixed(6),
-                lon: lastLon.toFixed(6),
-                sum: Math.floor(cumulativeDistance)
+            lastShutdownData = {
+                lat: lastLat,
+                lon: lastLon,
+                sum: cumulativeDistance
             };
 
-            if (lastShutdownData) {
-                const distanceFromLast = getDistance(
-                    lastShutdownData.lat,
-                    lastShutdownData.lon,
-                    lastLat,
-                    lastLon
-                );
-
-                if (distanceFromLast < 80) {
-                    cumulativeDistance = lastShutdownData.sum + distanceFromLast;
-                } else {
-                    log(`🟡 시동 ON 거리 (${Math.round(distanceFromLast)}m)가 80m 초과로 무시됨`);
-                    cumulativeDistance = lastShutdownData.sum;
-                }
-            }
-
-            ignitionTime = onTime;
-            sendRequest("/api/ignition/on", payload);
-            updateButtonStates();
-            log("🔑 시동 ON");
+            log("주행 종료 (시동 OFF로 종료)");
         }
+
+        const payload = {
+            ...commonFields,
+            mdn: vehicleId,
+            onTime: ignitionTime,
+            offTime: offTime,
+            gcd: gpsStatus,
+            lat: lastLat.toFixed(6),
+            lon: lastLon.toFixed(6),
+            sum: Math.floor(cumulativeDistance)
+        };
+
+        sendRequest("/api/ignition/off", payload);
+        ignitionTime = null;
+        globalTuid = null;  // ✅ 세트 종료
+        updateButtonStates();
+        log("🛑 시동 OFF");
     }
+
+
 
     function startDriving() {
         if (!ignitionTime) {
