@@ -9,7 +9,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class MdtTransactionIdResolver implements HandlerMethodArgumentResolver {
-    final String HEADER_NAME = "X-TUID";
+    private static final String HEADER_NAME = "X-TUID";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
