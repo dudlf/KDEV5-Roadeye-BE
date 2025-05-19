@@ -17,7 +17,7 @@ public class MdtTransactionId {
         return byteBuffer.array();
     }
 
-    public static MdtTransactionId fromBytes(byte[] dbData) {
+    public static MdtTransactionId from(byte[] dbData) {
         ByteBuffer byteBuffer = ByteBuffer.wrap(dbData);
         long mostSigBits = byteBuffer.getLong();
         long leastSigBits = byteBuffer.getLong();

@@ -20,6 +20,6 @@ public class MdtLogEventTypeConverter implements AttributeConverter<MdtLogEventT
         if (dbData == null) {
             return null;
         }
-        return MdtLogEventType.fromCode(dbData);
+        return MdtLogEventType.from(dbData);
     }
 }

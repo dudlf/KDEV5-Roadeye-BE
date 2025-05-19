@@ -16,7 +16,7 @@ public enum MdtLogEventType {
     private final String code;
     private final String description;
 
-    public static MdtLogEventType fromCode(String code) {
+    public static MdtLogEventType from(String code) {
         for (MdtLogEventType eventType : MdtLogEventType.values()) {
             if (eventType.getCode().equals(code)) {
                 return eventType;

@@ -13,6 +13,6 @@ public class MdtTransactionIdConverter implements AttributeConverter<MdtTransact
 
     @Override
     public MdtTransactionId convertToEntityAttribute(byte[] dbData) {
-        return MdtTransactionId.fromBytes(dbData);
+        return MdtTransactionId.from(dbData);
     }
 }
