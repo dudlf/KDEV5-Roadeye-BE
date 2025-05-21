@@ -1,0 +1,31 @@
+package org.re.hq.domain.common;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+
+@Getter
+@MappedSuperclass
+public class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    private boolean active;
+
+    public void delete() {
+        this.active = false;
+    }
+}
