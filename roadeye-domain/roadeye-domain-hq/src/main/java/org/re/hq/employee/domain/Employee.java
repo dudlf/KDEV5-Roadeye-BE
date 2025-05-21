@@ -19,15 +19,15 @@ public class Employee extends BaseEntity {
     private int tryCount;
 
     @Embedded
-    private EmployeeCredentials authentication;
+    private EmployeeCredentials credentials;
 
     @Embedded
     private EmployeeMetadata metadata;
 
-    private Employee(Long tenantId, int tryCount, EmployeeCredentials authentication, EmployeeMetadata metadata) {
+    private Employee(Long tenantId, int tryCount, EmployeeCredentials credentials, EmployeeMetadata metadata) {
         this.tenantId = tenantId;
         this.tryCount = tryCount;
-        this.authentication = authentication;
+        this.credentials = credentials;
         this.metadata = metadata;
     }
 
