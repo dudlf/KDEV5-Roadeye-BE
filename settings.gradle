@@ -17,3 +17,5 @@ include 'roadeye-domain:roadeye-domain-mdt-log'
 include 'roadeye-emulator'
 
 include 'roadeye-monitoring'
+
+include 'roadeye-domain:roadeye-domain-hq'
