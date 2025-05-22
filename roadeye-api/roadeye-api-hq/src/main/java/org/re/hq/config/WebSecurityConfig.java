@@ -1,7 +1,9 @@
 package org.re.hq.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Priority;
 import lombok.RequiredArgsConstructor;
+import org.re.hq.security.userdetails.CompanyUserDetailsService;
 import org.re.hq.security.userdetails.PlatformAdminUserDetailsService;
 import org.re.hq.security.web.authentication.JsonUsernamePasswordAuthenticationFilter;
 import org.re.hq.security.web.authentication.RoadeyeAuthenticationFailureHandler;
@@ -34,10 +36,11 @@ public class WebSecurityConfig {
     @RequiredArgsConstructor
     public class AdminSecurityConfig {
         private final PlatformAdminUserDetailsService adminUserDetailsService;
-        
+
         private final ObjectMapper objectMapper;
 
         @Bean
+        @Priority(1)
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             return http
                 .securityMatcher("/api/admin/**")
@@ -70,6 +73,50 @@ public class WebSecurityConfig {
         public AuthenticationProvider adminAuthenticationProvider() {
             DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
             provider.setUserDetailsService(adminUserDetailsService);
+            provider.setPasswordEncoder(passwordEncoder());
+            return provider;
+        }
+    }
+
+    @Configuration
+    @RequiredArgsConstructor
+    public class CompanySecurityConfig {
+        private final CompanyUserDetailsService companyUserDetailsService;
+
+        private final ObjectMapper objectMapper;
+
+        @Bean
+        @Priority(2)
+        public SecurityFilterChain companyFilterChain(HttpSecurity http) throws Exception {
+            return http
+                .securityMatcher("/api/**")
+                .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers("/api/auth/sign-in").permitAll()
+                    .anyRequest().authenticated()
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .build();
+        }
+
+        public AbstractAuthenticationProcessingFilter jsonUsernamePasswordAuthenticationFilter() {
+            var filter = new JsonUsernamePasswordAuthenticationFilter("/api/auth/sign-in", companyAuthenticationManager(), objectMapper);
+            filter.setAuthenticationSuccessHandler(new RoadeyeAuthenticationSuccessHandler(objectMapper));
+            filter.setAuthenticationFailureHandler(new RoadeyeAuthenticationFailureHandler(objectMapper));
+            return filter;
+        }
+
+        public AuthenticationManager companyAuthenticationManager() {
+            var provider = companyAuthenticationProvider();
+            return new ProviderManager(provider);
+        }
+
+        @Bean
+        public AuthenticationProvider companyAuthenticationProvider() {
+            DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+            provider.setUserDetailsService(companyUserDetailsService);
             provider.setPasswordEncoder(passwordEncoder());
             return provider;
         }
