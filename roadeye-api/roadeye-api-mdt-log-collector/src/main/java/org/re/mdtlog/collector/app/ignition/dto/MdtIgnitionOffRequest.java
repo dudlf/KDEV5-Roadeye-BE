@@ -74,7 +74,7 @@ public record MdtIgnitionOffRequest(
 ) {
     public MdtLog toMdtLog(MdtTransactionId tuid, MdtLogRequestTimeInfo timeInfo) {
         return MdtLog.builder()
-            .eventType(MdtLogEventType.Ignition)
+            .eventType(MdtLogEventType.IGNITION)
             .txUid(tuid)
             .carId(carId)
             .terminalId(terminalId)

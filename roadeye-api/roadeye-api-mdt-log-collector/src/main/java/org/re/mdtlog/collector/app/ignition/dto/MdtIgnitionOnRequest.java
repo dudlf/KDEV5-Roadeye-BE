@@ -70,7 +70,7 @@ public record MdtIgnitionOnRequest(
 ) {
     public MdtLog toMdtLog(MdtTransactionId tuid, MdtLogRequestTimeInfo tInfo) {
         return MdtLog.builder()
-            .eventType(MdtLogEventType.Ignition)
+            .eventType(MdtLogEventType.IGNITION)
             .txUid(tuid)
             .carId(carId)
             .terminalId(terminalId)
