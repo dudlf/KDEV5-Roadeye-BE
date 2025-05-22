@@ -62,6 +62,7 @@ public class WebSecurityConfig {
             return filter;
         }
 
+        // TODO: global authentication manager로 리팩토링
         public AuthenticationManager adminAuthenticationManager() {
             var provider = adminAuthenticationProvider();
             return new ProviderManager(provider);
@@ -106,6 +107,7 @@ public class WebSecurityConfig {
             return filter;
         }
 
+        // TODO: global authentication manager로 리팩토링
         public AuthenticationManager companyAuthenticationManager() {
             var provider = companyAuthenticationProvider();
             return new ProviderManager(provider);
