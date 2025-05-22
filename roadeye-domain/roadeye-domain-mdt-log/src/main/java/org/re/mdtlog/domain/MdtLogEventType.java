@@ -8,8 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum MdtLogEventType {
     // @formatter:off
-    CycleLog("cycle-log", "주기 정보"),
-    Ignition("ignition", "시동 이벤트")
+    CYCLE_LOG  ("cycle-log", "주기 정보"),
+    IGNITION   ("ignition", "시동 이벤트")
     ;
     // @formatter:on
 

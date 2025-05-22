@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,13 +21,13 @@ class MdtLogRepositoryTest {
         var now = LocalDateTime.now();
         MdtLog mdtLog = MdtLog.builder()
             .packetVer(1)
-            .eventType(MdtLogEventType.CycleLog)
-            .txUid(new byte[16])
+            .eventType(MdtLogEventType.CYCLE_LOG)
+            .txUid(new MdtTransactionId(UUID.randomUUID().toString()))
             .carId("TEST_CAR")
             .terminalId("TERM123")
             .manufactureId("MANUF123")
             .deviceId("DEV123")
-            .gpsCond(MdtLogGpsCondition.Normal)
+            .gpsCond(MdtLogGpsCondition.NORMAL)
             .gpsLat(new BigDecimal("37.123456"))
             .gpsLon(new BigDecimal("127.123456"))
             .mdtAngle(90)

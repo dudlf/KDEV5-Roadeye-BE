@@ -63,7 +63,7 @@ public record MdtAddCycleLogRequest(
             .map((item) -> {
                     var occurredAtWithSec = occurredAt.plusSeconds(item.sec);
                     return MdtLog.builder()
-                        .eventType(MdtLogEventType.CycleLog)
+                        .eventType(MdtLogEventType.CYCLE_LOG)
                         .txUid(tuid)
                         .carId(carId)
                         .terminalId(terminalId)
