@@ -13,13 +13,13 @@ import org.re.hq.domain.common.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlatformAdmin extends BaseEntity {
     @Embedded
-    PlatformAdminPrincipal loginInfo;
+    private PlatformAdminPrincipal loginInfo;
 
     @Column(nullable = false)
-    Integer loginFailCount;
+    private Integer loginFailCount;
 
     @Column(nullable = false)
-    String name;
+    private String name;
 
     PlatformAdmin(PlatformAdminPrincipal loginInfo, Integer loginFailCount, String name) {
         this.loginInfo = loginInfo;
