@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
@@ -12,9 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class EmployeeServiceTest {
 
@@ -48,11 +50,40 @@ class EmployeeServiceTest {
 
     @Test
     void 계정_정보를_업데이트_할_때_계정이_존재하지_않는_경우_에러가_발생한다() {
-        var credentials = new EmployeeCredentials("root", "root");
         var updateEmployeeCommand = new UpdateEmployeeCommand("name", "position");
 
         assertThatThrownBy(() -> employeeService.updateMetadata(1L, 1L, updateEmployeeCommand))
             .isInstanceOf(IllegalArgumentException.class);
 
     }
+
+    @Test
+    void 계정_정보를_비활성화_합니다() {
+        var credentials = new EmployeeCredentials("root", "root");
+        var employee = employeeService.createNormalAccount(1L, credentials, "root", "root");
+
+        employeeService.disable(employee.getTenantId(), employee.getId());
+
+        System.out.println(employee.getUpdatedAt());
+        assertAll(
+            () -> assertThat(employee.getStatus()).isEqualTo(EntityLifecycleStatus.DISABLED),
+            () -> assertThat(employee.getUpdatedAt()).isNotNull()
+        );
+
+    }
+
+    @Test
+    void 계정_정보를_활성화_합니다() {
+        var credentials = new EmployeeCredentials("root", "root");
+        var employee = employeeService.createNormalAccount(1L, credentials, "root", "root");
+
+        employeeService.disable(employee.getTenantId(), employee.getId());
+        employeeService.enable(employee.getTenantId(), employee.getId());
+
+        assertAll(
+            () -> assertThat(employee.getStatus()).isEqualTo(EntityLifecycleStatus.ACTIVE),
+            () -> assertThat(employee.getUpdatedAt()).isNotNull()
+        );
+    }
+
 }
