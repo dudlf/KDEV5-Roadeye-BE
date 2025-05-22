@@ -2,12 +2,13 @@ package org.re.hq.car.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarMileage {
 
     @Column(nullable = false)
@@ -16,8 +17,8 @@ public class CarMileage {
     @Column(nullable = false)
     private Integer mileageSum;
 
-    public CarMileage(Integer mileageInit, Integer mileageSum) {
+    public CarMileage(Integer mileageInit) {
         this.mileageInit = mileageInit;
-        this.mileageSum = mileageSum;
+        this.mileageSum = mileageInit;
     }
 }
