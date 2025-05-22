@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 public class BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +26,18 @@ public class BaseEntity {
     @Column(nullable = false)
     private boolean deleted;
 
+    @Enumerated(EnumType.STRING)
+    private EntityLifecycleStatus status = EntityLifecycleStatus.ACTIVE;
+
     public void delete() {
-        this.deleted = true;
+        status = EntityLifecycleStatus.DELETED;
+    }
+
+    public void enable() {
+        status = EntityLifecycleStatus.ACTIVE;
+    }
+
+    public void disable() {
+        status = EntityLifecycleStatus.DISABLED;
     }
 }

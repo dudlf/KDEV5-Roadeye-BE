@@ -59,4 +59,27 @@ public class EmployeeService {
         return employeeRepository.findByIdAndTenantId(employeeId, tenantId)
             .orElseThrow(() -> new IllegalArgumentException("Employee with id " + employeeId + " does not exist"));
     }
+
+    /**
+     * TODO 활성화 / 비활성화의 경우 추가 상태에 따른 예외처리를 하도록 할지 고민 중
+     */
+    public void disable(Long tenantId, Long employeeId) {
+        var employee = this.read(tenantId, employeeId);
+
+        employee.disable();
+    }
+
+    public void enable(Long tenantId, Long employeeId) {
+        var employee = this.read(tenantId, employeeId);
+
+        employee.enable();
+    }
+
+    public void delete(Long tenantId, Long employeeId) {
+        var employee = this.read(tenantId, employeeId);
+
+        employee.delete();
+    }
+
+
 }
