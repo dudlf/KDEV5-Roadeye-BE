@@ -33,9 +33,7 @@ public class CarReservation extends BaseEntity {
 
     private LocalDateTime reservedAt;
 
-    private LocalDateTime approvedAt;
-
-    private LocalDateTime rejectedAt;
+    private LocalDateTime processedAt;
 
     private String rejectReason;
 
