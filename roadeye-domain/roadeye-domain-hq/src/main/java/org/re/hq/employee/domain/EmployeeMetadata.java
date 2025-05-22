@@ -7,14 +7,19 @@ import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Optional;
 
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmployeeMetadata {
 
+    @Setter(AccessLevel.PRIVATE)
     private String name;
 
+    @Setter(AccessLevel.PRIVATE)
     private String position;
 
     @Column(nullable = false)
@@ -43,4 +48,11 @@ public class EmployeeMetadata {
         );
     }
 
+    public void updateName(String name) {
+        Optional.ofNullable(name).ifPresent(this::setName);
+    }
+
+    public void updatePosition(String position) {
+        Optional.ofNullable(position).ifPresent(this::setPosition);
+    }
 }

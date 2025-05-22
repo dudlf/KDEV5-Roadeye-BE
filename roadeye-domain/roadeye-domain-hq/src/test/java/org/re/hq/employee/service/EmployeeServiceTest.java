@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeRole;
+import org.re.hq.employee.dto.UpdateEmployeeCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -43,5 +44,15 @@ class EmployeeServiceTest {
         var employee = employeeService.createNormalAccount(1L, credentials, "root", "root");
 
         assertThat(employee.getMetadata().getRole()).isEqualTo(EmployeeRole.NORMAL);
+    }
+
+    @Test
+    void 계정_정보를_업데이트_할_때_계정이_존재하지_않는_경우_에러가_발생한다() {
+        var credentials = new EmployeeCredentials("root", "root");
+        var updateEmployeeCommand = new UpdateEmployeeCommand("name", "position");
+
+        assertThatThrownBy(() -> employeeService.updateMetadata(1L, 1L, updateEmployeeCommand))
+            .isInstanceOf(IllegalArgumentException.class);
+
     }
 }

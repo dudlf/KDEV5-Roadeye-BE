@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.hq.domain.common.BaseEntity;
+import org.re.hq.employee.dto.UpdateEmployeeCommand;
 
 @Entity
 @Getter
@@ -35,4 +36,8 @@ public class Employee extends BaseEntity {
         return new Employee(tenantId, 0, authentication, metadata);
     }
 
+    public void update(UpdateEmployeeCommand updateEmployeeCommand) {
+        metadata.updateName(updateEmployeeCommand.name());
+        metadata.updatePosition(updateEmployeeCommand.position());
+    }
 }
