@@ -13,7 +13,7 @@ import org.re.hq.domain.common.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlatformAdmin extends BaseEntity {
     @Embedded
-    PlatformAdminLoginInfo loginInfo;
+    PlatformAdminPrincipal loginInfo;
 
     @Column(nullable = false)
     Integer loginFailCount;
@@ -21,14 +21,14 @@ public class PlatformAdmin extends BaseEntity {
     @Column(nullable = false)
     String name;
 
-    PlatformAdmin(PlatformAdminLoginInfo loginInfo, Integer loginFailCount, String name) {
+    PlatformAdmin(PlatformAdminPrincipal loginInfo, Integer loginFailCount, String name) {
         this.loginInfo = loginInfo;
         this.loginFailCount = loginFailCount;
         this.name = name;
     }
 
     public static PlatformAdmin create(String username, String encodedPassword) {
-        var loginInfo = new PlatformAdminLoginInfo(username, encodedPassword);
+        var loginInfo = new PlatformAdminPrincipal(username, encodedPassword);
         return new PlatformAdmin(loginInfo, 0, "admin");
     }
 }
