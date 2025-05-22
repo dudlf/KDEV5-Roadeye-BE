@@ -16,8 +16,8 @@ public class CarService {
     /**
      * 차량 등록
      **/
-    public Car createCar(Integer compId, String carName, String carImgUrl, String carNumber, Integer carMileageInit) {
-        Car car = Car.of(compId, carName, carImgUrl, carNumber, carMileageInit);
+    public Car createCar(Integer companyId, String carName, String carImgUrl, String carNumber, Integer carMileageInit) {
+        Car car = Car.of(companyId, carName, carImgUrl, carNumber, carMileageInit);
         return carRepository.save(car);
     }
 

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Car extends BaseEntity {
 
     @Column(nullable = false)
-    private Integer compId;
+    private Integer companyId;
 
     @Column(nullable = false, length = 30)
     private String carName;
@@ -41,16 +41,16 @@ public class Car extends BaseEntity {
     private LocalDateTime shippedAt;
 
     // 생성자
-    private Car(Integer compId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
-        this.compId = compId;
+    private Car(Integer companyId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
+        this.companyId = companyId;
         this.carName = carName;
         this.carImgUrl = carImgUrl;
         this.carNumber = carNumber;
         this.mileage = new CarMileage(mileageInit); // 초기값 세팅
     }
 
-    public static Car of(Integer compId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
-        return new Car(compId, carName, carImgUrl, carNumber, mileageInit);
+    public static Car of(Integer companyId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
+        return new Car(companyId, carName, carImgUrl, carNumber, mileageInit);
     }
 }
 

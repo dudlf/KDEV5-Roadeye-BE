@@ -24,17 +24,17 @@ class CarServiceTest {
     @Test
     void 차량을_등록합니다() {
         // given
-        Integer compId = 1;
+        Integer companyId = 1;
         String carName = "소나타";
         String carImgUrl = "https://example.com/car.jpg";
         String carNumber = "12가1234";
         Integer carMileageInit = 15000;
 
         // when
-        Car savedCar = carService.createCar(compId, carName, carImgUrl, carNumber, carMileageInit);
+        Car savedCar = carService.createCar(companyId, carName, carImgUrl, carNumber, carMileageInit);
 
         // then
-        assertThat(savedCar.getCompId()).isEqualTo(compId);
+        assertThat(savedCar.getCompanyId()).isEqualTo(companyId);
         assertThat(savedCar.getCarName()).isEqualTo(carName);
         assertThat(savedCar.getCarNumber()).isEqualTo(carNumber);
         assertThat(savedCar.getCarImgUrl()).isEqualTo(carImgUrl);
