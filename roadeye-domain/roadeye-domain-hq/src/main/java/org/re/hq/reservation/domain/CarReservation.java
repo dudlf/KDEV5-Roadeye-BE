@@ -13,10 +13,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarReservation extends BaseEntity {
 
+    @Column(nullable = false)
     private Long carId;
 
+    @Column(nullable = false)
     private Long reserverId;
 
+    @Column(nullable = false)
     private Long approverId;
 
     @Embedded
@@ -43,7 +46,6 @@ public class CarReservation extends BaseEntity {
         this.reservationPeriod = reservationPeriod;
         this.reserveStatus = ReserveStatus.REQUESTED;
         this.reserveReason = reserveReason;
-        this.reservedAt = LocalDateTime.now();
     }
 
     public static CarReservation createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
