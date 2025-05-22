@@ -20,27 +20,27 @@ public class PlatformAdminUserDetails implements UserDetails {
 
     private final Collection<? extends GrantedAuthority> authorities;
 
-    private final boolean isAccountNonExpired;
-    private final boolean isAccountNonLocked;
-    private final boolean isCredentialsNonExpired;
-    private final boolean isEnabled;
+    private final boolean accountNonExpired;
+    private final boolean accountNonLocked;
+    private final boolean credentialsNonExpired;
+    private final boolean enabled;
 
     private PlatformAdminUserDetails(
         String username,
         String password,
         Collection<? extends GrantedAuthority> authorities,
-        boolean isAccountNonExpired,
-        boolean isAccountNonLocked,
-        boolean isCredentialsNonExpired,
-        boolean isEnabled
+        boolean accountNonExpired,
+        boolean accountNonLocked,
+        boolean credentialsNonExpired,
+        boolean enabled
     ) {
         this.username = username;
         this.password = password;
         this.authorities = Collections.unmodifiableCollection(authorities);
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.isEnabled = isEnabled;
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
     }
 
     public static UserDetails from(PlatformAdmin user) {
