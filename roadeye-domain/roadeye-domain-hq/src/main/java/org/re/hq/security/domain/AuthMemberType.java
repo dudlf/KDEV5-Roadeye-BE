@@ -8,8 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum AuthMemberType {
     // @formatter:off
-    ADMIN ("Admin"),
-    USER  ("User"),
+    ADMIN ("Auth:Admin"),
+    USER  ("Auth:User"),
     ;
     // @formatter:on
 
