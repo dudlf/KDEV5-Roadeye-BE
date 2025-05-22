@@ -8,10 +8,10 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum MdtLogGpsCondition {
     // @formatter:off
-    Normal         ("A"),
-    InValid        ("V"),
-    NotAttached    ("0"),
-    GPSInfoInvalid ("P"),
+    NORMAL           ("A"),
+    INVALID          ("V"),
+    NOT_ATTACHED     ("0"),
+    GPS_INFO_INVALID ("P"),
     ;
     // @formatter:on
 
