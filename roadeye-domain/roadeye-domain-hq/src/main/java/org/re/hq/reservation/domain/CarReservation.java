@@ -1,8 +1,6 @@
 package org.re.hq.reservation.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,9 +19,8 @@ public class CarReservation extends BaseEntity {
 
     private Long approverId;
 
-    private LocalDateTime rentStartAt;
-
-    private LocalDateTime rentEndAt;
+    @Embedded
+    private ReservationPeriod reservationPeriod;
 
     @Enumerated(EnumType.STRING)
     private ReserveStatus reserveStatus;
@@ -39,19 +36,18 @@ public class CarReservation extends BaseEntity {
 
     private String rejectReason;
 
-    private CarReservation(Long carId, Long reserverId, LocalDateTime rentStartAt, LocalDateTime rentEndAt,
+    private CarReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
                            ReserveReason reserveReason) {
         this.carId = carId;
         this.reserverId = reserverId;
-        this.rentStartAt = rentStartAt;
-        this.rentEndAt = rentEndAt;
+        this.reservationPeriod = reservationPeriod;
         this.reserveStatus = ReserveStatus.REQUESTED;
         this.reserveReason = reserveReason;
         this.reservedAt = LocalDateTime.now();
     }
 
-    public static CarReservation createReservation(Long carId, Long reserverId, LocalDateTime rentStartAt,
-                                                   LocalDateTime rentEndAt, ReserveReason reserveReason) {
-        return new CarReservation(carId, reserverId, rentStartAt, rentEndAt, reserveReason);
+    public static CarReservation createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
+                                                   ReserveReason reserveReason) {
+        return new CarReservation(carId, reserverId, reservationPeriod, reserveReason);
     }
 }
