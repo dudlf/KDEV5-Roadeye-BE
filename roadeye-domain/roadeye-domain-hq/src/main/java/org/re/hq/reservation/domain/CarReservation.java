@@ -38,16 +38,17 @@ public class CarReservation extends BaseEntity {
     private String rejectReason;
 
     private CarReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
-                           ReserveReason reserveReason) {
+                           ReserveReason reserveReason, LocalDateTime reservedAt) {
         this.carId = carId;
         this.reserverId = reserverId;
         this.reservationPeriod = reservationPeriod;
         this.reserveStatus = ReserveStatus.REQUESTED;
         this.reserveReason = reserveReason;
+        this.reservedAt = reservedAt;
     }
 
     public static CarReservation createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
-                                                   ReserveReason reserveReason) {
-        return new CarReservation(carId, reserverId, reservationPeriod, reserveReason);
+                                                   ReserveReason reserveReason, LocalDateTime reservedAt) {
+        return new CarReservation(carId, reserverId, reservationPeriod, reserveReason, reservedAt);
     }
 }
