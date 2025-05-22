@@ -6,6 +6,7 @@ import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeMetadata;
 import org.re.hq.employee.domain.EmployeeRepository;
+import org.re.hq.employee.dto.UpdateEmployeeCommand;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,4 +41,22 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    /**
+     * 회원 정보를 수정한다.
+     * <p>
+     * 루트 계정만 접근 가능하도록 컨트롤러 부분에서 처리할 것 같지만, 여기서도 권한 검증 기능을 넣어야 할까?
+     */
+    // TODO teanantId 이름 변경
+    public void updateMetadata(Long tenantId, Long employeeId, UpdateEmployeeCommand updateEmployeeCommand) {
+        // TODO 예외 객체 생성
+        var employee = this.read(tenantId, employeeId);
+
+        employee.update(updateEmployeeCommand);
+    }
+
+    // TODO 도메인 서비스 용도로 read라는 메서드를 사용했지만 내부 메서드에서 사용하기에는 정보가 너무 부족하다 별도의 클래스로 분리하는게 나을듯?
+    public Employee read(Long tenantId, Long employeeId) {
+        return employeeRepository.findByIdAndTenantId(employeeId, tenantId)
+            .orElseThrow(() -> new IllegalArgumentException("Employee with id " + employeeId + " does not exist"));
+    }
 }
