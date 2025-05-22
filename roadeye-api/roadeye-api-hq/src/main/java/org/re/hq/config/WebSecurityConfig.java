@@ -25,8 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final ObjectMapper objectMapper;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -36,6 +34,8 @@ public class WebSecurityConfig {
     @RequiredArgsConstructor
     public class AdminSecurityConfig {
         private final PlatformAdminUserDetailsService adminUserDetailsService;
+        
+        private final ObjectMapper objectMapper;
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
