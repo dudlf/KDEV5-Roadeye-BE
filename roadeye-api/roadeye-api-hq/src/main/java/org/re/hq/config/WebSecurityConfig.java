@@ -55,7 +55,6 @@ public class WebSecurityConfig {
                 .build();
         }
 
-        @Bean
         public AbstractAuthenticationProcessingFilter jsonUsernamePasswordAuthenticationFilter() {
             var filter = new JsonUsernamePasswordAuthenticationFilter("/api/admin/auth/sign-in", adminAuthenticationManager(), objectMapper);
             filter.setAuthenticationSuccessHandler(new RoadeyeAuthenticationSuccessHandler(objectMapper));
@@ -63,7 +62,6 @@ public class WebSecurityConfig {
             return filter;
         }
 
-        @Bean
         public AuthenticationManager adminAuthenticationManager() {
             var provider = adminAuthenticationProvider();
             return new ProviderManager(provider);
