@@ -16,12 +16,12 @@ public class PlatformAdmin extends BaseEntity {
     private PlatformAdminPrincipal loginInfo;
 
     @Column(nullable = false)
-    private Integer loginFailCount;
+    private int loginFailCount;
 
     @Column(nullable = false)
     private String name;
 
-    PlatformAdmin(PlatformAdminPrincipal loginInfo, Integer loginFailCount, String name) {
+    PlatformAdmin(PlatformAdminPrincipal loginInfo, int loginFailCount, String name) {
         this.loginInfo = loginInfo;
         this.loginFailCount = loginFailCount;
         this.name = name;
