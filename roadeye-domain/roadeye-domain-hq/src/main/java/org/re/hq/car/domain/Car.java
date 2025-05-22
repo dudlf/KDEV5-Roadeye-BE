@@ -12,10 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Car extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer carId;
-
     @Column(nullable = false)
     private Integer compId;
 
@@ -42,19 +38,19 @@ public class Car extends BaseEntity {
     @Column(length = 512)
     private String disableReason;
 
-    @Column(nullable = false)
     private LocalDateTime shippedAt;
 
     // 생성자
-    private Car(Integer compId, String carName, String carImgUrl, String carNumber, Integer mileageSum) {
+    private Car(Integer compId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
+        this.compId = compId;
         this.carName = carName;
         this.carImgUrl = carImgUrl;
         this.carNumber = carNumber;
-        this.mileage = new CarMileage(0, mileageSum);
+        this.mileage = new CarMileage(mileageInit); // 초기값 세팅
     }
 
-    public static Car of(Integer compId, String carName, String carImgUrl, String carNumber, Integer mileageSum) {
-        return new Car(compId, carName, carImgUrl, carNumber, mileageSum);
+    public static Car of(Integer compId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
+        return new Car(compId, carName, carImgUrl, carNumber, mileageInit);
     }
 }
 
