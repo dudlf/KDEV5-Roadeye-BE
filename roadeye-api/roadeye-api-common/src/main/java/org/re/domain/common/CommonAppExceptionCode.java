@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum CommonAppExceptionCode implements AppExceptionCode {
     // @formatter:off
     INTERNAL_SERVER_ERROR("500", "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR),
+    ACCESS_DENIED("403", "Access Denied", HttpStatus.FORBIDDEN),
     ;
     // @formatter:on
 
