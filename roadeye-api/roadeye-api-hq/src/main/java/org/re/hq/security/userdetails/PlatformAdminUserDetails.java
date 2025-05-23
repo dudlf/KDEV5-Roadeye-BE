@@ -16,6 +16,7 @@ public class PlatformAdminUserDetails implements UserDetails, CredentialsContain
     private static final Collection<? extends GrantedAuthority> DEFAULT_AUTHORITIES
         = Collections.unmodifiableCollection(AuthorityUtils.createAuthorityList(AuthMemberType.ADMIN.getValue()));
 
+    private final Long id;
     private final String username;
     private String password;
 
@@ -27,6 +28,7 @@ public class PlatformAdminUserDetails implements UserDetails, CredentialsContain
     private final boolean enabled;
 
     private PlatformAdminUserDetails(
+        Long id,
         String username,
         String password,
         Collection<? extends GrantedAuthority> authorities,
@@ -35,6 +37,7 @@ public class PlatformAdminUserDetails implements UserDetails, CredentialsContain
         boolean credentialsNonExpired,
         boolean enabled
     ) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = Collections.unmodifiableCollection(authorities);
@@ -46,6 +49,7 @@ public class PlatformAdminUserDetails implements UserDetails, CredentialsContain
 
     public static UserDetails from(PlatformAdmin user) {
         return new PlatformAdminUserDetails(
+            user.getId(),
             user.getLoginInfo().username(),
             user.getLoginInfo().password(),
             DEFAULT_AUTHORITIES,

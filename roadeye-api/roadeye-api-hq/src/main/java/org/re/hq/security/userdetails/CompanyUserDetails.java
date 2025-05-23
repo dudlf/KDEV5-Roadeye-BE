@@ -19,6 +19,7 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
     private static final Collection<? extends GrantedAuthority> DEFAULT_AUTHORITIES
         = Collections.unmodifiableCollection(AuthorityUtils.createAuthorityList(AuthMemberType.USER.getValue()));
 
+    private final Long userId;
     private final String username;
     private String password;
 
@@ -30,6 +31,7 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
     private final boolean enabled;
 
     private CompanyUserDetails(
+        Long userId,
         String username,
         String password,
         Collection<? extends GrantedAuthority> authorities,
@@ -38,6 +40,7 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
         boolean credentialsNonExpired,
         boolean enabled
     ) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.authorities = Collections.unmodifiableCollection(authorities);
@@ -49,6 +52,7 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
 
     public static UserDetails from(Employee user) {
         return new CompanyUserDetails(
+            user.getId(),
             user.getCredentials().loginId(),
             user.getCredentials().password(),
             createAuthorities(user),
