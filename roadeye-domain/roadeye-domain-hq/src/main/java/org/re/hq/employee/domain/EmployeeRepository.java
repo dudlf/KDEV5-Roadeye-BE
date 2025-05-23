@@ -1,5 +1,7 @@
 package org.re.hq.employee.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,4 +15,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT e FROM Employee e WHERE e.credentials.loginId = :username AND e.tenantId = :tenantId")
     Optional<Employee> findByUsernameAndTenantId(Long tenantId, String username);
+
+    Page<Employee> findByTenantId(Long tenantId, Pageable pageable);
 }
