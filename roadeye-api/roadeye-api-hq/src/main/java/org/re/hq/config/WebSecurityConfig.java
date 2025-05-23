@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +32,11 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
     }
 
     @Configuration
@@ -59,6 +66,7 @@ public class WebSecurityConfig {
             var filter = new JsonUsernamePasswordAuthenticationFilter("/api/admin/auth/sign-in", adminAuthenticationManager(), objectMapper);
             filter.setAuthenticationSuccessHandler(new RoadeyeAuthenticationSuccessHandler(objectMapper));
             filter.setAuthenticationFailureHandler(new RoadeyeAuthenticationFailureHandler(objectMapper));
+            filter.setSecurityContextRepository(securityContextRepository());
             return filter;
         }
 
@@ -104,6 +112,7 @@ public class WebSecurityConfig {
             var filter = new JsonUsernamePasswordAuthenticationFilter("/api/auth/sign-in", companyAuthenticationManager(), objectMapper);
             filter.setAuthenticationSuccessHandler(new RoadeyeAuthenticationSuccessHandler(objectMapper));
             filter.setAuthenticationFailureHandler(new RoadeyeAuthenticationFailureHandler(objectMapper));
+            filter.setSecurityContextRepository(securityContextRepository());
             return filter;
         }
 
