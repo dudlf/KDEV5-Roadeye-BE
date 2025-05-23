@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 @SpringBootTest
 @Transactional
@@ -24,11 +26,11 @@ class CarReservationServiceTest {
     @Autowired
     private CarReservationRepository carReservationRepository;
 
-    CarReservation createCarReservation() {
+    CarReservation createCarReservation(Long carId, int start, int end) {
         CarReservation reservation = CarReservation.createReservation(
-            1L,
+            carId,
             10L,
-            ReservationPeriod.of(LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(5)),
+            ReservationPeriod.of(LocalDateTime.now().plusDays(start), LocalDateTime.now().plusDays(end)),
             ReserveReason.BUSINESS_TRIP,
             LocalDateTime.now()
         );
@@ -42,7 +44,7 @@ class CarReservationServiceTest {
 
     @Test
     void 예약을_승인합니다() {
-        CarReservation reservation = createCarReservation();
+        CarReservation reservation = createCarReservation(1L,1,5);
 
         carReservationService.approveReservation(reservation.getId(), 100L, LocalDateTime.now());
 
@@ -58,7 +60,7 @@ class CarReservationServiceTest {
 
     @Test
     void 예약을_반려합니다() {
-        CarReservation reservation = createCarReservation();
+        CarReservation reservation = createCarReservation(1L,1,5);
 
         rejectReservation(reservation);
 
@@ -75,7 +77,7 @@ class CarReservationServiceTest {
     @Test
     void 동일한시간대에는_하나의_예약만_가능합니다(){
         LocalDateTime now = LocalDateTime.now();
-        createCarReservation();
+        createCarReservation(1L,1,5);
 
         assertThatThrownBy(() -> carReservationService.createReservation(
             1L,
@@ -89,7 +91,7 @@ class CarReservationServiceTest {
 
     @Test
     void 반려된예약_시간대에는_예약이_가능합니다(){
-        CarReservation reservation = createCarReservation();
+        CarReservation reservation = createCarReservation(1L,1,5);
         rejectReservation(reservation);
 
         assertThatCode(() -> carReservationService.createReservation(
@@ -100,5 +102,21 @@ class CarReservationServiceTest {
             ReserveReason.BUSINESS_TRIP,
             LocalDateTime.now()
         )).doesNotThrowAnyException();
+    }
+
+    @Test
+    void 특정시간대에_유효한예약이_존재하는_차량들(){
+        createCarReservation(1L,1,5);
+        createCarReservation(2L,1,5);
+        createCarReservation(3L,3,5);
+        createCarReservation(4L,10,12);
+
+        List<Long> reservationIds = carReservationService.findCarIdsWithReservationPeriod(
+            ReservationPeriod.of(LocalDateTime.now().plusDays(4),LocalDateTime.now().plusDays(8))
+        );
+
+        assertAll(
+            () -> assertSame(1L, reservationIds.getFirst())
+        );
     }
 }

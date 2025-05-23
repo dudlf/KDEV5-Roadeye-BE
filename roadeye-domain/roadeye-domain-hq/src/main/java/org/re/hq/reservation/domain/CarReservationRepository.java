@@ -13,4 +13,13 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
         "AND r.reservationPeriod.rentStartAt <= :#{#reservationPeriod.rentEndAt} " +
         "AND r.reservationPeriod.rentEndAt >= :#{#reservationPeriod.rentStartAt} ")
     boolean existsCarReservationsByReservationPeriodContaining(Long carId, List<ReserveStatus> statuses, ReservationPeriod reservationPeriod);
+
+    @Query("SELECT DISTINCT r.carId FROM CarReservation r " +
+        "WHERE r.reserveStatus IN :statuses " +
+        "AND r.reservationPeriod.rentStartAt < :#{#reservationPeriod.rentEndAt} " +
+        "AND r.reservationPeriod.rentEndAt > :#{#reservationPeriod.rentStartAt}")
+    List<Long> findCarIdsWithReservationPeriod(
+        ReservationPeriod reservationPeriod,
+        List<ReserveStatus> statuses
+    );
 }

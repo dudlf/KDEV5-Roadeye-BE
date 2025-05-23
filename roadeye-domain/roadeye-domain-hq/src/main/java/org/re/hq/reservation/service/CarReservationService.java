@@ -60,4 +60,14 @@ public class CarReservationService {
             throw new IllegalStateException("Reservation already exists.");
         }
     }
+
+    /**
+     * 해당 시간대에 예약이 있는 차량 리스트 반환
+     */
+    public List<Long> findCarIdsWithReservationPeriod(ReservationPeriod reservationPeriod) {
+        return carReservationRepository.findCarIdsWithReservationPeriod(
+                reservationPeriod,
+                List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED)
+        );
+    }
 }
