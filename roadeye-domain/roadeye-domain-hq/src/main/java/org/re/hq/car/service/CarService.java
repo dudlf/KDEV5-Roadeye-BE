@@ -17,8 +17,8 @@ public class CarService {
     /**
      * 차량 등록
      **/
-    public Car createCar(Long companyId, CarProfile profile, int initial) {
-        Car car = Car.of(companyId, profile, initial);
+    public Car createCar(Long companyId, CarProfile carProfile, int mileageInitial) {
+        Car car = Car.of(companyId, carProfile, mileageInitial);
         return carRepository.save(car);
     }
 
