@@ -3,6 +3,7 @@ package org.re.hq.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Priority;
 import lombok.RequiredArgsConstructor;
+import org.re.hq.security.domain.AuthMemberType;
 import org.re.hq.security.userdetails.CompanyUserDetailsService;
 import org.re.hq.security.userdetails.PlatformAdminUserDetailsService;
 import org.re.hq.security.web.authentication.JsonUsernamePasswordAuthenticationFilter;
@@ -53,7 +54,7 @@ public class WebSecurityConfig {
                 .securityMatcher("/api/admin/**")
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/admin/auth/sign-in").permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().hasAuthority(AuthMemberType.ADMIN.getValue())
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -99,7 +100,7 @@ public class WebSecurityConfig {
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/auth/sign-in").permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().hasAuthority(AuthMemberType.USER.getValue())
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
