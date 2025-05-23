@@ -14,13 +14,13 @@ import java.math.BigDecimal;
 public class CarLocation {
 
     @Column(precision = 10, scale = 6)
-    private BigDecimal coordLat;
+    private BigDecimal coordinationLat;
 
     @Column(precision = 9, scale = 6)
-    private BigDecimal coordLon;
+    private BigDecimal coordinationLon;
 
-    public CarLocation(BigDecimal coordLat, BigDecimal coordLon) {
-        this.coordLat = coordLat;
-        this.coordLon = coordLon;
+    public CarLocation(BigDecimal coordinationLat, BigDecimal coordinationLon) {
+        this.coordinationLat = coordinationLat;
+        this.coordinationLon = coordinationLon;
     }
 }
