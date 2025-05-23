@@ -13,16 +13,10 @@ import java.time.LocalDateTime;
 public class Car extends BaseEntity {
 
     @Column(nullable = false)
-    private Integer companyId;
+    private Long companyId;
 
-    @Column(nullable = false, length = 30)
-    private String carName;
-
-    @Column(length = 512)
-    private String carImgUrl;
-
-    @Column(nullable = false, length = 8)
-    private String carNumber;
+    @Embedded
+    private CarProfile profile;
 
     @Embedded
     private CarLocation location;
@@ -33,24 +27,20 @@ public class Car extends BaseEntity {
     @Embedded
     private CarStatus status;
 
-    private LocalDateTime disabledAt;
-
     @Column(length = 512)
     private String disableReason;
 
     private LocalDateTime shippedAt;
 
     // 생성자
-    private Car(Integer companyId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
+    private Car(Long companyId, CarProfile profile, int initial) {
         this.companyId = companyId;
-        this.carName = carName;
-        this.carImgUrl = carImgUrl;
-        this.carNumber = carNumber;
-        this.mileage = new CarMileage(mileageInit); // 초기값 세팅
+        this.profile = profile;
+        this.mileage = new CarMileage(initial); // 초기값 세팅
     }
 
-    public static Car of(Integer companyId, String carName, String carImgUrl, String carNumber, Integer mileageInit) {
-        return new Car(companyId, carName, carImgUrl, carNumber, mileageInit);
+    public static Car of(Long companyId, CarProfile profile, int initial) {
+        return new Car(companyId, profile, initial);
     }
 }
 
