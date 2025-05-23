@@ -29,7 +29,7 @@ class HelloControllerTest {
 
     @Test
     void testError() throws Exception {
-        mockMvc.perform(get("/error"))
+        mockMvc.perform(get("/error-test"))
             .andExpect(status().isInternalServerError())
             .andExpect(content().contentType("application/json"))
             .andExpect(jsonPath("$.error.code").value("500"))

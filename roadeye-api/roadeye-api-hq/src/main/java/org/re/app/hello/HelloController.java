@@ -15,7 +15,7 @@ public class HelloController {
         return Map.of("message", "Hello, World!");
     }
 
-    @GetMapping("/error")
+    @GetMapping("/error-test")
     public Object error() {
         throw new AppException(CommonAppExceptionCode.INTERNAL_SERVER_ERROR);
     }
