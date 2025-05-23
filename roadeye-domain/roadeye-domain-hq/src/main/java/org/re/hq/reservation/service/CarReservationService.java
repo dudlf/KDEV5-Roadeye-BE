@@ -6,6 +6,7 @@ import org.re.hq.reservation.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,5 +32,40 @@ public class CarReservationService {
             .orElseThrow(() -> new IllegalArgumentException("Reservation not found with ID"));
 
         reservation.reject(approverId, rejectReason, processedAt);
+    }
+
+    /**
+     * 예약 등록
+     */
+    public void createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
+                                  ReserveReason reserveReason, LocalDateTime reservedAt){
+        checkReservation(carId, reservationPeriod);
+        checkReservationStart(reservationPeriod);
+
+        CarReservation carReservation = CarReservation.createReservation(carId, reserverId, reservationPeriod, reserveReason, reservedAt);
+
+        carReservationRepository.save(carReservation);
+    }
+
+    /**
+     * 겹치는 예약 확인 : 차량은 동일한 시간대에 두 개 이상의 예약을 가질 수 없다.
+     */
+    public void checkReservation(Long carId, ReservationPeriod reservationPeriod) {
+        boolean exists = carReservationRepository.existsCarReservationsByReservationPeriodContaining(
+                carId,
+                List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
+                reservationPeriod
+        );
+
+        if (exists) {
+            throw new IllegalStateException("Reservation already exists.");
+        }
+    }
+
+    /**
+     * 예약 시작 시간은 현재 시간 이후여야 한다.
+     */
+    public void checkReservationStart(ReservationPeriod reservationPeriod) {
+
     }
 }

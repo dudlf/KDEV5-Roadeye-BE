@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -24,16 +24,25 @@ class CarReservationServiceTest {
     @Autowired
     private CarReservationRepository carReservationRepository;
 
-    @Test
-    void 예약을_승인합니다() {
+    CarReservation createCarReservation() {
         CarReservation reservation = CarReservation.createReservation(
             1L,
             10L,
-            ReservationPeriod.of(LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2)),
+            ReservationPeriod.of(LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(5)),
             ReserveReason.BUSINESS_TRIP,
             LocalDateTime.now()
         );
         carReservationRepository.save(reservation);
+
+        return carReservationRepository.findById(reservation.getId()).get();
+    }
+    void rejectReservation(CarReservation reservation) {
+        carReservationService.rejectReservation(reservation.getId(), 100L,"정비로 인하여 대여 불가", LocalDateTime.now());
+    }
+
+    @Test
+    void 예약을_승인합니다() {
+        CarReservation reservation = createCarReservation();
 
         carReservationService.approveReservation(reservation.getId(), 100L, LocalDateTime.now());
 
@@ -49,16 +58,9 @@ class CarReservationServiceTest {
 
     @Test
     void 예약을_반려합니다() {
-        CarReservation reservation = CarReservation.createReservation(
-            1L,
-            10L,
-            ReservationPeriod.of(LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2)),
-            ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now()
-        );
-        carReservationRepository.save(reservation);
+        CarReservation reservation = createCarReservation();
 
-        carReservationService.rejectReservation(reservation.getId(), 100L,"정비로 인하여 대여 불가", LocalDateTime.now());
+        rejectReservation(reservation);
 
         CarReservation updated = carReservationRepository.findById(reservation.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
@@ -68,5 +70,35 @@ class CarReservationServiceTest {
                 () -> assertThat(updated.getProcessedAt()).isNotNull()
         );
 
+    }
+
+    @Test
+    void 동일한시간대에는_하나의_예약만_가능합니다(){
+        LocalDateTime now = LocalDateTime.now();
+        createCarReservation();
+
+        assertThatThrownBy(() -> carReservationService.createReservation(
+            1L,
+            10L,
+            ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
+            ReserveReason.BUSINESS_TRIP,
+            LocalDateTime.now()
+        )).isInstanceOf(IllegalStateException.class)
+            .hasMessage("Reservation already exists.");
+    }
+
+    @Test
+    void 반려된예약_시간대에는_예약이_가능합니다(){
+        CarReservation reservation = createCarReservation();
+        rejectReservation(reservation);
+
+        assertThatCode(() -> carReservationService.createReservation(
+            reservation.getCarId(),
+            10L,
+            ReservationPeriod.of(reservation.getReservationPeriod().getRentStartAt(),
+                reservation.getReservationPeriod().getRentEndAt()),
+            ReserveReason.BUSINESS_TRIP,
+            LocalDateTime.now()
+        )).doesNotThrowAnyException();
     }
 }
