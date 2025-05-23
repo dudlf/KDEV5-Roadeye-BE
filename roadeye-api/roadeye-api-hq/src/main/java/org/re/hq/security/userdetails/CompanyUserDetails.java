@@ -2,6 +2,7 @@ package org.re.hq.security.userdetails;
 
 import lombok.Getter;
 import org.re.hq.employee.domain.Employee;
+import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.security.domain.AuthMemberType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 @Getter
 public class CompanyUserDetails implements UserDetails {
     private static final Collection<? extends GrantedAuthority> DEFAULT_AUTHORITIES
-            = Collections.unmodifiableCollection(AuthorityUtils.createAuthorityList(AuthMemberType.USER.getValue()));
+        = Collections.unmodifiableCollection(AuthorityUtils.createAuthorityList(AuthMemberType.USER.getValue()));
 
     private final String username;
     private final String password;
@@ -28,13 +29,13 @@ public class CompanyUserDetails implements UserDetails {
     private final boolean enabled;
 
     private CompanyUserDetails(
-            String username,
-            String password,
-            Collection<? extends GrantedAuthority> authorities,
-            boolean accountNonExpired,
-            boolean accountNonLocked,
-            boolean credentialsNonExpired,
-            boolean enabled
+        String username,
+        String password,
+        Collection<? extends GrantedAuthority> authorities,
+        boolean accountNonExpired,
+        boolean accountNonLocked,
+        boolean credentialsNonExpired,
+        boolean enabled
     ) {
         this.username = username;
         this.password = password;
@@ -47,21 +48,26 @@ public class CompanyUserDetails implements UserDetails {
 
     public static UserDetails from(Employee user) {
         return new CompanyUserDetails(
-                user.getCredentials().loginId(),
-                user.getCredentials().password(),
-                createAuthorities(user),
-                true,
-                true,
-                true,
-                true
+            user.getCredentials().loginId(),
+            user.getCredentials().password(),
+            createAuthorities(user),
+            true,
+            true,
+            true,
+            true
         );
     }
 
     private static Collection<? extends GrantedAuthority> createAuthorities(Employee user) {
         return Stream.concat(
-                DEFAULT_AUTHORITIES.stream(),
-                Stream.of(user.getMetadata().getRole())
-                        .map((r) -> new SimpleGrantedAuthority(r.name()))
+            DEFAULT_AUTHORITIES.stream(),
+            Stream.of(user.getMetadata().getRole())
+                .map((r) -> new SimpleGrantedAuthority(r.name()))
         ).toList();
+    }
+
+    public boolean isManager() {
+        return authorities.stream()
+            .anyMatch((a) -> a.getAuthority().equals(EmployeeRole.ROOT.name()));
     }
 }

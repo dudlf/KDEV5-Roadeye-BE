@@ -2,6 +2,7 @@ package org.re.app.hello;
 
 import org.re.domain.common.CommonAppExceptionCode;
 import org.re.exception.AppException;
+import org.re.hq.security.access.ManagerOnly;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +23,11 @@ public class HelloController {
     @GetMapping("/error-internal")
     public Object errorInternal() {
         throw new RuntimeException("Internal error");
+    }
+
+    @ManagerOnly
+    @GetMapping("/api/foods/mgr-only")
+    public Object foods() {
+        return Map.of("foods", "pizza");
     }
 }
