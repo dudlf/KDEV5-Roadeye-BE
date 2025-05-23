@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.security.domain.AuthMemberType;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,12 +15,12 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 @Getter
-public class CompanyUserDetails implements UserDetails {
+public class CompanyUserDetails implements UserDetails, CredentialsContainer {
     private static final Collection<? extends GrantedAuthority> DEFAULT_AUTHORITIES
         = Collections.unmodifiableCollection(AuthorityUtils.createAuthorityList(AuthMemberType.USER.getValue()));
 
     private final String username;
-    private final String password;
+    private String password;
 
     private final Collection<? extends GrantedAuthority> authorities;
 
@@ -69,5 +70,10 @@ public class CompanyUserDetails implements UserDetails {
     public boolean isManager() {
         return authorities.stream()
             .anyMatch((a) -> a.getAuthority().equals(EmployeeRole.ROOT.name()));
+    }
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null;
     }
 }
