@@ -27,12 +27,12 @@ class CarServiceTest {
     void 차량을_등록합니다() {
         // given
         Long companyId = 1L;
-        String carName = "소나타";
-        String carImgUrl = "https://example.com/car.jpg";
-        String carNumber = "12가1234";
+        String name = "소나타";
+        String number = "12가1234";
+        String imgUrl = "https://example.com/car.jpg";
         int initial = 15000;
 
-        CarProfile profile = new CarProfile(carName, carImgUrl, carNumber);
+        CarProfile profile = new CarProfile(name, number, imgUrl);
 
         // when
         Car savedCar = carService.createCar(companyId, profile, initial);
@@ -40,9 +40,9 @@ class CarServiceTest {
         // then
         assertAll(
             () -> assertThat(savedCar.getCompanyId()).isEqualTo(companyId),
-            () -> assertThat(savedCar.getProfile().getName()).isEqualTo(carName),
-            () -> assertThat(savedCar.getProfile().getNumber()).isEqualTo(carNumber),
-            () -> assertThat(savedCar.getProfile().getImageUrl()).isEqualTo(carImgUrl),
+            () -> assertThat(savedCar.getProfile().getName()).isEqualTo(name),
+            () -> assertThat(savedCar.getProfile().getNumber()).isEqualTo(number),
+            () -> assertThat(savedCar.getProfile().getImageUrl()).isEqualTo(imgUrl),
             () -> assertThat(savedCar.getMileage().getInitial()).isEqualTo(initial)
         );
     }
