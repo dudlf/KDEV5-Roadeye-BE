@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class RoadeyeAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -32,12 +31,6 @@ public class RoadeyeAuthenticationSuccessHandler implements AuthenticationSucces
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.OK.value());
             objectMapper.writeValue(writer, jsonResponse);
-        } catch (IOException e) {
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            objectMapper.writeValue(response.getWriter(), Map.of("error", "Internal Server Error"));
-        } finally {
-            response.getWriter().flush();
         }
     }
 }
