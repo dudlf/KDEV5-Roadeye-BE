@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 import org.re.hq.domain.common.BaseEntity;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
 
 @Entity
 @Getter
+@SQLRestriction("status != 'DELETED'")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Employee extends BaseEntity {
 
