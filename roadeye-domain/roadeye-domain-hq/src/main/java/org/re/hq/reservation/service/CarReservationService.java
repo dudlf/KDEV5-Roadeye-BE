@@ -40,7 +40,6 @@ public class CarReservationService {
     public void createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
                                   ReserveReason reserveReason, LocalDateTime reservedAt){
         checkReservation(carId, reservationPeriod);
-        checkReservationStart(reservationPeriod);
 
         CarReservation carReservation = CarReservation.createReservation(carId, reserverId, reservationPeriod, reserveReason, reservedAt);
 
@@ -48,7 +47,7 @@ public class CarReservationService {
     }
 
     /**
-     * 겹치는 예약 확인 : 차량은 동일한 시간대에 두 개 이상의 예약을 가질 수 없다.
+     * 차량은 동일한 시간대에 두 개 이상의 예약을 가질 수 없다.
      */
     public void checkReservation(Long carId, ReservationPeriod reservationPeriod) {
         boolean exists = carReservationRepository.existsCarReservationsByReservationPeriodContaining(
@@ -60,12 +59,5 @@ public class CarReservationService {
         if (exists) {
             throw new IllegalStateException("Reservation already exists.");
         }
-    }
-
-    /**
-     * 예약 시작 시간은 현재 시간 이후여야 한다.
-     */
-    public void checkReservationStart(ReservationPeriod reservationPeriod) {
-
     }
 }
