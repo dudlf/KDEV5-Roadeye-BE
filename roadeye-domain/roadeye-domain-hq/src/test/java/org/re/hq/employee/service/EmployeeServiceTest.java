@@ -10,13 +10,16 @@ import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(properties = {"spring.jpa.show-sql=true"})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class EmployeeServiceTest {
 
@@ -84,6 +87,38 @@ class EmployeeServiceTest {
             () -> assertThat(employee.getStatus()).isEqualTo(EntityLifecycleStatus.ACTIVE),
             () -> assertThat(employee.getUpdatedAt()).isNotNull()
         );
+    }
+
+    @Test
+    void 계정_정보를_조회합니다() {
+        IntStream.iterate(0, i -> i + 1)
+            .limit(30)
+            .forEach((ignore) -> {
+                var credentials = new EmployeeCredentials("root", "root");
+                employeeService.createNormalAccount(1L, credentials, "root", "root");
+            });
+
+        var actual = employeeService.readAll(1L, PageRequest.of(0, 10));
+
+        assertThat(actual.getTotalElements()).isEqualTo(30);
+        assertThat(actual.getSize()).isEqualTo(10);
+    }
+
+    @Test
+    void 소프트_딜리트로_삭제된_정보는_전체_조회에서_보이지_않는다() {
+        var sample = IntStream.iterate(0, i -> i + 1)
+            .limit(30)
+            .mapToObj((ignore) -> {
+                var credentials = new EmployeeCredentials("root", "root");
+                return employeeService.createNormalAccount(1L, credentials, "root", "root");
+            }).toList();
+
+        var employee = employeeService.read(1L, sample.getFirst().getId());
+        employeeService.delete(1L, employee.getId());
+
+        var actual = employeeService.readAll(1L, PageRequest.of(0, 10));
+        assertThat(actual.getTotalElements()).isEqualTo(29);
+        assertThat(actual.getSize()).isEqualTo(10);
     }
 
 }

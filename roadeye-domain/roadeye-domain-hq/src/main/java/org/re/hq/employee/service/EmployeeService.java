@@ -7,6 +7,8 @@ import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeMetadata;
 import org.re.hq.employee.domain.EmployeeRepository;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -79,6 +81,10 @@ public class EmployeeService {
         var employee = this.read(tenantId, employeeId);
 
         employee.delete();
+    }
+
+    public Page<Employee> readAll(Long tenantId, Pageable pageable) {
+        return employeeRepository.findByTenantId(tenantId, pageable);
     }
 
 
