@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 public class CarMileage {
 
     @Column(nullable = false)
-    private Integer mileageInit = 0;
+    private int initial = 0;
 
     @Column(nullable = false)
-    private Integer mileageSum;
+    private int total;
 
-    public CarMileage(Integer mileageInit) {
-        this.mileageInit = mileageInit;
-        this.mileageSum = mileageInit;
+    public CarMileage(int initial) {
+        this.initial = initial;
+        this.total = initial;
     }
 }
