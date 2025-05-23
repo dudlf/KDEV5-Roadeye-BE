@@ -5,12 +5,14 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.re.hq.car.domain.Car;
+import org.re.hq.car.domain.CarProfile;
 import org.re.hq.car.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 @Transactional
@@ -24,20 +26,24 @@ class CarServiceTest {
     @Test
     void 차량을_등록합니다() {
         // given
-        Integer companyId = 1;
+        Long companyId = 1L;
         String carName = "소나타";
         String carImgUrl = "https://example.com/car.jpg";
         String carNumber = "12가1234";
-        Integer carMileageInit = 15000;
+        int initial = 15000;
+
+        CarProfile profile = new CarProfile(carName, carImgUrl, carNumber);
 
         // when
-        Car savedCar = carService.createCar(companyId, carName, carImgUrl, carNumber, carMileageInit);
+        Car savedCar = carService.createCar(companyId, profile, initial);
 
         // then
-        assertThat(savedCar.getCompanyId()).isEqualTo(companyId);
-        assertThat(savedCar.getCarName()).isEqualTo(carName);
-        assertThat(savedCar.getCarNumber()).isEqualTo(carNumber);
-        assertThat(savedCar.getCarImgUrl()).isEqualTo(carImgUrl);
-        assertThat(savedCar.getMileage().getMileageInit()).isEqualTo(carMileageInit);
+        assertAll(
+            () -> assertThat(savedCar.getCompanyId()).isEqualTo(companyId),
+            () -> assertThat(savedCar.getProfile().getName()).isEqualTo(carName),
+            () -> assertThat(savedCar.getProfile().getNumber()).isEqualTo(carNumber),
+            () -> assertThat(savedCar.getProfile().getImageUrl()).isEqualTo(carImgUrl),
+            () -> assertThat(savedCar.getMileage().getInitial()).isEqualTo(initial)
+        );
     }
 }
