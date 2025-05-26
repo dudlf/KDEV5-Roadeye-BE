@@ -6,16 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSources;
+
+import org.re.hq.reservation.CarReservationFixture;
 import org.re.hq.reservation.domain.*;
-import org.re.hq.reservation.fixture.CarReservationFixture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
@@ -35,7 +32,7 @@ class CarReservationServiceTest {
 
     @BeforeEach
     void setUp(){
-        CarReservation reservation = CarReservationFixture.createReservation(1L,1,5);
+        CarReservation reservation = CarReservationFixture.create(1L,1,5);
         carReservationRepository.save(reservation);
     }
 
@@ -45,9 +42,7 @@ class CarReservationServiceTest {
 
     @Test
     void 예약을_승인합니다() {
-        CarReservation reservation = carReservationRepository.findById(1L)
-            .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
-
+        CarReservation reservation = carReservationRepository.findAll().getFirst();
         carReservationService.approveReservation(reservation.getId(), 100L, LocalDateTime.now());
 
         CarReservation updated = carReservationRepository.findById(reservation.getId())
@@ -62,8 +57,7 @@ class CarReservationServiceTest {
 
     @Test
     void 예약을_반려합니다() {
-        CarReservation reservation = carReservationRepository.findById(1L)
-            .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+        CarReservation reservation = carReservationRepository.findAll().getFirst();
 
         rejectReservation(reservation);
 
@@ -108,7 +102,11 @@ class CarReservationServiceTest {
 
     @Test
     void 특정시간대에_유효한예약이_존재하는_차량들(){
-        List<CarReservation> carReservations = CarReservationFixture.createReservations();
+        List<CarReservation> carReservations = List.of(
+            CarReservationFixture.create(2L,1,5),
+            CarReservationFixture.create(3L,3,5),
+            CarReservationFixture.create(4L,10,12)
+        );
         carReservationRepository.saveAll(carReservations);
 
         List<Long> reservationIds = carReservationService.findCarIdsWithReservationPeriod(
