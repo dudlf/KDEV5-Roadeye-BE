@@ -13,20 +13,25 @@ import java.util.UUID;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CarStatus {
-
+public class CarMdtStatus {
+    @Column(nullable = false)
     private Integer batteryVoltage;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CarIgnitionStatus ignition;
 
     @Column(columnDefinition = "BINARY(16)")
     private UUID activeTuid;
 
-    public CarStatus(Integer batteryVoltage, CarIgnitionStatus ignition, UUID activeTuid) {
+    public CarMdtStatus(Integer batteryVoltage, CarIgnitionStatus ignition, UUID activeTuid) {
         this.batteryVoltage = batteryVoltage;
         this.ignition = ignition;
         this.activeTuid = activeTuid;
+    }
+
+    public static CarMdtStatus createDefault() {
+        return new CarMdtStatus(0, CarIgnitionStatus.OFF, null);
     }
 }
 

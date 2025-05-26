@@ -28,7 +28,7 @@ public class Car extends BaseEntity {
     private CarMileage mileage;
 
     @Embedded
-    private CarStatus status;
+    private CarMdtStatus mdtStatus;
 
     @Column(length = 512)
     private String disableReason;
@@ -40,6 +40,7 @@ public class Car extends BaseEntity {
         this.companyId = companyId;
         this.profile = carProfile;
         this.location = CarLocation.createDefault();
+        this.mdtStatus = CarMdtStatus.createDefault();
         this.mileage = new CarMileage(mileageInitial); // 초기값 세팅
     }
 
