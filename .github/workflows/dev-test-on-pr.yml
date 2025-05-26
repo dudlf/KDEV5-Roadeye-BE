@@ -3,7 +3,7 @@ name: PR Test
 on:
   pull_request:
     branches:
-      - CICD
+      - dev
 
 jobs:
   test:
