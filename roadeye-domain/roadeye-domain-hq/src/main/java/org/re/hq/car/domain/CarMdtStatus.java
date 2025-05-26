@@ -1,12 +1,12 @@
 package org.re.hq.car.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.hq.car.converter.CarIgnitionStatusConverter;
 
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ public class CarMdtStatus {
     @Column(nullable = false)
     private Integer batteryVoltage;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = CarIgnitionStatusConverter.class)
     @Column(nullable = false)
     private CarIgnitionStatus ignition;
 
