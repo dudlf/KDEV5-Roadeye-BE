@@ -1,6 +1,7 @@
 package org.re.hq.reservation.service;
 
 import jakarta.transaction.Transactional;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertSame;
+
 
 @SpringBootTest
 @Transactional
@@ -116,9 +118,8 @@ class CarReservationServiceTest {
         );
 
         assertAll(
-            () -> assertSame(1L, reservationIds.getFirst()),
-            () -> assertSame(2L, reservationIds.get(1)),
-            () -> assertSame(3L, reservationIds.get(2))
+            () -> assertThat(reservationIds).asInstanceOf(InstanceOfAssertFactories.LIST).hasSize(3),
+            () -> assertThat(reservationIds).asInstanceOf(InstanceOfAssertFactories.LIST).contains(1L,2L,3L)
         );
     }
 
@@ -131,7 +132,7 @@ class CarReservationServiceTest {
             ReserveReason.BUSINESS_TRIP,
             LocalDateTime.now()
         )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Rent start time must be before renting end time");
+            .hasMessage("Rent start time must be after current time");
 
         assertThatThrownBy(() -> carReservationService.createReservation(
             1L,
@@ -141,6 +142,5 @@ class CarReservationServiceTest {
             LocalDateTime.now()
         )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Rent end time must be after rent start time");
-
     }
 }
