@@ -13,14 +13,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarLocation {
 
-    @Column(precision = 10, scale = 6)
-    private BigDecimal coordinationLat;
+    @Column(name = "gps_lat", precision = 10, scale = 6)
+    private BigDecimal latitude;
 
-    @Column(precision = 9, scale = 6)
-    private BigDecimal coordinationLon;
+    @Column(name = "gps_lon", precision = 9, scale = 6)
+    private BigDecimal longitude;
 
-    public CarLocation(BigDecimal coordinationLat, BigDecimal coordinationLon) {
-        this.coordinationLat = coordinationLat;
-        this.coordinationLon = coordinationLon;
+    public CarLocation(BigDecimal latitude, BigDecimal longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
