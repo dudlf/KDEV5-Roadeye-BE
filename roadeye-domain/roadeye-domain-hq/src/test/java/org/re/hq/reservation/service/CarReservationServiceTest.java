@@ -116,7 +116,31 @@ class CarReservationServiceTest {
         );
 
         assertAll(
-            () -> assertSame(1L, reservationIds.getFirst())
+            () -> assertSame(1L, reservationIds.getFirst()),
+            () -> assertSame(2L, reservationIds.get(1)),
+            () -> assertSame(3L, reservationIds.get(2))
         );
+    }
+
+    @Test
+    void 예약시간은_유효한시간이어야한다(){
+        assertThatThrownBy(() -> carReservationService.createReservation(
+            1L,
+            10L,
+            ReservationPeriod.of(LocalDateTime.now().minusHours(3), LocalDateTime.now().plusDays(1)),
+            ReserveReason.BUSINESS_TRIP,
+            LocalDateTime.now()
+        )).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Rent start time must be before renting end time");
+
+        assertThatThrownBy(() -> carReservationService.createReservation(
+            1L,
+            10L,
+            ReservationPeriod.of(LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(1)),
+            ReserveReason.BUSINESS_TRIP,
+            LocalDateTime.now()
+        )).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Rent end time must be after rent start time");
+
     }
 }
