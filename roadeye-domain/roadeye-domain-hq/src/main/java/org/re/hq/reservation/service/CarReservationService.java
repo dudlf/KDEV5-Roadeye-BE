@@ -1,9 +1,9 @@
 package org.re.hq.reservation.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.re.hq.reservation.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -64,6 +64,7 @@ public class CarReservationService {
     /**
      * 해당 시간대에 예약이 있는 차량 리스트 반환
      */
+    @Transactional(readOnly = true)
     public List<Long> findCarIdsWithReservationPeriod(ReservationPeriod reservationPeriod) {
         return carReservationRepository.findCarIdsWithReservationPeriod(
                 reservationPeriod,
