@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarMileage {
 
-    @Column(nullable = false)
-    private int initial = 0;
+    @Column(name = "mileage_initial", nullable = false)
+    private int initial;
 
-    @Column(nullable = false)
+    @Column(name = "mileage_sum", nullable = false)
     private int total;
 
     public CarMileage(int initial) {
