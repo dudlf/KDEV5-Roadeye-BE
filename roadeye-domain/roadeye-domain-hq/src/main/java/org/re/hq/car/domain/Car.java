@@ -1,10 +1,13 @@
 package org.re.hq.car.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.hq.domain.common.BaseEntity;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,6 +39,7 @@ public class Car extends BaseEntity {
     private Car(Long companyId, CarProfile carProfile, int mileageInitial) {
         this.companyId = companyId;
         this.profile = carProfile;
+        this.location = CarLocation.createDefault();
         this.mileage = new CarMileage(mileageInitial); // 초기값 세팅
     }
 
