@@ -49,7 +49,7 @@ public class CarReservationService {
     /**
      * 차량은 동일한 시간대에 두 개 이상의 예약을 가질 수 없다.
      */
-    public void checkReservation(Long carId, ReservationPeriod reservationPeriod) {
+    private void checkReservation(Long carId, ReservationPeriod reservationPeriod) {
         boolean exists = carReservationRepository.existsCarReservationsByReservationPeriodContaining(
                 carId,
                 List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
