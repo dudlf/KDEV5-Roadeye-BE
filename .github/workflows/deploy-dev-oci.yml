@@ -1,0 +1,36 @@
+name: Deploy Dev OCI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - CICD
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build the project
+        run: ./gradlew :roadeye-api:roadeye-api-hq:build
+
+      - name: Copy JAR to remote server via SCP
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "roadeye-api/roadeye-api-hq/build/libs/*.jar"
+          target: ${{ secrets.REMOTE_PATH }}
