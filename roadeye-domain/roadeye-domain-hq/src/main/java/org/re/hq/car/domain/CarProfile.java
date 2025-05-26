@@ -15,14 +15,14 @@ public class CarProfile {
     private String name;
 
     @Column(nullable = false, length = 8)
-    private String number;
+    private String licenseNumber;
 
     @Column(length = 512)
     private String imageUrl;
 
-    public CarProfile(String name, String number, String imageUrl) {
+    public CarProfile(String name, String licenseNumber, String imageUrl) {
         this.name = name;
-        this.number = number;
+        this.licenseNumber = licenseNumber;
         this.imageUrl = imageUrl;
     }
 }

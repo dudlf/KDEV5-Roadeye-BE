@@ -6,10 +6,8 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.re.hq.car.domain.Car;
 import org.re.hq.car.domain.CarProfile;
-import org.re.hq.car.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -41,7 +39,7 @@ class CarServiceTest {
         assertAll(
             () -> assertThat(savedCar.getCompanyId()).isEqualTo(companyId),
             () -> assertThat(savedCar.getProfile().getName()).isEqualTo(name),
-            () -> assertThat(savedCar.getProfile().getNumber()).isEqualTo(number),
+            () -> assertThat(savedCar.getProfile().getLicenseNumber()).isEqualTo(number),
             () -> assertThat(savedCar.getProfile().getImageUrl()).isEqualTo(imgUrl),
             () -> assertThat(savedCar.getMileage().getInitial()).isEqualTo(initial)
         );
