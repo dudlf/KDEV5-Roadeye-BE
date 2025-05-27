@@ -1,6 +1,7 @@
 package org.re.hq.car.service;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationCommandFixture;
@@ -22,181 +23,194 @@ class CarServiceTest {
     @Autowired
     CarService carService;
 
-    @Test
-    @DisplayName("차량 등록에 성공해야 한다.")
-    void 차량등록_성공_테스트() {
-        // given
-        var companyId = 1L;
-        var command = CarCreationCommandFixture.create();
+    @Nested
+    @DisplayName("차량 등록 테스트")
+    class CarCreationTests {
 
-        // when
-        var car = carService.createCar(companyId, command);
+        @Test
+        @DisplayName("차량 등록에 성공해야 한다.")
+        void 차량등록_성공_테스트() {
+            // given
+            var companyId = 1L;
+            var command = CarCreationCommandFixture.create();
 
-        // then
-        assertThat(car).isNotNull();
-        assertThat(car.getCompanyId()).isEqualTo(companyId);
-        assertThat(car.getProfile().getName()).isEqualTo(command.name());
-        assertThat(car.getProfile().getLicenseNumber()).isEqualTo(command.licenseNumber());
-        assertThat(car.getProfile().getImageUrl()).isEqualTo(command.imageUrl());
-        assertThat(car.getMileage().getInitial()).isEqualTo(command.mileageInitial());
+            // when
+            var car = carService.createCar(companyId, command);
+
+            // then
+            assertThat(car).isNotNull();
+            assertThat(car.getCompanyId()).isEqualTo(companyId);
+            assertThat(car.getProfile().getName()).isEqualTo(command.name());
+            assertThat(car.getProfile().getLicenseNumber()).isEqualTo(command.licenseNumber());
+            assertThat(car.getProfile().getImageUrl()).isEqualTo(command.imageUrl());
+            assertThat(car.getMileage().getInitial()).isEqualTo(command.mileageInitial());
+        }
+
+        @Test
+        @DisplayName("차량 최초 등록 시 시동 상태가 OFF가 되야 한다.")
+        void 차량등록_시_시동상태_OFF_테스트() {
+            // given
+            var companyId = 1L;
+            var command = CarCreationCommandFixture.create();
+
+            // when
+            var car = carService.createCar(companyId, command);
+
+            // then
+            assertThat(car).isNotNull();
+            assertThat(car.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.OFF);
+        }
     }
 
-    @Test
-    @DisplayName("차량 최초 등록 시 시동 상태가 OFF가 되야 한다.")
-    void 차량등록_시_시동상태_OFF_테스트() {
-        // given
-        var companyId = 1L;
-        var command = CarCreationCommandFixture.create();
+    @Nested
+    @DisplayName("차량 정보 수정 테스트")
+    class CarUpdateTests {
+        @Test
+        @DisplayName("차량 이름 변경이 가능해야 한다.")
+        void 차량이름_변경_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var nextName = "Next Car Name";
+            var updatedCommand = new CarUpdateCommand(nextName, null);
 
-        // when
-        var car = carService.createCar(companyId, command);
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            var updatedCar = carService.updateCarProfile(companyId, car.getId(), updatedCommand);
 
-        // then
-        assertThat(car).isNotNull();
-        assertThat(car.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.OFF);
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getProfile().getName()).isEqualTo(nextName);
+            assertThat(updatedCar.getProfile().getLicenseNumber()).isEqualTo(creationCommand.licenseNumber());
+        }
+
+        @Test
+        @DisplayName("차량 이미지 변경이 가능해야 한다.")
+        void 차량이미지_변경_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var nextImageUrl = "http://example.com/next_car.jpg";
+            var updatedCommand = new CarUpdateCommand(null, nextImageUrl);
+
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            var updatedCar = carService.updateCarProfile(companyId, car.getId(), updatedCommand);
+
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getProfile().getImageUrl()).isEqualTo(nextImageUrl);
+        }
+
+        @Test
+        @DisplayName("비활성화 이유가 등록되어야 한다.")
+        void 차량비활성화_이유_등록_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var disableReason = "차량 고장";
+
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            var disabledCar = carService.disable(companyId, car.getId(), new CarDisableCommand(disableReason));
+
+            // then
+            assertThat(disabledCar).isNotNull();
+            assertThat(disabledCar.getStatus()).isEqualTo(EntityLifecycleStatus.DISABLED);
+            assertThat(disabledCar.getDisableReason()).isEqualTo(disableReason);
+        }
     }
 
-    @Test
-    @DisplayName("차량 이름 변경이 가능해야 한다.")
-    void 차량이름_변경_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var nextName = "Next Car Name";
-        var updatedCommand = new CarUpdateCommand(nextName, null);
+    @Nested
+    @DisplayName("차량 시동 테스트")
+    class CarIgnitionTests {
+        @Test
+        @DisplayName("시동 OFF 상태에서만 시동 ON이 가능해야 한다.")
+        void 시동OFF_상태에서_시동ON_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var transactionId = UUID.randomUUID();
 
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        var updatedCar = carService.updateCarProfile(companyId, car.getId(), updatedCommand);
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            var updatedCar = carService.turnOnIgnition(companyId, car.getId(), transactionId);
 
-        // then
-        assertThat(updatedCar).isNotNull();
-        assertThat(updatedCar.getProfile().getName()).isEqualTo(nextName);
-        assertThat(updatedCar.getProfile().getLicenseNumber()).isEqualTo(creationCommand.licenseNumber());
-    }
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.ON);
+        }
 
-    @Test
-    @DisplayName("차량 이미지 변경이 가능해야 한다.")
-    void 차량이미지_변경_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var nextImageUrl = "http://example.com/next_car.jpg";
-        var updatedCommand = new CarUpdateCommand(null, nextImageUrl);
+        @Test
+        @DisplayName("시동을 킬 때 트랜잭션 ID가 설정되어야 한다.")
+        void 시동킬때_트랜잭션ID_설정_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var transactionId = UUID.randomUUID();
 
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        var updatedCar = carService.updateCarProfile(companyId, car.getId(), updatedCommand);
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            var updatedCar = carService.turnOnIgnition(companyId, car.getId(), transactionId);
 
-        // then
-        assertThat(updatedCar).isNotNull();
-        assertThat(updatedCar.getProfile().getImageUrl()).isEqualTo(nextImageUrl);
-    }
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getMdtStatus().getActiveTuid()).isEqualTo(transactionId);
+        }
 
-    @Test
-    @DisplayName("비활성화 이유가 등록되어야 한다.")
-    void 차량비활성화_이유_등록_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var disableReason = "차량 고장";
+        @Test
+        @DisplayName("시동 ON 상태에서만 시동 OFF가 가능해야 한다.")
+        void 시동ON_상태에서_시동OFF_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var transactionId = UUID.randomUUID();
 
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        var disabledCar = carService.disable(companyId, car.getId(), new CarDisableCommand(disableReason));
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
 
-        // then
-        assertThat(disabledCar).isNotNull();
-        assertThat(disabledCar.getStatus()).isEqualTo(EntityLifecycleStatus.DISABLED);
-        assertThat(disabledCar.getDisableReason()).isEqualTo(disableReason);
-    }
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.OFF);
+        }
 
-    @Test
-    @DisplayName("시동 OFF 상태에서만 시동 ON이 가능해야 한다.")
-    void 시동OFF_상태에서_시동ON_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var transactionId = UUID.randomUUID();
+        @Test
+        @DisplayName("트랜잭션 ID가 일치하지 않으면 시동 OFF가 실패해야 한다.")
+        void 시동끄기_트랜잭션ID_일치_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var transactionId = UUID.randomUUID();
+            var wrongTransactionId = UUID.randomUUID();
 
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        var updatedCar = carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            carService.turnOnIgnition(companyId, car.getId(), transactionId);
 
-        // then
-        assertThat(updatedCar).isNotNull();
-        assertThat(updatedCar.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.ON);
-    }
+            // then
+            assertThrows(Exception.class, () -> {
+                carService.turnOffIgnition(companyId, car.getId(), wrongTransactionId);
+            });
+        }
 
-    @Test
-    @DisplayName("시동을 킬 때 트랜잭션 ID가 설정되어야 한다.")
-    void 시동킬때_트랜잭션ID_설정_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var transactionId = UUID.randomUUID();
+        @Test
+        @DisplayName("시동을 끈 후 트랜잭션 ID가 null이 되어야 한다.")
+        void 시동끄기_후_트랜잭션ID_null_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var transactionId = UUID.randomUUID();
 
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        var updatedCar = carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
 
-        // then
-        assertThat(updatedCar).isNotNull();
-        assertThat(updatedCar.getMdtStatus().getActiveTuid()).isEqualTo(transactionId);
-    }
-
-    @Test
-    @DisplayName("시동 ON 상태에서만 시동 OFF가 가능해야 한다.")
-    void 시동ON_상태에서_시동OFF_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var transactionId = UUID.randomUUID();
-
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        carService.turnOnIgnition(companyId, car.getId(), transactionId);
-        var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
-
-        // then
-        assertThat(updatedCar).isNotNull();
-        assertThat(updatedCar.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.OFF);
-    }
-
-    @Test
-    @DisplayName("트랜잭션 ID가 일치하지 않으면 시동 OFF가 실패해야 한다.")
-    void 시동끄기_트랜잭션ID_일치_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var transactionId = UUID.randomUUID();
-        var wrongTransactionId = UUID.randomUUID();
-
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        carService.turnOnIgnition(companyId, car.getId(), transactionId);
-
-        // then
-        assertThrows(Exception.class, () -> {
-            carService.turnOffIgnition(companyId, car.getId(), wrongTransactionId);
-        });
-    }
-
-    @Test
-    @DisplayName("시동을 끈 후 트랜잭션 ID가 null이 되어야 한다.")
-    void 시동끄기_후_트랜잭션ID_null_테스트() {
-        // given
-        var companyId = 1L;
-        var creationCommand = CarCreationCommandFixture.create();
-        var transactionId = UUID.randomUUID();
-
-        // when
-        var car = carService.createCar(companyId, creationCommand);
-        carService.turnOnIgnition(companyId, car.getId(), transactionId);
-        var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
-
-        // then
-        assertThat(updatedCar).isNotNull();
-        assertThat(updatedCar.getMdtStatus().getActiveTuid()).isNull();
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getMdtStatus().getActiveTuid()).isNull();
+        }
     }
 }
