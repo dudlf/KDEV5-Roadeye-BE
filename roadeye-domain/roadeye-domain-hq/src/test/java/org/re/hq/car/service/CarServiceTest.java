@@ -81,6 +81,28 @@ class CarServiceTest {
         }
 
         @Test
+        @DisplayName("차량 목록 조회시 모두 활성화 상태여야 한다.")
+        void 차량목록조회_활성화상태_테스트() {
+            // given
+            var companyId = 1L;
+            var pageable = PageRequest.of(0, 10);
+            var numCars = 10;
+
+            // 차량 10개 등록
+            for (int i = 0; i < numCars; i++) {
+                var command = CarCreationCommandFixture.create();
+                carService.createCar(companyId, command);
+            }
+
+            // when
+            var carPage = carService.getCars(companyId, pageable);
+
+            // then
+            assertThat(carPage).isNotNull();
+            assertThat(carPage.getContent()).allMatch(car -> car.getStatus() == EntityLifecycleStatus.ACTIVE);
+        }
+
+        @Test
         @DisplayName("회사의 차량을 ID로 조회할 수 있어야 한다.")
         void 회사차량_단건조회_테스트() {
             // given
@@ -110,6 +132,22 @@ class CarServiceTest {
             assertThrows(Exception.class, () -> {
                 carService.getCarById(companyId2, car.getId());
             });
+        }
+
+        @Test
+        @DisplayName("차량 단건 조회시 활성화 상태여야 한다.")
+        void 차량단건조회_활성화상태_테스트() {
+            // given
+            var companyId = 1L;
+            var command = CarCreationCommandFixture.create();
+            var car = carService.createCar(companyId, command);
+
+            // when
+            var retrievedCar = carService.getCarById(companyId, car.getId());
+
+            // then
+            assertThat(retrievedCar).isNotNull();
+            assertThat(retrievedCar.getStatus()).isEqualTo(EntityLifecycleStatus.ACTIVE);
         }
     }
 
