@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - dev
+      - CICD
 
 concurrency:
   group: 'deploy-dev-oci-hq'
