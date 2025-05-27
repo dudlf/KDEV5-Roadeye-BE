@@ -2,7 +2,7 @@ package org.re.hq.car.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.re.hq.car.dto.CarCreationCommand;
+import org.re.hq.car.dto.CarCreationCommandFixture;
 import org.re.hq.car.dto.CarUpdateCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,16 +21,7 @@ class CarServiceTest {
     void 차량등록_성공_테스트() {
         // given
         var companyId = 1L;
-        var carName = "Test Car";
-        var carLicenseNumber = "123가 4567";
-        var carImageUrl = "http://example.com/car.jpg";
-        var carMileageInitial = 10000;
-        var command = new CarCreationCommand(
-            carName,
-            carLicenseNumber,
-            carImageUrl,
-            carMileageInitial
-        );
+        var command = CarCreationCommandFixture.create();
 
         // when
         var car = carService.createCar(companyId, command);
@@ -38,10 +29,10 @@ class CarServiceTest {
         // then
         assertThat(car).isNotNull();
         assertThat(car.getCompanyId()).isEqualTo(companyId);
-        assertThat(car.getProfile().getName()).isEqualTo(carName);
-        assertThat(car.getProfile().getLicenseNumber()).isEqualTo(carLicenseNumber);
-        assertThat(car.getProfile().getImageUrl()).isEqualTo(carImageUrl);
-        assertThat(car.getMileage().getInitial()).isEqualTo(carMileageInitial);
+        assertThat(car.getProfile().getName()).isEqualTo(command.name());
+        assertThat(car.getProfile().getLicenseNumber()).isEqualTo(command.licenseNumber());
+        assertThat(car.getProfile().getImageUrl()).isEqualTo(command.imageUrl());
+        assertThat(car.getMileage().getInitial()).isEqualTo(command.mileageInitial());
     }
 
     @Test
@@ -49,16 +40,7 @@ class CarServiceTest {
     void 차량이름_변경_테스트() {
         // given
         var companyId = 1L;
-        var carName = "Test Car";
-        var carLicenseNumber = "123가 4567";
-        var carImageUrl = "http://example.com/car.jpg";
-        var carMileageInitial = 10000;
-        var creationCommand = new CarCreationCommand(
-            carName,
-            carLicenseNumber,
-            carImageUrl,
-            carMileageInitial
-        );
+        var creationCommand = CarCreationCommandFixture.create();
         var nextName = "Next Car Name";
         var updatedCommand = new CarUpdateCommand(nextName, null);
 
@@ -69,7 +51,7 @@ class CarServiceTest {
         // then
         assertThat(updatedCar).isNotNull();
         assertThat(updatedCar.getProfile().getName()).isEqualTo(nextName);
-        assertThat(updatedCar.getProfile().getLicenseNumber()).isEqualTo(carLicenseNumber);
+        assertThat(updatedCar.getProfile().getLicenseNumber()).isEqualTo(creationCommand.licenseNumber());
     }
 
     @Test
@@ -77,16 +59,7 @@ class CarServiceTest {
     void 차량이미지_변경_테스트() {
         // given
         var companyId = 1L;
-        var carName = "Test Car";
-        var carLicenseNumber = "123가 4567";
-        var carImageUrl = "http://example.com/car.jpg";
-        var carMileageInitial = 10000;
-        var creationCommand = new CarCreationCommand(
-            carName,
-            carLicenseNumber,
-            carImageUrl,
-            carMileageInitial
-        );
+        var creationCommand = CarCreationCommandFixture.create();
         var nextImageUrl = "http://example.com/next_car.jpg";
         var updatedCommand = new CarUpdateCommand(null, nextImageUrl);
 
