@@ -24,7 +24,7 @@ public class CarLocation {
         this.longitude = longitude;
     }
 
-    public static CarLocation createDefault() {
+    public static CarLocation create() {
         return new CarLocation(BigDecimal.ZERO, BigDecimal.ZERO);
     }
 }

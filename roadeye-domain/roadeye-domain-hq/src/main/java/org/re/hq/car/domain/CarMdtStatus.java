@@ -31,7 +31,7 @@ public class CarMdtStatus {
         this.activeTuid = activeTuid;
     }
 
-    public static CarMdtStatus createDefault() {
+    public static CarMdtStatus create() {
         return new CarMdtStatus(Integers.ZERO, CarIgnitionStatus.OFF, null);
     }
 

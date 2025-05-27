@@ -40,8 +40,8 @@ public class Car extends BaseEntity {
     private Car(Long companyId, CarProfile carProfile, int mileageInitial) {
         this.companyId = companyId;
         this.profile = carProfile;
-        this.location = CarLocation.createDefault();
-        this.mdtStatus = CarMdtStatus.createDefault();
+        this.location = CarLocation.create();
+        this.mdtStatus = CarMdtStatus.create();
         this.mileage = new CarMileage(mileageInitial);
     }
 
