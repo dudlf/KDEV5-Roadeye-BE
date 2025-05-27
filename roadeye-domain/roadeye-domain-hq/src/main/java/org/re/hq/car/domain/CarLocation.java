@@ -19,7 +19,7 @@ public class CarLocation {
     @Column(name = "gps_lon", precision = 9, scale = 6)
     private BigDecimal longitude;
 
-    public CarLocation(BigDecimal latitude, BigDecimal longitude) {
+    private CarLocation(BigDecimal latitude, BigDecimal longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
