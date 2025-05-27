@@ -52,5 +52,10 @@ public class CarMdtStatus {
         this.ignition = CarIgnitionStatus.OFF;
         this.activeTuid = null;
     }
+
+    public void resetIgnitionStatus() {
+        this.ignition = CarIgnitionStatus.OFF;
+        this.activeTuid = null;
+    }
 }
 

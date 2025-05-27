@@ -212,5 +212,41 @@ class CarServiceTest {
             assertThat(updatedCar).isNotNull();
             assertThat(updatedCar.getMdtStatus().getActiveTuid()).isNull();
         }
+
+        @Test
+        @DisplayName("시동 상태를 초기화할 수 있어야 한다.")
+        void 시동상태_초기화_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var transactionId = UUID.randomUUID();
+
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            var updatedCar = carService.resetIgnitionStatus(companyId, car.getId());
+
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.OFF);
+        }
+
+        @Test
+        @DisplayName("시동 상태를 초기화할 때 트랜잭션 ID가 null이 되어야 한다.")
+        void 시동상태_초기화_후_트랜잭션ID_null_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var transactionId = UUID.randomUUID();
+
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            var updatedCar = carService.resetIgnitionStatus(companyId, car.getId());
+
+            // then
+            assertThat(updatedCar).isNotNull();
+            assertThat(updatedCar.getMdtStatus().getActiveTuid()).isNull();
+        }
     }
 }
