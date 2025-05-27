@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarMdtStatus {
     @Column(nullable = false)
-    private Integer batteryVoltage;
+    private int batteryVoltage;
 
     @Convert(converter = CarIgnitionStatusConverter.class)
     @Column(nullable = false)
@@ -25,7 +25,7 @@ public class CarMdtStatus {
     @Column(columnDefinition = "BINARY(16)")
     private UUID activeTuid;
 
-    public CarMdtStatus(Integer batteryVoltage, CarIgnitionStatus ignition, UUID activeTuid) {
+    public CarMdtStatus(int batteryVoltage, CarIgnitionStatus ignition, UUID activeTuid) {
         this.batteryVoltage = batteryVoltage;
         this.ignition = ignition;
         this.activeTuid = activeTuid;
