@@ -23,43 +23,37 @@ public class CarService {
     }
 
     public Car updateCarProfile(Long companyId, Long carId, CarUpdateCommand command) {
-        var car = carRepository.findByCompanyIdAndId(companyId, carId)
-            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
-
+        var car = getCar(companyId, carId);
         command.update(car);
-
         return carRepository.save(car);
     }
 
     public Car turnOnIgnition(Long companyId, Long carId, UUID transactionId) {
-        var car = carRepository.findByCompanyIdAndId(companyId, carId)
-            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
-
+        var car = getCar(companyId, carId);
         car.turnOnIgnition(transactionId);
         return carRepository.save(car);
     }
 
     public Car turnOffIgnition(Long companyId, Long carId, UUID transactionId) {
-        var car = carRepository.findByCompanyIdAndId(companyId, carId)
-            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
-
+        var car = getCar(companyId, carId);
         car.turnOffIgnition(transactionId);
         return carRepository.save(car);
     }
 
     public Car resetIgnitionStatus(Long companyId, Long carId) {
-        var car = carRepository.findByCompanyIdAndId(companyId, carId)
-            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
-
+        var car = getCar(companyId, carId);
         car.resetIgnitionStatus();
         return carRepository.save(car);
     }
 
     public Car disable(Long companyId, Long carId, CarDisableCommand command) {
-        var car = carRepository.findByCompanyIdAndId(companyId, carId)
-            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
-
+        var car = getCar(companyId, carId);
         car.disable(command.reason());
         return carRepository.save(car);
+    }
+
+    private Car getCar(Long companyId, Long carId) {
+        return carRepository.findByCompanyIdAndId(companyId, carId)
+            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
     }
 }
