@@ -48,6 +48,23 @@ class CarServiceTest {
             assertThat(carPage).isNotNull();
             assertThat(carPage.getTotalElements()).isEqualTo(numCars);
         }
+
+        @Test
+        @DisplayName("회사의 차량을 ID로 조회할 수 있어야 한다.")
+        void 회사차량_단건조회_테스트() {
+            // given
+            var companyId = 1L;
+            var command = CarCreationCommandFixture.create();
+            var car = carService.createCar(companyId, command);
+
+            // when
+            var retrievedCar = carService.getCarById(companyId, car.getId());
+
+            // then
+            assertThat(retrievedCar).isNotNull();
+            assertThat(retrievedCar.getId()).isEqualTo(car.getId());
+            assertThat(retrievedCar.getCompanyId()).isEqualTo(companyId);
+        }
     }
 
     @Nested

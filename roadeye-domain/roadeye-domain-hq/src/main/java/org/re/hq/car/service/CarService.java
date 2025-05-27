@@ -23,6 +23,10 @@ public class CarService {
         return carRepository.findByCompanyId(companyId, pageable);
     }
 
+    public Car getCarById(Long companyId, Long id) {
+        return getCar(companyId, id);
+    }
+
     public Car createCar(Long companyId, CarCreationCommand command) {
         var car = command.toEntity(companyId);
         return carRepository.save(car);
