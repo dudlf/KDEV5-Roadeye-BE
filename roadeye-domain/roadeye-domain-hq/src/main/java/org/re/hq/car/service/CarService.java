@@ -9,6 +9,8 @@ import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.car.repository.CarRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -26,6 +28,14 @@ public class CarService {
 
         command.update(car);
 
+        return carRepository.save(car);
+    }
+
+    public Car turnOnIgnition(Long companyId, Long carId, UUID transactionId) {
+        var car = carRepository.findByCompanyIdAndId(companyId, carId)
+            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
+
+        car.turnOnIgnition(transactionId);
         return carRepository.save(car);
     }
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.re.hq.domain.common.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -50,6 +51,10 @@ public class Car extends BaseEntity {
     public void disable(String reason) {
         this.disableReason = reason;
         super.disable();
+    }
+
+    public void turnOnIgnition(UUID transactionId) {
+        this.mdtStatus.turnOnIgnition(transactionId);
     }
 }
 

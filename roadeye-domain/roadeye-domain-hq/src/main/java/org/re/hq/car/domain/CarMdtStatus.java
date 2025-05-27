@@ -33,5 +33,13 @@ public class CarMdtStatus {
     public static CarMdtStatus createDefault() {
         return new CarMdtStatus(0, CarIgnitionStatus.OFF, null);
     }
+
+    public void turnOnIgnition(UUID transactionId) {
+        if (this.ignition != CarIgnitionStatus.OFF) {
+            throw new IllegalStateException("Ignition is already ON or in an invalid state.");
+        }
+        this.ignition = CarIgnitionStatus.ON;
+        this.activeTuid = transactionId;
+    }
 }
 
