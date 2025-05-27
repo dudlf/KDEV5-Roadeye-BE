@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface CarRepository extends JpaRepository<Car, Long> {
     Page<Car> findByCompanyIdAndStatus(Long companyId, EntityLifecycleStatus entityLifecycleStatus, Pageable pageable);
 
-    Optional<Car> findByCompanyIdAndIdAndStatus(Long companyId, Long id, EntityLifecycleStatus status);
+    Long countByCompanyIdAndStatus(Long companyId, EntityLifecycleStatus status);
 
+    Optional<Car> findByCompanyIdAndIdAndStatus(Long companyId, Long id, EntityLifecycleStatus status);
 }

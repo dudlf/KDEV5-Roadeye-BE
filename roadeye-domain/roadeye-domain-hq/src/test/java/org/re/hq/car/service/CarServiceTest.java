@@ -149,6 +149,34 @@ class CarServiceTest {
             assertThat(retrievedCar).isNotNull();
             assertThat(retrievedCar.getStatus()).isEqualTo(EntityLifecycleStatus.ACTIVE);
         }
+
+        @Test
+        @DisplayName("차량 상태별 카운트를 조회할 수 있어야 한다.")
+        void 차량상태별_카운트조회_테스트() {
+            // given
+            var companyId = 1L;
+            var activeCommand = CarCreationCommandFixture.create();
+            var disabledCommand = CarCreationCommandFixture.create();
+
+            // 차량 활성화 상태 등록
+            for (int i = 0; i < 5; i++) {
+                carService.createCar(companyId, activeCommand);
+            }
+
+            // 차량 비활성화 상태 등록
+            for (int i = 0; i < 3; i++) {
+                var car = carService.createCar(companyId, disabledCommand);
+                carService.disable(companyId, car.getId(), new CarDisableCommand("비활성화 이유"));
+            }
+
+            // when
+            var activeCount = carService.countCarsByStatus(companyId, EntityLifecycleStatus.ACTIVE);
+            var disabledCount = carService.countCarsByStatus(companyId, EntityLifecycleStatus.DISABLED);
+
+            // then
+            assertThat(activeCount).isEqualTo(5);
+            assertThat(disabledCount).isEqualTo(3);
+        }
     }
 
     @Nested

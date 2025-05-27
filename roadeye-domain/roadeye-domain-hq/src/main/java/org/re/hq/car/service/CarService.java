@@ -28,6 +28,10 @@ public class CarService {
         return getActiveCar(companyId, id);
     }
 
+    public Long countCarsByStatus(Long companyId, EntityLifecycleStatus status) {
+        return carRepository.countByCompanyIdAndStatus(companyId, status);
+    }
+
     public Car createCar(Long companyId, CarCreationCommand command) {
         var car = command.toEntity(companyId);
         return carRepository.save(car);
