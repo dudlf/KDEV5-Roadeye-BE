@@ -14,7 +14,7 @@ public class CarProfile {
     @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false, length = 8)
+    @Column(nullable = false, length = 10)
     private String licenseNumber;
 
     @Column(length = 512)
