@@ -9,7 +9,8 @@ public class CarIgnitionStatusConverter implements AttributeConverter<CarIgnitio
     @Override
     public Integer convertToDatabaseColumn(CarIgnitionStatus attribute) {
         if (attribute == null) {
-            return null;
+            // TODO: 커스텀 예외 처리
+            throw new IllegalArgumentException("CarIgnitionStatus cannot be null");
         }
         return attribute.getValue();
     }
@@ -17,7 +18,8 @@ public class CarIgnitionStatusConverter implements AttributeConverter<CarIgnitio
     @Override
     public CarIgnitionStatus convertToEntityAttribute(Integer dbData) {
         if (dbData == null) {
-            return null;
+            // TODO: 커스텀 예외 처리
+            throw new IllegalArgumentException("Database value for CarIgnitionStatus cannot be null");
         }
         return CarIgnitionStatus.of(dbData);
     }
