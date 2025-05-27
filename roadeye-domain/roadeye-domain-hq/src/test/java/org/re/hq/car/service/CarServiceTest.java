@@ -50,6 +50,36 @@ class CarServiceTest {
         }
 
         @Test
+        @DisplayName("회사 차량 목록 조회시 다른 회사 차량은 조회되지 않아야 한다.")
+        void 회사차량_목록조회_다른회사차량_조회되지않음_테스트() {
+            // given
+            var companyId1 = 1L;
+            var companyId2 = 2L;
+            var pageable = PageRequest.of(0, 10);
+            var numCarsCompany1 = 5;
+            var numCarsCompany2 = 3;
+
+            // 회사 1에 차량 등록
+            for (int i = 0; i < numCarsCompany1; i++) {
+                var command = CarCreationCommandFixture.create();
+                carService.createCar(companyId1, command);
+            }
+
+            // 회사 2에 차량 등록
+            for (int i = 0; i < numCarsCompany2; i++) {
+                var command = CarCreationCommandFixture.create();
+                carService.createCar(companyId2, command);
+            }
+
+            // when
+            var carPage = carService.getCars(companyId1, pageable);
+
+            // then
+            assertThat(carPage).isNotNull();
+            assertThat(carPage.getTotalElements()).isEqualTo(numCarsCompany1);
+        }
+
+        @Test
         @DisplayName("회사의 차량을 ID로 조회할 수 있어야 한다.")
         void 회사차량_단건조회_테스트() {
             // given
@@ -64,6 +94,21 @@ class CarServiceTest {
             assertThat(retrievedCar).isNotNull();
             assertThat(retrievedCar.getId()).isEqualTo(car.getId());
             assertThat(retrievedCar.getCompanyId()).isEqualTo(companyId);
+        }
+
+        @Test
+        @DisplayName("회사의 차량을 ID로 조회할 때, 다른 회사 차량은 조회되지 않아야 한다.")
+        void 회사차량_단건조회_다른회사차량_조회되지않음_테스트() {
+            // given
+            var companyId1 = 1L;
+            var companyId2 = 2L;
+            var command = CarCreationCommandFixture.create();
+            var car = carService.createCar(companyId1, command);
+
+            // when
+            assertThrows(Exception.class, () -> {
+                carService.getCarById(companyId2, car.getId());
+            });
         }
     }
 
