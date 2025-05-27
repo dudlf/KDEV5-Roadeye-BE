@@ -44,25 +44,25 @@ public class CarService {
     public Car updateCarProfile(Long companyId, Long carId, CarUpdateCommand command) {
         var car = getActiveCar(companyId, carId);
         car.update(command);
-        return carRepository.save(car);
+        return car;
     }
 
     public Car turnOnIgnition(Long companyId, Long carId, UUID transactionId) {
         var car = getActiveCar(companyId, carId);
         car.turnOnIgnition(transactionId);
-        return carRepository.save(car);
+        return car;
     }
 
     public Car turnOffIgnition(Long companyId, Long carId, UUID transactionId) {
         var car = getActiveCar(companyId, carId);
         car.turnOffIgnition(transactionId);
-        return carRepository.save(car);
+        return car;
     }
 
     public Car resetIgnitionStatus(Long companyId, Long carId) {
         var car = getActiveCar(companyId, carId);
         car.resetIgnitionStatus();
-        return carRepository.save(car);
+        return car;
     }
 
     public void deleteCar(Long companyId, Long carId) {
@@ -73,13 +73,13 @@ public class CarService {
     public Car disable(Long companyId, Long carId, CarDisableCommand command) {
         var car = getActiveCar(companyId, carId);
         car.disable(command.reason());
-        return carRepository.save(car);
+        return car;
     }
 
     // ===
 
     private Car getActiveCar(Long companyId, Long carId) {
         return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
-            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
+                .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
     }
 }
