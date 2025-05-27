@@ -1,6 +1,9 @@
 package org.re.hq.car.dto;
 
+import org.jspecify.annotations.NonNull;
+
 public record CarDisableCommand(
-    String reason
+        @NonNull
+        String reason
 ) {
 }
