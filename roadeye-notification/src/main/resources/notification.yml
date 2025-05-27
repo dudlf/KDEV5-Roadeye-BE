@@ -2,3 +2,7 @@ spring:
   config:
     import:
       - classpath: /mail.yml
+
+firebase:
+  credentials:
+    path: classpath:/push.json
