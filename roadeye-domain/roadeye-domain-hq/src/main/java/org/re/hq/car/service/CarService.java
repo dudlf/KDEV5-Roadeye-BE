@@ -24,6 +24,10 @@ public class CarService {
         return carRepository.findByCompanyIdAndStatus(companyId, EntityLifecycleStatus.ACTIVE, pageable);
     }
 
+    public Page<Car> getCarsByStatus(Long companyId, EntityLifecycleStatus status, Pageable pageable) {
+        return carRepository.findByCompanyIdAndStatus(companyId, status, pageable);
+    }
+
     public Car getCarById(Long companyId, Long id) {
         return getActiveCar(companyId, id);
     }

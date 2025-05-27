@@ -151,6 +151,68 @@ class CarServiceTest {
         }
 
         @Test
+        @DisplayName("차량 상태별 목록 조회가 가능해야 한다.")
+        void 차량상태별_목록조회_테스트() {
+            // given
+            var companyId = 1L;
+            var numActiveCars = 5;
+            var numDisabledCars = 3;
+            var creationCommand = CarCreationCommandFixture.create();
+
+            // 차량 활성화 상태 등록
+            for (int i = 0; i < numActiveCars; i++) {
+                carService.createCar(companyId, creationCommand);
+            }
+
+            // 차량 비활성화 상태 등록
+            for (int i = 0; i < numDisabledCars; i++) {
+                var car = carService.createCar(companyId, creationCommand);
+                carService.disable(companyId, car.getId(), new CarDisableCommand("비활성화 이유"));
+            }
+
+            // when
+            var activeCars = carService.getCarsByStatus(companyId, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
+            var disabledCars = carService.getCarsByStatus(companyId, EntityLifecycleStatus.DISABLED, PageRequest.of(0, 10));
+
+            // then
+            assertThat(activeCars).isNotNull();
+            assertThat(activeCars.getTotalElements()).isEqualTo(numActiveCars);
+            assertThat(disabledCars).isNotNull();
+            assertThat(disabledCars.getTotalElements()).isEqualTo(numDisabledCars);
+        }
+
+        @Test
+        @DisplayName("차량 상태별 목록 조회시 다른 회사 차량은 조회되지 않아야 한다.")
+        void 차량상태별_목록조회_다른회사차량_조회되지않음_테스트() {
+            // given
+            var companyId1 = 1L;
+            var companyId2 = 2L;
+            var numCarsCompany1 = 5;
+            var numCarsCompany2 = 3;
+            var creationCommand = CarCreationCommandFixture.create();
+
+            // 회사 1에 차량 활성화 상태 등록
+            for (int i = 0; i < numCarsCompany1; i++) {
+                carService.createCar(companyId1, creationCommand);
+            }
+
+            // 회사 2에 차량 활성화 상태 등록
+            for (int i = 0; i < numCarsCompany2; i++) {
+                carService.createCar(companyId2, creationCommand);
+            }
+
+            // when
+            var activeCars = carService.getCarsByStatus(companyId1, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
+            var disabledCars = carService.getCarsByStatus(companyId2, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
+
+            // then
+            assertThat(activeCars).isNotNull();
+            assertThat(activeCars.getTotalElements()).isEqualTo(numCarsCompany1);
+            assertThat(disabledCars).isNotNull();
+            assertThat(disabledCars.getTotalElements()).isEqualTo(numCarsCompany2);
+        }
+
+        @Test
         @DisplayName("차량 상태별 카운트를 조회할 수 있어야 한다.")
         void 차량상태별_카운트조회_테스트() {
             // given
