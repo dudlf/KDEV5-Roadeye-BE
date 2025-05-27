@@ -217,17 +217,18 @@ class CarServiceTest {
         void 차량상태별_카운트조회_테스트() {
             // given
             var companyId = 1L;
-            var activeCommand = CarCreationCommandFixture.create();
-            var disabledCommand = CarCreationCommandFixture.create();
+            var numActiveCars = 5;
+            var numDisabledCars = 3;
+            var creationCommand = CarCreationCommandFixture.create();
 
             // 차량 활성화 상태 등록
-            for (int i = 0; i < 5; i++) {
-                carService.createCar(companyId, activeCommand);
+            for (int i = 0; i < numActiveCars; i++) {
+                carService.createCar(companyId, creationCommand);
             }
 
             // 차량 비활성화 상태 등록
-            for (int i = 0; i < 3; i++) {
-                var car = carService.createCar(companyId, disabledCommand);
+            for (int i = 0; i < numDisabledCars; i++) {
+                var car = carService.createCar(companyId, creationCommand);
                 carService.disable(companyId, car.getId(), new CarDisableCommand("비활성화 이유"));
             }
 
@@ -236,8 +237,8 @@ class CarServiceTest {
             var disabledCount = carService.countCarsByStatus(companyId, EntityLifecycleStatus.DISABLED);
 
             // then
-            assertThat(activeCount).isEqualTo(5);
-            assertThat(disabledCount).isEqualTo(3);
+            assertThat(activeCount).isEqualTo(numActiveCars);
+            assertThat(disabledCount).isEqualTo(numDisabledCars);
         }
     }
 
