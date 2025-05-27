@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -207,6 +208,54 @@ class CarServiceTest {
             assertThat(disabledCar).isNotNull();
             assertThat(disabledCar.getStatus()).isEqualTo(EntityLifecycleStatus.DISABLED);
             assertThat(disabledCar.getDisableReason()).isEqualTo(disableReason);
+        }
+    }
+
+    @Nested
+    @DisplayName("차량 삭제 테스트")
+    class CarDeletionTests {
+        @Test
+        @DisplayName("차량 삭제 후 목록 조회에서 제외되어야 한다.")
+        void 차량삭제_후_목록조회_제외_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+            var numCars = 10;
+            var numCarsToDelete = 5;
+            var pageable = PageRequest.of(0, numCars);
+
+            // 차량 10개 등록
+            var cars = IntStream.range(0, numCars)
+                .mapToObj(i -> carService.createCar(companyId, creationCommand))
+                .toList();
+            // 차량 5개 삭제
+            cars.stream()
+                .limit(numCarsToDelete)
+                .forEach(car -> carService.deleteCar(companyId, car.getId()));
+
+            // when
+            var carPage = carService.getCars(companyId, pageable);
+
+            // then
+            assertThat(carPage).isNotNull();
+            assertThat(carPage.getTotalElements()).isEqualTo(numCars - numCarsToDelete);
+        }
+
+        @Test
+        @DisplayName("차량 삭제 후 단건 조회가 불가능해야 한다.")
+        void 차량삭제_후_단건조회_테스트() {
+            // given
+            var companyId = 1L;
+            var creationCommand = CarCreationCommandFixture.create();
+
+            // when
+            var car = carService.createCar(companyId, creationCommand);
+            carService.deleteCar(companyId, car.getId());
+
+            // then
+            assertThrows(Exception.class, () -> {
+                carService.getCarById(companyId, car.getId());
+            });
         }
     }
 
