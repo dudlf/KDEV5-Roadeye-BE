@@ -7,6 +7,8 @@ import org.re.hq.car.dto.CarCreationCommand;
 import org.re.hq.car.dto.CarDisableCommand;
 import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.car.repository.CarRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,6 +18,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CarService {
     private final CarRepository carRepository;
+
+    public Page<Car> getCars(Long companyId, Pageable pageable) {
+        return carRepository.findByCompanyId(companyId, pageable);
+    }
 
     public Car createCar(Long companyId, CarCreationCommand command) {
         var car = command.toEntity(companyId);

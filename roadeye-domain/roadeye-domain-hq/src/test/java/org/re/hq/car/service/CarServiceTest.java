@@ -11,6 +11,7 @@ import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.UUID;
 
@@ -22,6 +23,32 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CarServiceTest {
     @Autowired
     CarService carService;
+
+    @Nested
+    @DisplayName("차량 조회 테스트")
+    class CarRetrievalTests {
+        @Test
+        @DisplayName("회사의 차량 목록을 조회할 수 있어야 한다.")
+        void 회사차량_목록조회_테스트() {
+            // given
+            var companyId = 1L;
+            var pageable = PageRequest.of(0, 10);
+            var numCars = 10;
+
+            // 차량 10개 등록
+            for (int i = 0; i < numCars; i++) {
+                var command = CarCreationCommandFixture.create();
+                carService.createCar(companyId, command);
+            }
+
+            // when
+            var carPage = carService.getCars(companyId, pageable);
+
+            // then
+            assertThat(carPage).isNotNull();
+            assertThat(carPage.getTotalElements()).isEqualTo(numCars);
+        }
+    }
 
     @Nested
     @DisplayName("차량 등록 테스트")
