@@ -28,8 +28,9 @@ public class CarService {
         return carRepository.findByCompanyIdAndStatus(companyId, status, pageable);
     }
 
-    public Car getCarById(Long companyId, Long id) {
-        return getActiveCar(companyId, id);
+    public Car getCarById(Long companyId, Long carId) {
+        return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
+                .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
     }
 
     public Long countCarsByStatus(Long companyId, EntityLifecycleStatus status) {
@@ -41,45 +42,32 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public Car updateCarProfile(Long companyId, Long carId, CarUpdateCommand command) {
-        var car = getActiveCar(companyId, carId);
+    public Car updateCarProfile(Car car, CarUpdateCommand command) {
         car.update(command);
         return car;
     }
 
-    public Car turnOnIgnition(Long companyId, Long carId, UUID transactionId) {
-        var car = getActiveCar(companyId, carId);
+    public Car turnOnIgnition(Car car, UUID transactionId) {
         car.turnOnIgnition(transactionId);
         return car;
     }
 
-    public Car turnOffIgnition(Long companyId, Long carId, UUID transactionId) {
-        var car = getActiveCar(companyId, carId);
+    public Car turnOffIgnition(Car car, UUID transactionId) {
         car.turnOffIgnition(transactionId);
         return car;
     }
 
-    public Car resetIgnitionStatus(Long companyId, Long carId) {
-        var car = getActiveCar(companyId, carId);
+    public Car resetIgnitionStatus(Car car) {
         car.resetIgnitionStatus();
         return car;
     }
 
-    public void deleteCar(Long companyId, Long carId) {
-        var car = getActiveCar(companyId, carId);
+    public void deleteCar(Car car) {
         car.delete();
     }
 
-    public Car disable(Long companyId, Long carId, CarDisableCommand command) {
-        var car = getActiveCar(companyId, carId);
+    public Car disable(Car car, CarDisableCommand command) {
         car.disable(command.reason());
         return car;
-    }
-
-    // ===
-
-    private Car getActiveCar(Long companyId, Long carId) {
-        return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
-                .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
     }
 }

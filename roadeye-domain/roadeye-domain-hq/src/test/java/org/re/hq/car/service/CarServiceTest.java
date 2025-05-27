@@ -167,7 +167,7 @@ class CarServiceTest {
             // 차량 비활성화 상태 등록
             for (int i = 0; i < numDisabledCars; i++) {
                 var car = carService.createCar(companyId, creationCommand);
-                carService.disable(companyId, car.getId(), new CarDisableCommand("비활성화 이유"));
+                carService.disable(car, new CarDisableCommand("비활성화 이유"));
             }
 
             // when
@@ -229,7 +229,7 @@ class CarServiceTest {
             // 차량 비활성화 상태 등록
             for (int i = 0; i < numDisabledCars; i++) {
                 var car = carService.createCar(companyId, creationCommand);
-                carService.disable(companyId, car.getId(), new CarDisableCommand("비활성화 이유"));
+                carService.disable(car, new CarDisableCommand("비활성화 이유"));
             }
 
             // when
@@ -295,7 +295,7 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            var updatedCar = carService.updateCarProfile(companyId, car.getId(), updatedCommand);
+            var updatedCar = carService.updateCarProfile(car, updatedCommand);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -314,7 +314,7 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            var updatedCar = carService.updateCarProfile(companyId, car.getId(), updatedCommand);
+            var updatedCar = carService.updateCarProfile(car, updatedCommand);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -331,7 +331,7 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            var disabledCar = carService.disable(companyId, car.getId(), new CarDisableCommand(disableReason));
+            var disabledCar = carService.disable(car, new CarDisableCommand(disableReason));
 
             // then
             assertThat(disabledCar).isNotNull();
@@ -355,12 +355,12 @@ class CarServiceTest {
 
             // 차량 10개 등록
             var cars = IntStream.range(0, numCars)
-                .mapToObj(i -> carService.createCar(companyId, creationCommand))
-                .toList();
+                    .mapToObj(i -> carService.createCar(companyId, creationCommand))
+                    .toList();
             // 차량 5개 삭제
             cars.stream()
-                .limit(numCarsToDelete)
-                .forEach(car -> carService.deleteCar(companyId, car.getId()));
+                    .limit(numCarsToDelete)
+                    .forEach(car -> carService.deleteCar(car));
 
             // when
             var carPage = carService.getCars(companyId, pageable);
@@ -379,7 +379,7 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            carService.deleteCar(companyId, car.getId());
+            carService.deleteCar(car);
 
             // then
             assertThrows(Exception.class, () -> {
@@ -401,7 +401,7 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            var updatedCar = carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            var updatedCar = carService.turnOnIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -418,7 +418,7 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            var updatedCar = carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            var updatedCar = carService.turnOnIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -435,8 +435,8 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            carService.turnOnIgnition(companyId, car.getId(), transactionId);
-            var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
+            carService.turnOnIgnition(car, transactionId);
+            var updatedCar = carService.turnOffIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -454,11 +454,11 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            carService.turnOnIgnition(companyId, car.getId(), transactionId);
+            carService.turnOnIgnition(car, transactionId);
 
             // then
             assertThrows(Exception.class, () -> {
-                carService.turnOffIgnition(companyId, car.getId(), wrongTransactionId);
+                carService.turnOffIgnition(car, wrongTransactionId);
             });
         }
 
@@ -472,8 +472,8 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            carService.turnOnIgnition(companyId, car.getId(), transactionId);
-            var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
+            carService.turnOnIgnition(car, transactionId);
+            var updatedCar = carService.turnOffIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -490,8 +490,8 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            carService.turnOnIgnition(companyId, car.getId(), transactionId);
-            var updatedCar = carService.resetIgnitionStatus(companyId, car.getId());
+            carService.turnOnIgnition(car, transactionId);
+            var updatedCar = carService.resetIgnitionStatus(car);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -508,8 +508,8 @@ class CarServiceTest {
 
             // when
             var car = carService.createCar(companyId, creationCommand);
-            carService.turnOnIgnition(companyId, car.getId(), transactionId);
-            var updatedCar = carService.resetIgnitionStatus(companyId, car.getId());
+            carService.turnOnIgnition(car, transactionId);
+            var updatedCar = carService.resetIgnitionStatus(car);
 
             // then
             assertThat(updatedCar).isNotNull();
