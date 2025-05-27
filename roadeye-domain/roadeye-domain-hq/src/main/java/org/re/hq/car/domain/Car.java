@@ -68,10 +68,10 @@ public class Car extends BaseEntity {
 
     public void update(CarUpdateCommand command) {
         if (command.name() != null) {
-            getProfile().setName(command.name());
+            profile.setName(command.name());
         }
         if (command.imageUrl() != null) {
-            getProfile().setImageUrl(command.imageUrl());
+            profile.setImageUrl(command.imageUrl());
         }
     }
 }
