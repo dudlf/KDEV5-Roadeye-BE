@@ -43,7 +43,7 @@ public class CarService {
 
     public Car updateCarProfile(Long companyId, Long carId, CarUpdateCommand command) {
         var car = getActiveCar(companyId, carId);
-        command.update(car);
+        car.update(command);
         return carRepository.save(car);
     }
 

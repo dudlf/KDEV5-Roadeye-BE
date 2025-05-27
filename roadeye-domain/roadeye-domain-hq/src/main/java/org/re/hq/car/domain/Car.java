@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.domain.common.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -63,6 +64,15 @@ public class Car extends BaseEntity {
 
     public void resetIgnitionStatus() {
         this.mdtStatus.resetIgnitionStatus();
+    }
+
+    public void update(CarUpdateCommand command) {
+        if (command.name() != null) {
+            getProfile().setName(command.name());
+        }
+        if (command.imageUrl() != null) {
+            getProfile().setImageUrl(command.imageUrl());
+        }
     }
 }
 
