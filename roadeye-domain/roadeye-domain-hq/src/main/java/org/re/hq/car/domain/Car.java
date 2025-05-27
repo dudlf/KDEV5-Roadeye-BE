@@ -46,5 +46,10 @@ public class Car extends BaseEntity {
     public static Car of(Long companyId, CarProfile carProfile, int mileageInitial) {
         return new Car(companyId, carProfile, mileageInitial);
     }
+
+    public void disable(String reason) {
+        this.disableReason = reason;
+        super.disable();
+    }
 }
 
