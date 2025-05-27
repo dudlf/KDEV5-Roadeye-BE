@@ -39,6 +39,14 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    public Car turnOffIgnition(Long companyId, Long carId, UUID transactionId) {
+        var car = carRepository.findByCompanyIdAndId(companyId, carId)
+            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
+
+        car.turnOffIgnition(transactionId);
+        return carRepository.save(car);
+    }
+
     public Car disable(Long companyId, Long carId, CarDisableCommand command) {
         var car = carRepository.findByCompanyIdAndId(companyId, carId)
             .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));

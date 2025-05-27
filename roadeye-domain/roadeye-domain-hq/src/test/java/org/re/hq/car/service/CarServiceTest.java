@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Import({CarService.class})
 @DataJpaTest
@@ -142,5 +143,60 @@ class CarServiceTest {
         // then
         assertThat(updatedCar).isNotNull();
         assertThat(updatedCar.getMdtStatus().getActiveTuid()).isEqualTo(transactionId);
+    }
+
+    @Test
+    @DisplayName("시동 ON 상태에서만 시동 OFF가 가능해야 한다.")
+    void 시동ON_상태에서_시동OFF_테스트() {
+        // given
+        var companyId = 1L;
+        var creationCommand = CarCreationCommandFixture.create();
+        var transactionId = UUID.randomUUID();
+
+        // when
+        var car = carService.createCar(companyId, creationCommand);
+        carService.turnOnIgnition(companyId, car.getId(), transactionId);
+        var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
+
+        // then
+        assertThat(updatedCar).isNotNull();
+        assertThat(updatedCar.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.OFF);
+    }
+
+    @Test
+    @DisplayName("트랜잭션 ID가 일치하지 않으면 시동 OFF가 실패해야 한다.")
+    void 시동끄기_트랜잭션ID_일치_테스트() {
+        // given
+        var companyId = 1L;
+        var creationCommand = CarCreationCommandFixture.create();
+        var transactionId = UUID.randomUUID();
+        var wrongTransactionId = UUID.randomUUID();
+
+        // when
+        var car = carService.createCar(companyId, creationCommand);
+        carService.turnOnIgnition(companyId, car.getId(), transactionId);
+
+        // then
+        assertThrows(Exception.class, () -> {
+            carService.turnOffIgnition(companyId, car.getId(), wrongTransactionId);
+        });
+    }
+
+    @Test
+    @DisplayName("시동을 끈 후 트랜잭션 ID가 null이 되어야 한다.")
+    void 시동끄기_후_트랜잭션ID_null_테스트() {
+        // given
+        var companyId = 1L;
+        var creationCommand = CarCreationCommandFixture.create();
+        var transactionId = UUID.randomUUID();
+
+        // when
+        var car = carService.createCar(companyId, creationCommand);
+        carService.turnOnIgnition(companyId, car.getId(), transactionId);
+        var updatedCar = carService.turnOffIgnition(companyId, car.getId(), transactionId);
+
+        // then
+        assertThat(updatedCar).isNotNull();
+        assertThat(updatedCar.getMdtStatus().getActiveTuid()).isNull();
     }
 }

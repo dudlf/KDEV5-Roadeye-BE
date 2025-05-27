@@ -41,5 +41,16 @@ public class CarMdtStatus {
         this.ignition = CarIgnitionStatus.ON;
         this.activeTuid = transactionId;
     }
+
+    public void turnOffIgnition(UUID transactionId) {
+        if (this.ignition != CarIgnitionStatus.ON) {
+            throw new IllegalStateException("Ignition is already OFF or in an invalid state.");
+        }
+        if (!this.activeTuid.equals(transactionId)) {
+            throw new IllegalArgumentException("Transaction ID does not match the active transaction.");
+        }
+        this.ignition = CarIgnitionStatus.OFF;
+        this.activeTuid = null;
+    }
 }
 

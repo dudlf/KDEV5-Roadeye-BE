@@ -56,5 +56,9 @@ public class Car extends BaseEntity {
     public void turnOnIgnition(UUID transactionId) {
         this.mdtStatus.turnOnIgnition(transactionId);
     }
+
+    public void turnOffIgnition(UUID transactionId) {
+        this.mdtStatus.turnOffIgnition(transactionId);
+    }
 }
 
