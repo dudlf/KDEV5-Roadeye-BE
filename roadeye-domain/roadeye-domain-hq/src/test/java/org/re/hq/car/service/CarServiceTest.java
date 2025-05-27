@@ -1,47 +1,45 @@
 package org.re.hq.car.service;
 
-import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.re.hq.car.domain.Car;
-import org.re.hq.car.domain.CarProfile;
+import org.re.hq.car.dto.CarCreationCommand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
-@Transactional
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@Import({CarService.class})
+@DataJpaTest
 class CarServiceTest {
-
     @Autowired
-    private CarService carService;
-
+    CarService carService;
 
     @Test
-    void 차량을_등록합니다() {
+    @DisplayName("차량 등록에 성공해야 한다.")
+    void 차량등록_성공_테스트() {
         // given
-        Long companyId = 1L;
-        String name = "소나타";
-        String number = "12가1234";
-        String imgUrl = "https://example.com/car.jpg";
-        int initial = 15000;
-
-        CarProfile profile = new CarProfile(name, number, imgUrl);
+        var companyId = 1L;
+        var carName = "Test Car";
+        var carLicenseNumber = "123가 4567";
+        var carImageUrl = "http://example.com/car.jpg";
+        var carMileageInitial = 10000;
+        var command = new CarCreationCommand(
+            carName,
+            carLicenseNumber,
+            carImageUrl,
+            carMileageInitial
+        );
 
         // when
-        Car savedCar = carService.createCar(companyId, profile, initial);
+        var car = carService.createCar(companyId, command);
 
         // then
-        assertAll(
-            () -> assertThat(savedCar.getCompanyId()).isEqualTo(companyId),
-            () -> assertThat(savedCar.getProfile().getName()).isEqualTo(name),
-            () -> assertThat(savedCar.getProfile().getLicenseNumber()).isEqualTo(number),
-            () -> assertThat(savedCar.getProfile().getImageUrl()).isEqualTo(imgUrl),
-            () -> assertThat(savedCar.getMileage().getInitial()).isEqualTo(initial)
-        );
+        assertThat(car).isNotNull();
+        assertThat(car.getCompanyId()).isEqualTo(companyId);
+        assertThat(car.getProfile().getName()).isEqualTo(carName);
+        assertThat(car.getProfile().getLicenseNumber()).isEqualTo(carLicenseNumber);
+        assertThat(car.getProfile().getImageUrl()).isEqualTo(carImageUrl);
+        assertThat(car.getMileage().getInitial()).isEqualTo(carMileageInitial);
     }
 }
