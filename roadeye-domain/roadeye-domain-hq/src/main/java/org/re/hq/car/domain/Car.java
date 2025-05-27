@@ -35,13 +35,12 @@ public class Car extends BaseEntity {
 
     private LocalDateTime shippedAt;
 
-    // 생성자
     private Car(Long companyId, CarProfile carProfile, int mileageInitial) {
         this.companyId = companyId;
         this.profile = carProfile;
         this.location = CarLocation.createDefault();
         this.mdtStatus = CarMdtStatus.createDefault();
-        this.mileage = new CarMileage(mileageInitial); // 초기값 세팅
+        this.mileage = new CarMileage(mileageInitial);
     }
 
     public static Car of(Long companyId, CarProfile carProfile, int mileageInitial) {
