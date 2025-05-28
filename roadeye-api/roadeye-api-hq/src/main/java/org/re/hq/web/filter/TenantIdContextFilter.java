@@ -19,15 +19,15 @@ public class TenantIdContextFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain filterChain
     ) throws ServletException, IOException {
-        TenantIdContext.setTenantId(TenantId.EMPTY);
-
         String tenantIdString = request.getHeader(TENANT_ID_HEADER_NAME);
-        if (tenantIdString != null && !tenantIdString.isEmpty()) {
-            Long id = Long.parseLong(tenantIdString);
-            TenantIdContext.setTenantId(new TenantId(id));
+        if (tenantIdString == null || tenantIdString.isEmpty()) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         try {
+            Long id = Long.parseLong(tenantIdString);
+            TenantIdContext.setTenantId(new TenantId(id));
             filterChain.doFilter(request, response);
         } finally {
             TenantIdContext.clear();
