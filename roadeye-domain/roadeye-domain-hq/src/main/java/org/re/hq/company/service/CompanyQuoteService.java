@@ -47,4 +47,9 @@ public class CompanyQuoteService {
         quoteRequest.approve(approver);
         return quoteRequest;
     }
+
+    public CompanyQuoteRequest reject(PlatformAdmin approver, CompanyQuoteRequest quoteRequest) {
+        quoteRequest.reject(approver);
+        return quoteRequest;
+    }
 }

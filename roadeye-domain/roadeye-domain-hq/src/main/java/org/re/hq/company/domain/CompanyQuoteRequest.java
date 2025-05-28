@@ -56,4 +56,17 @@ public class CompanyQuoteRequest extends BaseEntity {
     public boolean isApproved() {
         return this.quoteStatus == CompanyQuoteStatus.APPROVED;
     }
+
+    public void reject(PlatformAdmin approver) {
+        if (this.quoteStatus != CompanyQuoteStatus.PENDING) {
+            throw new IllegalStateException("Cannot reject a quote request that is not pending.");
+        }
+        this.approver = approver;
+        this.quoteStatus = CompanyQuoteStatus.REJECTED;
+        this.rejectedAt = LocalDateTime.now();
+    }
+
+    public boolean isRejected() {
+        return this.quoteStatus == CompanyQuoteStatus.REJECTED;
+    }
 }

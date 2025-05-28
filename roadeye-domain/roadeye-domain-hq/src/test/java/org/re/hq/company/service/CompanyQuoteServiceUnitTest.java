@@ -45,7 +45,7 @@ class CompanyQuoteServiceUnitTest {
             Mockito.verify(quoteRequest).approve(approver);
             assertThat(approvedQuoteRequest.getApprover()).isEqualTo(approver);
         }
-        
+
         @Test
         @DisplayName("이미 승인된 견적 요청을 다시 승인할 수 없어야 한다.")
         void approve_AlreadyApproved_ThrowsException() {
@@ -57,6 +57,69 @@ class CompanyQuoteServiceUnitTest {
             // When & Then
             assertThrows(RuntimeException.class, () -> {
                 companyQuoteService.approve(approver, quoteRequest);
+            });
+        }
+
+        @Test
+        @DisplayName("이미 거절된 견적 요청을 승인할 수 없어야 한다.")
+        void approve_AlreadyRejected_ThrowsException() {
+            // Given
+            var quoteRequest = Mockito.spy(CompanyQuoteRequestFixture.create());
+            var approver = Mockito.mock(PlatformAdmin.class);
+            quoteRequest.reject(approver); // 이미 거절된 상태
+
+            // When & Then
+            assertThrows(RuntimeException.class, () -> {
+                companyQuoteService.approve(approver, quoteRequest);
+            });
+        }
+    }
+
+
+    @Nested
+    @DisplayName("거절 테스트")
+    class RejectionTest {
+        @Test
+        @DisplayName("견적 요청을 거절할 수 있어야 한다.")
+        void reject_Success() {
+            // Given
+            var quoteRequest = Mockito.spy(CompanyQuoteRequestFixture.create());
+            var approver = Mockito.mock(PlatformAdmin.class);
+
+            // When
+            var rejectedQuoteRequest = companyQuoteService.reject(approver, quoteRequest);
+
+            // Then
+            assertNotNull(rejectedQuoteRequest);
+            Mockito.verify(quoteRequest).reject(approver);
+            assertThat(rejectedQuoteRequest.getApprover()).isEqualTo(approver);
+        }
+
+        @Test
+        @DisplayName("이미 거절된 견적 요청을 다시 거절할 수 없어야 한다.")
+        void reject_AlreadyRejected_ThrowsException() {
+            // Given
+            var quoteRequest = Mockito.spy(CompanyQuoteRequestFixture.create());
+            var approver = Mockito.mock(PlatformAdmin.class);
+            quoteRequest.reject(approver); // 이미 거절된 상태
+
+            // When & Then
+            assertThrows(RuntimeException.class, () -> {
+                companyQuoteService.reject(approver, quoteRequest);
+            });
+        }
+
+        @Test
+        @DisplayName("이미 승인된 견적 요청을 거절할 수 없어야 한다.")
+        void reject_AlreadyApproved_ThrowsException() {
+            // Given
+            var quoteRequest = Mockito.spy(CompanyQuoteRequestFixture.create());
+            var approver = Mockito.mock(PlatformAdmin.class);
+            quoteRequest.approve(approver); // 이미 승인된 상태
+
+            // When & Then
+            assertThrows(RuntimeException.class, () -> {
+                companyQuoteService.reject(approver, quoteRequest);
             });
         }
     }
