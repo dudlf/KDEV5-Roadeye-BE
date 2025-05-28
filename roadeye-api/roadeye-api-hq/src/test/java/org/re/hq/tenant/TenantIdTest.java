@@ -3,6 +3,7 @@ package org.re.hq.tenant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.re.hq.test.controller.TenantIdTestController;
+import org.re.hq.web.filter.TenantIdContextFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,7 +27,7 @@ public class TenantIdTest {
         var tenantId = 123L;
 
         mvc.perform(get("/test/tenant-id")
-                .header("X-Tenant-Id", tenantId))
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.tenantId").value(tenantId));
     }

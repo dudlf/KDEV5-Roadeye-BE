@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.service.EmployeeService;
+import org.re.hq.web.filter.TenantIdContextFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,7 +63,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
@@ -89,7 +90,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
@@ -116,7 +117,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
@@ -142,7 +143,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/admin/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
@@ -172,7 +173,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
@@ -199,7 +200,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
@@ -226,7 +227,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
@@ -252,7 +253,7 @@ public class CompanyLoginTest {
             ));
             var req = post("/api/admin/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Tenant-Id", tenantId)
+                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
                 .content(body);
 
             // then
