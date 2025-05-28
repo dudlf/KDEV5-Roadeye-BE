@@ -3,7 +3,7 @@ package org.re.hq.tenant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.re.hq.test.controller.TenantIdTestController;
-import org.re.hq.web.filter.TenantIdContextFilter;
+import org.re.hq.web.method.support.TenantIdArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,8 +26,9 @@ public class TenantIdTest {
     public void tenantIdShouldBeResolvedCorrectly() throws Exception {
         var tenantId = 123L;
 
-        mvc.perform(get("/test/tenant-id")
-                .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId))
+        var req = get("/test/tenant-id")
+            .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+        mvc.perform(req)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.tenantId").value(tenantId));
     }
