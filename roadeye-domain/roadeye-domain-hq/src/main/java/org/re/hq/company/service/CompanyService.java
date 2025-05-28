@@ -22,4 +22,8 @@ public class CompanyService {
         return companyRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Company not found with id: " + id));
     }
+
+    public boolean isBusinessNumberExists(String businessNumber) {
+        return companyRepository.existsByBusinessNumber(businessNumber);
+    }
 }
