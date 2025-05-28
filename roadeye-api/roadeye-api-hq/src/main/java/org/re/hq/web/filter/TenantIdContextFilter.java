@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class TenantIdContextFilter extends OncePerRequestFilter {
-    public final static String TENANT_ID_HEADER_NAME = "X-Tenant-Id";
+    public final static String TENANT_ID_HEADER_NAME = "X-Company-Id";
 
     @Override
     protected void doFilterInternal(
