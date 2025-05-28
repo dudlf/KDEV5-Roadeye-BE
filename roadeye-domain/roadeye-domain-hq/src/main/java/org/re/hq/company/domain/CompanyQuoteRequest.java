@@ -1,13 +1,11 @@
 package org.re.hq.company.domain;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.hq.admin.domain.PlatformAdmin;
 import org.re.hq.company.converter.CompanyQuoteStatusConverter;
 import org.re.hq.domain.common.BaseEntity;
 
@@ -27,6 +25,10 @@ public class CompanyQuoteRequest extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime requestedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
+    private PlatformAdmin approver;
+
     @Column
     private LocalDateTime approvedAt;
 
@@ -40,5 +42,18 @@ public class CompanyQuoteRequest extends BaseEntity {
         this.quoteStatus = CompanyQuoteStatus.PENDING;
         this.quoteInfo = quoteInfo;
         this.requestedAt = requestedAt;
+    }
+
+    public void approve(PlatformAdmin approver) {
+        if (this.quoteStatus != CompanyQuoteStatus.PENDING) {
+            throw new IllegalStateException("Cannot approve a quote request that is not pending.");
+        }
+        this.approver = approver;
+        this.quoteStatus = CompanyQuoteStatus.APPROVED;
+        this.approvedAt = LocalDateTime.now();
+    }
+
+    public boolean isApproved() {
+        return this.quoteStatus == CompanyQuoteStatus.APPROVED;
     }
 }
