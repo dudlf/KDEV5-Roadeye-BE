@@ -6,6 +6,7 @@ import org.re.hq.car.dto.CarCreationCommand;
 import org.re.hq.car.dto.CarDisableCommand;
 import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.car.repository.CarRepository;
+import org.re.hq.company.domain.Company;
 import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,25 +21,29 @@ import java.util.UUID;
 public class CarService {
     private final CarRepository carRepository;
 
-    public Page<Car> getCars(Long companyId, Pageable pageable) {
+    public Page<Car> getCars(Company company, Pageable pageable) {
+        var companyId = company.getId();
         return carRepository.findByCompanyIdAndStatus(companyId, EntityLifecycleStatus.ACTIVE, pageable);
     }
 
-    public Page<Car> getCarsByStatus(Long companyId, EntityLifecycleStatus status, Pageable pageable) {
+    public Page<Car> getCarsByStatus(Company company, EntityLifecycleStatus status, Pageable pageable) {
+        var companyId = company.getId();
         return carRepository.findByCompanyIdAndStatus(companyId, status, pageable);
     }
 
-    public Car getCarById(Long companyId, Long carId) {
+    public Car getCarById(Company company, Long carId) {
+        var companyId = company.getId();
         return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
-                .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
+            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
     }
 
-    public Long countCarsByStatus(Long companyId, EntityLifecycleStatus status) {
+    public Long countCarsByStatus(Company company, EntityLifecycleStatus status) {
+        var companyId = company.getId();
         return carRepository.countByCompanyIdAndStatus(companyId, status);
     }
 
-    public Car createCar(Long companyId, CarCreationCommand command) {
-        var car = command.toEntity(companyId);
+    public Car createCar(Company company, CarCreationCommand command) {
+        var car = command.toEntity(company);
         return carRepository.save(car);
     }
 
