@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.re.hq.admin.domain.PlatformAdmin;
+import org.re.hq.company.CompanyQuoteRequestFixture;
 import org.re.hq.company.domain.CompanyQuoteStatus;
 import org.re.hq.company.dto.CompanyQuoteRequestCommandFixture;
 import org.re.hq.test.supports.WithPlatformAdmin;
@@ -14,11 +15,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Import({CompanyQuoteService.class})
 @DataJpaTest
+@WithPlatformAdmin
 class CompanyQuoteServiceTest {
     @Autowired
     CompanyQuoteService companyQuoteService;
@@ -88,7 +90,6 @@ class CompanyQuoteServiceTest {
 
         @Test
         @DisplayName("견적 상태별 목록 조회 시 다른 상태가 포함되지 않아야 한다.")
-        @WithPlatformAdmin
         void findAllByQuoteStatus_OnlyIncludesSpecifiedStatus(PlatformAdmin approver) {
             // Given
             var numQuotes = 10;
@@ -116,6 +117,102 @@ class CompanyQuoteServiceTest {
             // Then
             assertNotNull(quoteRequests);
             assertEquals(numExpected, quoteRequests.getTotalElements());
+        }
+    }
+
+    @Nested
+    @DisplayName("승인 테스트")
+    class ApprovalTest {
+        @Test
+        @DisplayName("견적 요청을 승인할 수 있어야 한다.")
+        void approve_Success(PlatformAdmin approver) {
+            // Given
+            var quoteRequest = Mockito.spy(CompanyQuoteRequestFixture.create());
+
+            // When
+            var approvedQuoteRequest = companyQuoteService.approve(approver, quoteRequest);
+
+            // Then
+            assertNotNull(approvedQuoteRequest);
+            Mockito.verify(quoteRequest).approve(approver);
+            assertThat(approvedQuoteRequest.getApprover()).isEqualTo(approver);
+        }
+
+        @Test
+        @DisplayName("이미 승인된 견적 요청을 다시 승인할 수 없어야 한다.")
+        void approve_AlreadyApproved_ThrowsException(PlatformAdmin approver) {
+            // Given
+            var command = CompanyQuoteRequestCommandFixture.create();
+            var quoteRequest = companyQuoteService.requestNewQuote(command);
+            quoteRequest.approve(approver); // 이미 승인된 상태
+
+            // When & Then
+            assertThrows(RuntimeException.class, () -> {
+                companyQuoteService.approve(approver, quoteRequest);
+            });
+        }
+
+        @Test
+        @DisplayName("이미 거절된 견적 요청을 승인할 수 없어야 한다.")
+        void approve_AlreadyRejected_ThrowsException(PlatformAdmin approver) {
+            // Given
+            var command = CompanyQuoteRequestCommandFixture.create();
+            var quoteRequest = companyQuoteService.requestNewQuote(command);
+            quoteRequest.reject(approver); // 이미 거절된 상태
+
+            // When & Then
+            assertThrows(RuntimeException.class, () -> {
+                companyQuoteService.approve(approver, quoteRequest);
+            });
+        }
+    }
+
+
+    @Nested
+    @DisplayName("거절 테스트")
+    class RejectionTest {
+        @Test
+        @DisplayName("견적 요청을 거절할 수 있어야 한다.")
+        void reject_Success(PlatformAdmin approver) {
+            // Given
+            var command = CompanyQuoteRequestCommandFixture.create();
+            var quoteRequest = Mockito.spy(companyQuoteService.requestNewQuote(command));
+
+            // When
+            var rejectedQuoteRequest = companyQuoteService.reject(approver, quoteRequest);
+
+            // Then
+            assertNotNull(rejectedQuoteRequest);
+            Mockito.verify(quoteRequest).reject(approver);
+            assertThat(rejectedQuoteRequest.getApprover()).isEqualTo(approver);
+        }
+
+        @Test
+        @DisplayName("이미 거절된 견적 요청을 다시 거절할 수 없어야 한다.")
+        void reject_AlreadyRejected_ThrowsException(PlatformAdmin approver) {
+            // Given
+            var command = CompanyQuoteRequestCommandFixture.create();
+            var quoteRequest = companyQuoteService.requestNewQuote(command);
+            quoteRequest.reject(approver); // 이미 거절된 상태
+
+            // When & Then
+            assertThrows(RuntimeException.class, () -> {
+                companyQuoteService.reject(approver, quoteRequest);
+            });
+        }
+
+        @Test
+        @DisplayName("이미 승인된 견적 요청을 거절할 수 없어야 한다.")
+        void reject_AlreadyApproved_ThrowsException(PlatformAdmin approver) {
+            // Given
+            var command = CompanyQuoteRequestCommandFixture.create();
+            var quoteRequest = companyQuoteService.requestNewQuote(command);
+            quoteRequest.approve(approver); // 이미 승인된 상태
+
+            // When & Then
+            assertThrows(RuntimeException.class, () -> {
+                companyQuoteService.reject(approver, quoteRequest);
+            });
         }
     }
 
