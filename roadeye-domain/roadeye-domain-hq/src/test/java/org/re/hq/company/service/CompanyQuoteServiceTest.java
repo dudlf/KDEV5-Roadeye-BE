@@ -4,8 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.re.hq.admin.domain.PlatformAdmin;
 import org.re.hq.company.domain.CompanyQuoteStatus;
 import org.re.hq.company.dto.CompanyQuoteRequestCommandFixture;
+import org.re.hq.test.supports.WithPlatformAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -82,6 +84,38 @@ class CompanyQuoteServiceTest {
             // Then
             assertNotNull(quoteRequests);
             assertEquals(numQuotes, quoteRequests.getTotalElements());
+        }
+
+        @Test
+        @DisplayName("견적 상태별 목록 조회 시 다른 상태가 포함되지 않아야 한다.")
+        @WithPlatformAdmin
+        void findAllByQuoteStatus_OnlyIncludesSpecifiedStatus(PlatformAdmin approver) {
+            // Given
+            var numQuotes = 10;
+            var numApproved = 3;
+            var numRejected = 2;
+            for (int i = 0; i < numQuotes; i++) {
+                var command = CompanyQuoteRequestCommandFixture.create();
+                Mockito.when(companyService.isBusinessNumberExists(command.businessNumber())).thenReturn(false);
+                var quoteRequest = companyQuoteService.requestNewQuote(command);
+
+                // 일부는 승인, 일부는 거절 상태로 설정
+                if (i < numApproved) {
+                    companyQuoteService.approve(approver, quoteRequest);
+                } else if (i < numApproved + numRejected) {
+                    companyQuoteService.reject(approver, quoteRequest);
+                }
+            }
+            var numExpected = numQuotes - numApproved - numRejected;
+
+            var pageable = PageRequest.of(0, 10);
+
+            // When
+            var quoteRequests = companyQuoteService.findAllByQuoteStatus(CompanyQuoteStatus.PENDING, pageable);
+
+            // Then
+            assertNotNull(quoteRequests);
+            assertEquals(numExpected, quoteRequests.getTotalElements());
         }
     }
 
