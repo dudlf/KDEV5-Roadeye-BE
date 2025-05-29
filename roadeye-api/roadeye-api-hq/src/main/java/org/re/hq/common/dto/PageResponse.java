@@ -18,18 +18,11 @@ public class PageResponse<T> extends SuccessResponse<List<T>> {
         return new PageResponse<>(page.getContent(), PageInfo.of(page));
     }
 
-    @Getter
-    public static class PageInfo {
-        private final int page;
-        private final int size;
-        private final long total;
-
-        private PageInfo(int page, int size, long total) {
-            this.page = page;
-            this.size = size;
-            this.total = total;
-        }
-
+    public record PageInfo(
+        int page,
+        int size,
+        long total
+    ) {
         public static PageInfo of(Page<?> page) {
             return new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements());
         }

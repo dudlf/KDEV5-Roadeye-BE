@@ -10,15 +10,10 @@ import org.re.exception.AppExceptionCode;
 public class ErrorResponse extends BaseResponse {
     private final ErrorData error;
 
-    @Getter
-    public static class ErrorData {
-        private final String code;
-        private final String message;
-
-        private ErrorData(String code, String message) {
-            this.code = code;
-            this.message = message;
-        }
+    public record ErrorData(
+        String code,
+        String message
+    ) {
 
         public static ErrorData of(AppException ae) {
             return of(ae.getCode());
