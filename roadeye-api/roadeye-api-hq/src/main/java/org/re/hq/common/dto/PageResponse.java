@@ -5,8 +5,9 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+@Getter
 public class PageResponse<T> extends SuccessResponse<List<T>> {
-    PageInfo pageInfo;
+    private final PageInfo pageInfo;
 
     private PageResponse(List<T> data, PageInfo pageInfo) {
         super(data);
