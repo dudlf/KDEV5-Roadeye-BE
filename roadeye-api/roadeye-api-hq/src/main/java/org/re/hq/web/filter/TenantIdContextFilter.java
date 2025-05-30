@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.util.Strings;
 import org.re.hq.tenant.TenantId;
 import org.re.hq.tenant.context.TenantIdContext;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,7 +21,7 @@ public class TenantIdContextFilter extends OncePerRequestFilter {
         FilterChain filterChain
     ) throws ServletException, IOException {
         String tenantIdString = request.getHeader(TENANT_ID_HEADER_NAME);
-        if (tenantIdString == null || tenantIdString.isEmpty()) {
+        if (Strings.isEmpty(tenantIdString)) {
             filterChain.doFilter(request, response);
             return;
         }
