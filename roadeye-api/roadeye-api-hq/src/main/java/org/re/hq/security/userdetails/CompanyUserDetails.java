@@ -1,6 +1,7 @@
 package org.re.hq.security.userdetails;
 
 import lombok.Getter;
+import org.jspecify.annotations.NonNull;
 import org.re.hq.employee.domain.Employee;
 import org.re.hq.security.domain.AuthMemberType;
 import org.re.hq.tenant.TenantId;
@@ -18,6 +19,7 @@ public class CompanyUserDetails implements UserDetails {
     private static final Collection<? extends GrantedAuthority> DEFAULT_AUTHORITIES
         = Collections.unmodifiableCollection(AuthorityUtils.createAuthorityList(AuthMemberType.USER.getValue()));
 
+    @NonNull
     private final TenantId tenantId;
     private final String username;
     private final String password;
@@ -30,7 +32,7 @@ public class CompanyUserDetails implements UserDetails {
     private final boolean isEnabled;
 
     private CompanyUserDetails(
-        TenantId tenantId,
+        @NonNull TenantId tenantId,
         String username,
         String password,
         Collection<? extends GrantedAuthority> authorities,

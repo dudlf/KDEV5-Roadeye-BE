@@ -27,7 +27,7 @@ public class TenantIdContextFilter extends OncePerRequestFilter {
         }
 
         try {
-            Long id = Long.parseLong(tenantIdString);
+            long id = Long.parseLong(tenantIdString);
             TenantIdContext.setTenantId(new TenantId(id));
             filterChain.doFilter(request, response);
         } finally {

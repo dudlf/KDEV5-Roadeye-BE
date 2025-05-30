@@ -26,12 +26,9 @@ public class TenantIdArgumentResolver implements HandlerMethodArgumentResolver {
         var servletRequest = (HttpServletRequest) webRequest.getNativeRequest();
         var session = servletRequest.getSession(false);
         if (session == null) {
-            return TenantId.EMPTY;
+            return null;
         }
         var tenantId = (Long) session.getAttribute(TENANT_ID_SESSION_ATTRIBUTE_NAME);
-        if (tenantId == null) {
-            return TenantId.EMPTY;
-        }
         return new TenantId(tenantId);
     }
 }
