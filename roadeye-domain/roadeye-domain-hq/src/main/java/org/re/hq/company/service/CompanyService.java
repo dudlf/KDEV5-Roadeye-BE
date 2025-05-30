@@ -3,7 +3,7 @@ package org.re.hq.company.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.re.hq.company.domain.Company;
-import org.re.hq.company.domain.CompanyQuoteRequest;
+import org.re.hq.company.domain.CompanyQuote;
 import org.re.hq.company.repository.CompanyRepository;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.service.EmployeeDomainService;
@@ -31,15 +31,15 @@ public class CompanyService {
         return companyRepository.existsByBusinessNumber(businessNumber);
     }
 
-    public Company createCompany(CompanyQuoteRequest quoteRequest) {
-        var bisNo = quoteRequest.getQuoteInfo().getCompanyBusinessNumber();
+    public Company createCompany(CompanyQuote quote) {
+        var bisNo = quote.getQuoteInfo().getCompanyBusinessNumber();
         if (isBusinessNumberExists(bisNo)) {
             throw new IllegalArgumentException("Business number already exists: " + bisNo);
         }
 
-        var company = quoteRequest.toCompany();
+        var company = quote.toCompany();
         companyRepository.save(company);
-        var credential = EmployeeCredentials.from(quoteRequest);
+        var credential = EmployeeCredentials.from(quote);
         employeeService.createRootAccount(company.getId(), credential, "Root", "Administrator");
         return company;
     }

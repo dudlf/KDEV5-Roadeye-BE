@@ -1,17 +1,17 @@
 package org.re.hq.employee.domain;
 
 import jakarta.persistence.Embeddable;
-import org.re.hq.company.domain.CompanyQuoteRequest;
+import org.re.hq.company.domain.CompanyQuote;
 
 @Embeddable
 public record EmployeeCredentials(
     String loginId,
     String password
 ) {
-    public static EmployeeCredentials from(CompanyQuoteRequest quoteRequest) {
+    public static EmployeeCredentials from(CompanyQuote quote) {
         return new EmployeeCredentials(
-            quoteRequest.getQuoteInfo().getRootAccountUsername(),
-            quoteRequest.getQuoteInfo().getRootAccountPassword()
+            quote.getQuoteInfo().getRootAccountUsername(),
+            quote.getQuoteInfo().getRootAccountPassword()
         );
     }
 
