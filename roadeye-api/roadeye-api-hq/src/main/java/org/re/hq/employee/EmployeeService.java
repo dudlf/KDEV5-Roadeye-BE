@@ -6,7 +6,7 @@ import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeMetadata;
 import org.re.hq.employee.service.EmployeeDomainService;
-import org.re.hq.tenant.TenantIdProvider;
+import org.re.hq.tenant.TenantId;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,26 +16,27 @@ public class EmployeeService {
 
     private final EmployeeDomainService employeeDomainService;
 
-    public Long createRoot(TenantIdProvider tenantIdProvider, EmployeeCredentials credentials, EmployeeMetadata metadata) {
-        employeeDomainService.validateExistsRootAccount(tenantIdProvider.getCurrentTenantId());
+    public Long createRoot(TenantId tenantId, EmployeeCredentials credentials, EmployeeMetadata metadata) {
+
+        employeeDomainService.validateExistsRootAccount(tenantId.value());
         var employee = Employee.createRoot(
-            tenantIdProvider.getCurrentTenantId(),
-            credentials,
-            metadata
+                tenantId.value(),
+                credentials,
+                metadata
         );
         return employeeDomainService.create(employee);
     }
 
-    public Long createNormal(TenantIdProvider tenantIdProvider, EmployeeCredentials credentials, EmployeeMetadata metadata) {
+    public Long createNormal(TenantId tenantId, EmployeeCredentials credentials, EmployeeMetadata metadata) {
         var employee = Employee.createNormal(
-            tenantIdProvider.getCurrentTenantId(),
-            credentials,
-            metadata
+                tenantId.value(),
+                credentials,
+                metadata
         );
         return employeeDomainService.create(employee);
     }
 
-    public Employee read(TenantIdProvider tenantIdProvider, Long employeeId) {
-        return employeeDomainService.read(tenantIdProvider.getCurrentTenantId(), employeeId);
+    public Employee read(TenantId tenantId, Long employeeId) {
+        return employeeDomainService.read(tenantId.value(), employeeId);
     }
 }
