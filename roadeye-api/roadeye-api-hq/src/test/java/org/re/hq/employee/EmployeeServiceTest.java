@@ -16,10 +16,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 class EmployeeServiceTest {
 
+    private final TenantId defaultTenantId = new TenantId(1L);
     @Autowired
     private EmployeeService employeeService;
-
-    private TenantId defaultTenantId;
 
     @Test
     void 루트_계정을_생성합니다() {
