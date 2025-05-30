@@ -60,7 +60,7 @@ public class CompanyUserDetails implements UserDetails {
     private static Collection<? extends GrantedAuthority> createAuthorities(Employee user) {
         return Stream.concat(
             DEFAULT_AUTHORITIES.stream(),
-            Stream.of(user.getMetadata().getRole())
+            Stream.of(user.getRole())
                 .map((r) -> new SimpleGrantedAuthority(r.name()))
         ).toList();
     }
