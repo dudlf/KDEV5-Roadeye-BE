@@ -25,4 +25,12 @@ public class Company extends BaseEntity {
         this.businessNumber = businessNumber;
         this.email = email;
     }
+
+    public static Company create(CompanyQuoteRequest quoteRequest) {
+        return new Company(
+            quoteRequest.getQuoteInfo().getCompanyName(),
+            quoteRequest.getQuoteInfo().getCompanyBusinessNumber(),
+            quoteRequest.getQuoteInfo().getCompanyEmail()
+        );
+    }
 }

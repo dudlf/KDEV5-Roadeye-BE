@@ -3,6 +3,7 @@ package org.re.hq.company.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.re.hq.admin.domain.PlatformAdmin;
+import org.re.hq.company.domain.Company;
 import org.re.hq.company.domain.CompanyQuoteRequest;
 import org.re.hq.company.domain.CompanyQuoteStatus;
 import org.re.hq.company.dto.CompanyQuoteRequestCommand;
@@ -43,9 +44,9 @@ public class CompanyQuoteService {
         return companyQuoteRepository.save(quoteRequest);
     }
 
-    public CompanyQuoteRequest approve(PlatformAdmin approver, CompanyQuoteRequest quoteRequest) {
+    public Company approve(PlatformAdmin approver, CompanyQuoteRequest quoteRequest) {
         quoteRequest.approve(approver);
-        return quoteRequest;
+        return companyService.createCompany(quoteRequest);
     }
 
     public CompanyQuoteRequest reject(PlatformAdmin approver, CompanyQuoteRequest quoteRequest) {

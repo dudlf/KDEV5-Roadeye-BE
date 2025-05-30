@@ -8,25 +8,22 @@ import org.re.hq.admin.domain.PlatformAdmin;
 import org.re.hq.company.CompanyQuoteRequestFixture;
 import org.re.hq.company.domain.CompanyQuoteStatus;
 import org.re.hq.company.dto.CompanyQuoteRequestCommandFixture;
+import org.re.hq.employee.service.EmployeeService;
 import org.re.hq.test.supports.WithPlatformAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import({CompanyQuoteService.class})
+@Import({CompanyQuoteService.class, CompanyService.class, EmployeeService.class})
 @DataJpaTest
 @WithPlatformAdmin
 class CompanyQuoteServiceTest {
     @Autowired
     CompanyQuoteService companyQuoteService;
-
-    @MockitoBean
-    CompanyService companyService;
 
     @Nested
     @DisplayName("조회 테스트")
@@ -38,7 +35,6 @@ class CompanyQuoteServiceTest {
             var numQuotes = 5;
             for (int i = 0; i < numQuotes; i++) {
                 var command = CompanyQuoteRequestCommandFixture.create();
-                Mockito.when(companyService.isBusinessNumberExists(command.businessNumber())).thenReturn(false);
                 companyQuoteService.requestNewQuote(command);
             }
             var pageable = PageRequest.of(0, 10);
@@ -56,7 +52,6 @@ class CompanyQuoteServiceTest {
         void findById_Success() {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            Mockito.when(companyService.isBusinessNumberExists(command.businessNumber())).thenReturn(false);
             var quoteRequest = companyQuoteService.requestNewQuote(command);
 
             // When
@@ -74,7 +69,6 @@ class CompanyQuoteServiceTest {
             var numQuotes = 5;
             for (int i = 0; i < numQuotes; i++) {
                 var command = CompanyQuoteRequestCommandFixture.create();
-                Mockito.when(companyService.isBusinessNumberExists(command.businessNumber())).thenReturn(false);
                 companyQuoteService.requestNewQuote(command);
             }
             var quoteStatus = CompanyQuoteStatus.PENDING;
@@ -96,8 +90,8 @@ class CompanyQuoteServiceTest {
             var numApproved = 3;
             var numRejected = 2;
             for (int i = 0; i < numQuotes; i++) {
-                var command = CompanyQuoteRequestCommandFixture.create();
-                Mockito.when(companyService.isBusinessNumberExists(command.businessNumber())).thenReturn(false);
+                var businessNumber = "1234567890" + i; // 고유한 사업자 번호 생성
+                var command = CompanyQuoteRequestCommandFixture.createWithBusinessNumber(businessNumber);
                 var quoteRequest = companyQuoteService.requestNewQuote(command);
 
                 // 일부는 승인, 일부는 거절 상태로 설정
@@ -130,12 +124,12 @@ class CompanyQuoteServiceTest {
             var quoteRequest = Mockito.spy(CompanyQuoteRequestFixture.create());
 
             // When
-            var approvedQuoteRequest = companyQuoteService.approve(approver, quoteRequest);
+            var company = companyQuoteService.approve(approver, quoteRequest);
 
             // Then
-            assertNotNull(approvedQuoteRequest);
+            assertNotNull(company);
             Mockito.verify(quoteRequest).approve(approver);
-            assertThat(approvedQuoteRequest.getApprover()).isEqualTo(approver);
+            assertThat(quoteRequest.getApprover()).isEqualTo(approver);
         }
 
         @Test
@@ -165,8 +159,25 @@ class CompanyQuoteServiceTest {
                 companyQuoteService.approve(approver, quoteRequest);
             });
         }
-    }
 
+        @Test
+        @DisplayName("견적 요청이 승인되면 회사가 생성되어야 한다.")
+        void approve_CreatesCompany(PlatformAdmin approver) {
+            // Given
+            var command = CompanyQuoteRequestCommandFixture.create();
+            var quoteRequest = companyQuoteService.requestNewQuote(command);
+
+            // When
+            var company = companyQuoteService.approve(approver, quoteRequest);
+
+            // Then
+            assertNotNull(company);
+            assertNotNull(company.getId());
+            assertEquals(command.name(), company.getName());
+            assertEquals(command.businessNumber(), company.getBusinessNumber());
+            assertEquals(command.email(), company.getEmail());
+        }
+    }
 
     @Nested
     @DisplayName("거절 테스트")
@@ -221,7 +232,6 @@ class CompanyQuoteServiceTest {
     void requestNewQuote_Success() {
         // Given
         var command = CompanyQuoteRequestCommandFixture.create();
-        Mockito.when(companyService.isBusinessNumberExists(command.businessNumber())).thenReturn(false);
 
         // When
         var quoteRequest = companyQuoteService.requestNewQuote(command);

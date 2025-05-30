@@ -2,10 +2,7 @@ package org.re.hq.employee.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.re.hq.employee.domain.Employee;
-import org.re.hq.employee.domain.EmployeeCredentials;
-import org.re.hq.employee.domain.EmployeeMetadata;
-import org.re.hq.employee.domain.EmployeeRepository;
+import org.re.hq.employee.domain.*;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +14,11 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+
+    public Employee findCompanyRootAccount(Long companyId) {
+        return employeeRepository.findByTenantIdAndRole(companyId, EmployeeRole.ROOT)
+            .orElseThrow(() -> new IllegalArgumentException("Root account not found for tenant id: " + companyId));
+    }
 
     /**
      * 업체 계정의 루트 계정을 생성하는 기능
@@ -86,6 +88,4 @@ public class EmployeeService {
     public Page<Employee> readAll(Long tenantId, Pageable pageable) {
         return employeeRepository.findByTenantId(tenantId, pageable);
     }
-
-
 }
