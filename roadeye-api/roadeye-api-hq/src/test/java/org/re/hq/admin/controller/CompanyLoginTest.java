@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.re.hq.employee.domain.EmployeeCredentials;
-import org.re.hq.employee.service.EmployeeService;
+import org.re.hq.employee.service.EmployeeDomainService;
 import org.re.hq.tenant.TenantIdProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,7 +44,7 @@ public class CompanyLoginTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    EmployeeService employeeService;
+    EmployeeDomainService employeeDomainService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -52,9 +52,9 @@ public class CompanyLoginTest {
     @BeforeEach
     void setUp() {
         this.mvc = MockMvcBuilders
-                .webAppContextSetup(this.wac)
-                .apply(springSecurity())
-                .build();
+            .webAppContextSetup(this.wac)
+            .apply(springSecurity())
+            .build();
     }
 
     @Nested
@@ -69,20 +69,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createRootAccount(tenantId, credential, name, position);
+            employeeDomainService.createRootAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", VALID_USERNAME,
-                    "password", VALID_PASSWORD
+                "username", VALID_USERNAME,
+                "password", VALID_PASSWORD
             ));
             var req = post("/api/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isOk());
+                .andExpect(status().isOk());
         }
 
         @ParameterizedTest
@@ -95,20 +95,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createRootAccount(tenantId, credential, name, position);
+            employeeDomainService.createRootAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", username,
-                    "password", VALID_PASSWORD
+                "username", username,
+                "password", VALID_PASSWORD
             ));
             var req = post("/api/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
         }
 
         @ParameterizedTest
@@ -121,20 +121,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createRootAccount(tenantId, credential, name, position);
+            employeeDomainService.createRootAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", VALID_USERNAME,
-                    "password", password
+                "username", VALID_USERNAME,
+                "password", password
             ));
             var req = post("/api/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -146,20 +146,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createRootAccount(tenantId, credential, name, position);
+            employeeDomainService.createRootAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", VALID_USERNAME,
-                    "password", VALID_PASSWORD
+                "username", VALID_USERNAME,
+                "password", VALID_PASSWORD
             ));
             var req = post("/api/admin/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
         }
     }
 
@@ -175,20 +175,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createNormalAccount(tenantId, credential, name, position);
+            employeeDomainService.createNormalAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", VALID_USERNAME,
-                    "password", VALID_PASSWORD
+                "username", VALID_USERNAME,
+                "password", VALID_PASSWORD
             ));
             var req = post("/api/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isOk());
+                .andExpect(status().isOk());
         }
 
         @ParameterizedTest
@@ -201,20 +201,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createNormalAccount(tenantId, credential, name, position);
+            employeeDomainService.createNormalAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", username,
-                    "password", VALID_PASSWORD
+                "username", username,
+                "password", VALID_PASSWORD
             ));
             var req = post("/api/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
         }
 
         @ParameterizedTest
@@ -227,20 +227,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createNormalAccount(tenantId, credential, name, position);
+            employeeDomainService.createNormalAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", VALID_USERNAME,
-                    "password", password
+                "username", VALID_USERNAME,
+                "password", password
             ));
             var req = post("/api/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -252,20 +252,20 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createNormalAccount(tenantId, credential, name, position);
+            employeeDomainService.createNormalAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
-                    "username", VALID_USERNAME,
-                    "password", VALID_PASSWORD
+                "username", VALID_USERNAME,
+                "password", VALID_PASSWORD
             ));
             var req = post("/api/admin/auth/sign-in")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body);
 
             // then
             mvc.perform(req)
-                    .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
         }
     }
 }
