@@ -7,4 +7,8 @@ public record EmployeeCredentials(
     String loginId,
     String password
 ) {
+
+    public static EmployeeCredentials create(String loginId, String password) {
+        return new EmployeeCredentials(loginId, password);
+    }
 }
