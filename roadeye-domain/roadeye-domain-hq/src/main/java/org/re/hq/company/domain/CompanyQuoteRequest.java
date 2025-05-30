@@ -69,4 +69,12 @@ public class CompanyQuoteRequest extends BaseEntity {
     public boolean isRejected() {
         return this.quoteStatus == CompanyQuoteStatus.REJECTED;
     }
+    
+    public Company toCompany() {
+        return new Company(
+            quoteInfo.getCompanyName(),
+            quoteInfo.getCompanyBusinessNumber(),
+            quoteInfo.getCompanyEmail()
+        );
+    }
 }

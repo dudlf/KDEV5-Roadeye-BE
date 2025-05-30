@@ -37,7 +37,7 @@ public class CompanyService {
             throw new IllegalArgumentException("Business number already exists: " + bisNo);
         }
 
-        var company = Company.create(quoteRequest);
+        var company = quoteRequest.toCompany();
         companyRepository.save(company);
         var credential = EmployeeCredentials.from(quoteRequest);
         employeeService.createRootAccount(company.getId(), credential, "Root", "Administrator");
