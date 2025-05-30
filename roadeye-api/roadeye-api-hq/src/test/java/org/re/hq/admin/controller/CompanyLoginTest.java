@@ -8,8 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.service.EmployeeDomainService;
-import org.re.hq.tenant.TenantIdProvider;
-import org.re.hq.employee.service.EmployeeService;
 import org.re.hq.web.filter.TenantIdContextFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,13 +42,6 @@ public class CompanyLoginTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @BeforeEach
-    void setUp() {
-        this.mvc = MockMvcBuilders
-            .webAppContextSetup(this.wac)
-            .apply(springSecurity())
-            .build();
-    }
 
     @Nested
     @DisplayName("루트 계정 테스트")
@@ -64,7 +55,7 @@ public class CompanyLoginTest {
             var name = "name";
             var position = "position";
 
-            employeeService.createRootAccount(tenantId, credential, name, position);
+            employeeDomainService.createRootAccount(tenantId, credential, name, position);
 
             // when
             var body = objectMapper.writeValueAsString(Map.of(
