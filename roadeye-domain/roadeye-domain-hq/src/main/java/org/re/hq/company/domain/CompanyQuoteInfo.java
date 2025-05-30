@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CompanyQuoteRequestInfo {
+public class CompanyQuoteInfo {
     @Column(nullable = false, length = 50)
     private String companyName;
 
@@ -25,7 +25,7 @@ public class CompanyQuoteRequestInfo {
     @Column(nullable = false)
     private String companyBusinessNumber;
 
-    public CompanyQuoteRequestInfo(
+    public CompanyQuoteInfo(
         String companyName,
         String rootAccountUsername,
         String rootAccountPassword,

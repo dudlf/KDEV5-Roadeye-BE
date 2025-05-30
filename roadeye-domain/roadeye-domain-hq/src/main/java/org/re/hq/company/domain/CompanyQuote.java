@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CompanyQuoteRequest extends BaseEntity {
+public class CompanyQuote extends BaseEntity {
     @Convert(converter = CompanyQuoteStatusConverter.class)
     @Column(nullable = false)
     private CompanyQuoteStatus quoteStatus;
 
     @Embedded
-    private CompanyQuoteRequestInfo quoteInfo;
+    private CompanyQuoteInfo quoteInfo;
 
     @Column(nullable = false)
     private LocalDateTime requestedAt;
@@ -38,7 +38,7 @@ public class CompanyQuoteRequest extends BaseEntity {
     @Column
     private String rejectionReason;
 
-    public CompanyQuoteRequest(CompanyQuoteRequestInfo quoteInfo, LocalDateTime requestedAt) {
+    public CompanyQuote(CompanyQuoteInfo quoteInfo, LocalDateTime requestedAt) {
         this.quoteStatus = CompanyQuoteStatus.PENDING;
         this.quoteInfo = quoteInfo;
         this.requestedAt = requestedAt;
@@ -68,5 +68,13 @@ public class CompanyQuoteRequest extends BaseEntity {
 
     public boolean isRejected() {
         return this.quoteStatus == CompanyQuoteStatus.REJECTED;
+    }
+
+    public Company toCompany() {
+        return new Company(
+            quoteInfo.getCompanyName(),
+            quoteInfo.getCompanyBusinessNumber(),
+            quoteInfo.getCompanyEmail()
+        );
     }
 }

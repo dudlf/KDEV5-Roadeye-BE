@@ -15,4 +15,18 @@ public class CompanyQuoteRequestCommandFixture {
             businessNumber
         );
     }
+
+    public static CompanyQuoteRequestCommand createWithBusinessNumber(String businessNumber) {
+        String name = "Test Company";
+        String username = "admin";
+        String password = "password";
+        String email = "test@test.com";
+        return new CompanyQuoteRequestCommand(
+            name,
+            username,
+            password,
+            email,
+            businessNumber
+        );
+    }
 }

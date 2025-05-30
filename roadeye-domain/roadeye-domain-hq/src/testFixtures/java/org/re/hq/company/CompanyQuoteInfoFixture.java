@@ -1,15 +1,15 @@
 package org.re.hq.company;
 
-import org.re.hq.company.domain.CompanyQuoteRequestInfo;
+import org.re.hq.company.domain.CompanyQuoteInfo;
 
-public class CompanyQuoteRequestInfoFixture {
-    public static CompanyQuoteRequestInfo create() {
+public class CompanyQuoteInfoFixture {
+    public static CompanyQuoteInfo create() {
         String name = "Test Company";
         String username = "admin";
         String password = "password";
         String email = "test@test.com";
         String businessNumber = "1234567890";
-        return new CompanyQuoteRequestInfo(
+        return new CompanyQuoteInfo(
             name,
             username,
             password,

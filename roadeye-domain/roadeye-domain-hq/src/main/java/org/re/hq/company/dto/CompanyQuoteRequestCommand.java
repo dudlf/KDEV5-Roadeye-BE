@@ -1,6 +1,6 @@
 package org.re.hq.company.dto;
 
-import org.re.hq.company.domain.CompanyQuoteRequestInfo;
+import org.re.hq.company.domain.CompanyQuoteInfo;
 
 public record CompanyQuoteRequestCommand(
     String name,
@@ -9,8 +9,8 @@ public record CompanyQuoteRequestCommand(
     String email,
     String businessNumber
 ) {
-    public CompanyQuoteRequestInfo toQuoteInfo() {
-        return new CompanyQuoteRequestInfo(
+    public CompanyQuoteInfo toQuoteInfo() {
+        return new CompanyQuoteInfo(
             name,
             username,
             password,

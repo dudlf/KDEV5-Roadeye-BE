@@ -2,10 +2,7 @@ package org.re.hq.employee.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.re.hq.employee.domain.Employee;
-import org.re.hq.employee.domain.EmployeeCredentials;
-import org.re.hq.employee.domain.EmployeeMetadata;
-import org.re.hq.employee.domain.EmployeeRepository;
+import org.re.hq.employee.domain.*;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +24,11 @@ public class EmployeeDomainService {
             // TODO 도메인 객체 예외 처리로 바꿀 것
             throw new IllegalStateException("Root account already exists");
         }
+    }
+
+    public Employee findCompanyRootAccount(Long companyId) {
+        return employeeRepository.findByTenantIdAndRole(companyId, EmployeeRole.ROOT)
+            .orElseThrow(() -> new IllegalArgumentException("Root account not found for tenant id: " + companyId));
     }
 
     /**
@@ -97,6 +99,4 @@ public class EmployeeDomainService {
     public Page<Employee> readAll(Long tenantId, Pageable pageable) {
         return employeeRepository.findByTenantId(tenantId, pageable);
     }
-
-
 }
