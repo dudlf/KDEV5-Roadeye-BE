@@ -6,7 +6,7 @@ import org.re.hq.company.domain.Company;
 import org.re.hq.company.domain.CompanyQuoteRequest;
 import org.re.hq.company.repository.CompanyRepository;
 import org.re.hq.employee.domain.EmployeeCredentials;
-import org.re.hq.employee.service.EmployeeService;
+import org.re.hq.employee.service.EmployeeDomainService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Transactional
 @RequiredArgsConstructor
 public class CompanyService {
-    private final EmployeeService employeeService;
+    private final EmployeeDomainService employeeService;
     private final CompanyRepository companyRepository;
 
     public Page<Company> findAll(Pageable pageable) {

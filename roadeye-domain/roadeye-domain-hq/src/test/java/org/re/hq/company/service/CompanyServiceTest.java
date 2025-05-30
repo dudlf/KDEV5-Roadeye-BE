@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.re.hq.company.CompanyQuoteRequestFixture;
-import org.re.hq.employee.service.EmployeeService;
+import org.re.hq.employee.service.EmployeeDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -12,14 +12,14 @@ import org.springframework.context.annotation.Import;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Import({CompanyService.class, EmployeeService.class})
+@Import({CompanyService.class, EmployeeDomainService.class})
 @DataJpaTest
 class CompanyServiceTest {
     @Autowired
     CompanyService companyService;
 
     @Autowired
-    EmployeeService employeeService;
+    EmployeeDomainService employeeDomainService;
 
     @Nested
     @DisplayName("생성 테스트")
@@ -59,7 +59,7 @@ class CompanyServiceTest {
 
             // When
             var company = companyService.createCompany(quoteRequest);
-            var rootAccount = employeeService.findCompanyRootAccount(company.getId());
+            var rootAccount = employeeDomainService.findCompanyRootAccount(company.getId());
 
             // Then
             assertNotNull(company);

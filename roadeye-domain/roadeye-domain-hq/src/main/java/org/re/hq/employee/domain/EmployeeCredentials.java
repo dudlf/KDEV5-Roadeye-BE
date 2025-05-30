@@ -14,4 +14,8 @@ public record EmployeeCredentials(
             quoteRequest.getQuoteInfo().getRootAccountPassword()
         );
     }
+
+    public static EmployeeCredentials create(String loginId, String password) {
+        return new EmployeeCredentials(loginId, password);
+    }
 }
