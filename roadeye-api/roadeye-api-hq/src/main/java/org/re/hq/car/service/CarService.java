@@ -20,4 +20,9 @@ public class CarService {
         var company = companyService.findById(tenantId.value());
         return carDomainService.getCars(company, pageable);
     }
+
+    public Car getCarById(TenantId tenantId, Long carId) {
+        var company = companyService.findById(tenantId.value());
+        return carDomainService.getCarById(company, carId);
+    }
 }

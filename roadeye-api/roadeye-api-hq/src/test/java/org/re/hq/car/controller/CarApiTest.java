@@ -53,5 +53,38 @@ class CarApiTest {
                 .andExpect(jsonPath("$.data.length()").value(nCars))
                 .andExpect(jsonPath("$.data[*].id").exists());
         }
+
+        @Test
+        @DisplayName("차량 상세 조회")
+        @MockCompanyUserDetails
+        void car_detail_test() throws Exception {
+            // given
+            var tenantId = 111L;
+            var carId = 123L;
+            var car = Mockito.spy(CarFixture.create());
+            Mockito.when(car.getId()).thenReturn(carId);
+            Mockito.when(carService.getCarById(Mockito.any(), Mockito.anyLong()))
+                .thenReturn(car);
+
+            // when
+            var req = get("/api/cars/{carId}", car.getId())
+                .param("tenantId", String.valueOf(tenantId))
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(car.getId()))
+                .andExpect(jsonPath("$.data.companyId").value(car.getCompany().getId()))
+                .andExpect(jsonPath("$.data.name").value(car.getProfile().getName()))
+                .andExpect(jsonPath("$.data.licenseNumber").value(car.getProfile().getLicenseNumber()))
+                .andExpect(jsonPath("$.data.imageUrl").value(car.getProfile().getImageUrl()))
+                .andExpect(jsonPath("$.data.latitude").value(car.getLocation().getLatitude()))
+                .andExpect(jsonPath("$.data.longitude").value(car.getLocation().getLongitude()))
+                .andExpect(jsonPath("$.data.mileageInitial").value(car.getMileage().getInitial()))
+                .andExpect(jsonPath("$.data.mileageCurrent").value(car.getMileage().getTotal()))
+                .andExpect(jsonPath("$.data.batteryVoltage").value(car.getMdtStatus().getBatteryVoltage()))
+                .andExpect(jsonPath("$.data.ignitionStatus").value(car.getMdtStatus().getIgnition().toString()));
+        }
     }
 }
