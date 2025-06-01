@@ -26,14 +26,11 @@ public class MockCompanyUserDetailsSecurityContextFactory implements WithSecurit
             annotation.username(),
             annotation.password()
         );
-        var meta = switch (annotation.role()) {
-            case ROOT -> EmployeeMetadata.createRoot("name", "pos");
-            case NORMAL -> EmployeeMetadata.createNormal("name", "pos");
+        var meta = EmployeeMetadata.create("name", "pos");
+        var tenantId = 111L;
+        return switch (annotation.role()) {
+            case ROOT -> Employee.createRoot(tenantId, auth, meta);
+            case NORMAL -> Employee.createNormal(tenantId, auth, meta);
         };
-        return Employee.of(
-            111L,
-            auth,
-            meta
-        );
     }
 }

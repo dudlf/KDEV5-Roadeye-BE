@@ -8,6 +8,7 @@ import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeMetadata;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
+import org.re.hq.security.userdetails.CompanyUserDetails;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,10 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     private final EmployeeDomainService employeeDomainService;
+
+    public Employee getMyInfo(CompanyUserDetails userDetails) {
+        return read(userDetails.getTenantId(), userDetails.getUserId());
+    }
 
     public Long createRoot(TenantId tenantId, EmployeeCredentials credentials, EmployeeMetadata metadata) {
 

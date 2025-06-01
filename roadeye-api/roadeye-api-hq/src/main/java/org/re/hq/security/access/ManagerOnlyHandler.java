@@ -20,7 +20,7 @@ public class ManagerOnlyHandler {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AccessDeniedException("Access denied");
         }
-        var details = authentication.getDetails();
+        var details = authentication.getPrincipal();
         if (!(details instanceof CompanyUserDetails userDetails)) {
             throw new AccessDeniedException("Access denied");
         }

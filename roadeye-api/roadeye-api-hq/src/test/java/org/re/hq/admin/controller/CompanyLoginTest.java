@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,7 +44,6 @@ public class CompanyLoginTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-
     @Nested
     @DisplayName("루트 계정 테스트")
     class RootAccountTest {
@@ -65,6 +66,7 @@ public class CompanyLoginTest {
             var req = post("/api/auth/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
+                .session(new MockHttpSession())
                 .content(body);
 
             // then
@@ -260,6 +262,44 @@ public class CompanyLoginTest {
             // then
             mvc.perform(req)
                 .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        @DisplayName("일반 계정으로 로그인한 후, 세션ID를 사용해 내 정보를 조회할 수 있어야 한다.")
+        void normalAccountGetMyInfoTest() throws Exception {
+            // given
+            var tenantId = 123L;
+            var credential = new EmployeeCredentials(VALID_USERNAME, passwordEncoder.encode(VALID_PASSWORD));
+            var name = "name";
+            var position = "position";
+
+            employeeDomainService.createNormalAccount(tenantId, credential, name, position);
+
+            // when
+            var body = objectMapper.writeValueAsString(Map.of(
+                "username", VALID_USERNAME,
+                "password", VALID_PASSWORD
+            ));
+            var mockSession = new MockHttpSession();
+
+            // Perform login
+            mvc.perform(
+                    post("/api/auth/sign-in")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
+                        .session(mockSession)
+                        .content(body)
+                )
+                .andExpect(status().isOk());
+
+            // then
+            mvc.perform(
+                    get("/api/employees/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(TenantIdContextFilter.TENANT_ID_HEADER_NAME, tenantId)
+                        .session(mockSession)
+                )
+                .andExpect(status().isOk());
         }
     }
 }
