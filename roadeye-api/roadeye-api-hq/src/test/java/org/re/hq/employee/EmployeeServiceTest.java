@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeMetadata;
 import org.re.hq.employee.domain.EmployeeRole;
+import org.re.hq.employee.service.EmployeeService;
 import org.re.hq.tenant.TenantId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class EmployeeServiceTest {
 
     private final TenantId defaultTenantId = new TenantId(1L);
+
     @Autowired
     private EmployeeService employeeService;
 
@@ -35,7 +37,7 @@ class EmployeeServiceTest {
         employeeService.createRoot(defaultTenantId, credentials, EmployeeMetadata.create("root", "root"));
 
         assertThatThrownBy(() -> employeeService.createRoot(defaultTenantId, credentials, EmployeeMetadata.create("root", "root")))
-                .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
