@@ -34,4 +34,10 @@ public class CarApi {
         var page = carService.searchByIgnitionStatus(tenantId, status, pageable);
         return PageResponse.of(page, CarResponse::from);
     }
+
+    @GetMapping("/count/ignition")
+    public SingleItemResponse<Long> countCarsByIgnition(TenantId tenantId, @RequestParam CarIgnitionStatus status) {
+        var count = carService.countByIgnitionStatus(tenantId, status);
+        return SingleItemResponse.of(count);
+    }
 }

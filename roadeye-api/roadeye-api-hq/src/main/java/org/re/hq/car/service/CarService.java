@@ -31,4 +31,9 @@ public class CarService {
         var company = companyService.findById(tenantId.value());
         return carDomainService.searchByIgnitionStatus(company, status, pageable);
     }
+
+    public Long countByIgnitionStatus(TenantId tenantId, CarIgnitionStatus status) {
+        var company = companyService.findById(tenantId.value());
+        return carDomainService.countByIgnitionStatus(company, status);
+    }
 }

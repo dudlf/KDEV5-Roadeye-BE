@@ -24,5 +24,14 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     Long countByCompanyIdAndStatus(Long companyId, EntityLifecycleStatus status);
 
+    @Query("""
+        SELECT COUNT(c)
+        FROM Car c
+        WHERE c.company.id = :companyId
+          AND c.mdtStatus.ignition = :ignitionStatus
+          AND c.status = :entityLifecycleStatus
+        """)
+    Long countByCompanyIdAndIgnitionStatusAndStatus(Long companyId, CarIgnitionStatus ignitionStatus, EntityLifecycleStatus entityLifecycleStatus);
+
     Optional<Car> findByCompanyIdAndIdAndStatus(Long companyId, Long id, EntityLifecycleStatus status);
 }

@@ -20,65 +20,70 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class CarDomainService {
-  private final CarRepository carRepository;
+    private final CarRepository carRepository;
 
-  public Page<Car> getCars(Company company, Pageable pageable) {
-    var companyId = company.getId();
-    return carRepository.findByCompanyIdAndStatus(companyId, EntityLifecycleStatus.ACTIVE, pageable);
-  }
+    public Page<Car> getCars(Company company, Pageable pageable) {
+        var companyId = company.getId();
+        return carRepository.findByCompanyIdAndStatus(companyId, EntityLifecycleStatus.ACTIVE, pageable);
+    }
 
-  public Page<Car> getCarsByStatus(Company company, EntityLifecycleStatus status, Pageable pageable) {
-    var companyId = company.getId();
-    return carRepository.findByCompanyIdAndStatus(companyId, status, pageable);
-  }
+    public Page<Car> getCarsByStatus(Company company, EntityLifecycleStatus status, Pageable pageable) {
+        var companyId = company.getId();
+        return carRepository.findByCompanyIdAndStatus(companyId, status, pageable);
+    }
 
-  public Car getCarById(Company company, Long carId) {
-    var companyId = company.getId();
-    return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
-      .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
-  }
+    public Car getCarById(Company company, Long carId) {
+        var companyId = company.getId();
+        return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
+            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
+    }
 
-  public Page<Car> searchByIgnitionStatus(Company company, CarIgnitionStatus status, Pageable pageable) {
-    var companyId = company.getId();
-    return carRepository.findByCompanyIdAndIgnitionStatusAndStatus(companyId, status, EntityLifecycleStatus.ACTIVE, pageable);
-  }
+    public Page<Car> searchByIgnitionStatus(Company company, CarIgnitionStatus status, Pageable pageable) {
+        var companyId = company.getId();
+        return carRepository.findByCompanyIdAndIgnitionStatusAndStatus(companyId, status, EntityLifecycleStatus.ACTIVE, pageable);
+    }
 
-  public Long countCarsByStatus(Company company, EntityLifecycleStatus status) {
-    var companyId = company.getId();
-    return carRepository.countByCompanyIdAndStatus(companyId, status);
-  }
+    public Long countCarsByStatus(Company company, EntityLifecycleStatus status) {
+        var companyId = company.getId();
+        return carRepository.countByCompanyIdAndStatus(companyId, status);
+    }
 
-  public Car createCar(Company company, CarCreationCommand command) {
-    var car = command.toEntity(company);
-    return carRepository.save(car);
-  }
+    public Long countByIgnitionStatus(Company company, CarIgnitionStatus status) {
+        var companyId = company.getId();
+        return carRepository.countByCompanyIdAndIgnitionStatusAndStatus(companyId, status, EntityLifecycleStatus.ACTIVE);
+    }
 
-  public Car updateCarProfile(Car car, CarUpdateCommand command) {
-    car.update(command);
-    return car;
-  }
+    public Car createCar(Company company, CarCreationCommand command) {
+        var car = command.toEntity(company);
+        return carRepository.save(car);
+    }
 
-  public Car turnOnIgnition(Car car, UUID transactionId) {
-    car.turnOnIgnition(transactionId);
-    return car;
-  }
+    public Car updateCarProfile(Car car, CarUpdateCommand command) {
+        car.update(command);
+        return car;
+    }
 
-  public Car turnOffIgnition(Car car, UUID transactionId) {
-    car.turnOffIgnition(transactionId);
-    return car;
-  }
+    public Car turnOnIgnition(Car car, UUID transactionId) {
+        car.turnOnIgnition(transactionId);
+        return car;
+    }
 
-  public Car resetIgnitionStatus(Car car) {
-    car.resetIgnitionStatus();
-    return car;
-  }
+    public Car turnOffIgnition(Car car, UUID transactionId) {
+        car.turnOffIgnition(transactionId);
+        return car;
+    }
 
-  public void deleteCar(Car car) {
-    car.delete();
-  }
+    public Car resetIgnitionStatus(Car car) {
+        car.resetIgnitionStatus();
+        return car;
+    }
 
-  public Car disable(Car car, CarDisableCommand command) {
-    car.disable(command.reason());
-    return car;
-  }
+    public void deleteCar(Car car) {
+        car.delete();
+    }
+
+    public Car disable(Car car, CarDisableCommand command) {
+        car.disable(command.reason());
+        return car;
+    }
 }

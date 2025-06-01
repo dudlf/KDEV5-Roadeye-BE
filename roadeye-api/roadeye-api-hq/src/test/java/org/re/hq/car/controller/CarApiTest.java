@@ -87,6 +87,36 @@ class CarApiTest {
                 .andExpect(jsonPath("$.data.batteryVoltage").value(car.getMdtStatus().getBatteryVoltage()))
                 .andExpect(jsonPath("$.data.ignitionStatus").value(car.getMdtStatus().getIgnition().toString()));
         }
+
+        @Test
+        @DisplayName("시동 상태별 차량 수 조회")
+        @MockCompanyUserDetails
+        void count_by_ignition_status_test() throws Exception {
+            // given
+            var tenantId = 111L;
+            var nOnCars = 5L;
+            Mockito.when(carService.countByIgnitionStatus(Mockito.any(), Mockito.eq(CarIgnitionStatus.ON)))
+                .thenReturn(nOnCars);
+            var nOffCars = 3L;
+            Mockito.when(carService.countByIgnitionStatus(Mockito.any(), Mockito.eq(CarIgnitionStatus.OFF)))
+                .thenReturn(nOffCars);
+
+            // 시동 On 차량 수 조회
+            var reqOn = get("/api/cars/count/ignition")
+                .param("status", CarIgnitionStatus.ON.toString())
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+            mvc.perform(reqOn)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(nOnCars));
+
+            // 시동 Off 차량 수 조회
+            var reqOff = get("/api/cars/count/ignition")
+                .param("status", CarIgnitionStatus.OFF.toString())
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+            mvc.perform(reqOff)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(nOffCars));
+        }
     }
 
     @Nested

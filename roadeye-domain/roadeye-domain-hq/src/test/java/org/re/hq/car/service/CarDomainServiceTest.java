@@ -263,6 +263,34 @@ class CarDomainServiceTest {
             assertThat(offCars).isNotNull();
             assertThat(offCars.getTotalElements()).isEqualTo(numOffCars);
         }
+
+        @Test
+        @DisplayName("차량 시동 상태별 카운트 조회가 가능해야 한다.")
+        void 차량시동상태별_카운트조회_테스트(Company company) {
+            // given
+            var numOnCars = 5;
+            var numOffCars = 3;
+            var creationCommand = CarCreationCommandFixture.create();
+
+            // 차량 시동 OFF 상태 등록
+            for (int i = 0; i < numOffCars; i++) {
+                carDomainService.createCar(company, creationCommand);
+            }
+
+            // 차량 시동 ON 상태 등록
+            for (int i = 0; i < numOnCars; i++) {
+                var car = carDomainService.createCar(company, creationCommand);
+                carDomainService.turnOnIgnition(car, UUID.randomUUID());
+            }
+
+            // when
+            var onCount = carDomainService.countByIgnitionStatus(company, CarIgnitionStatus.ON);
+            var offCount = carDomainService.countByIgnitionStatus(company, CarIgnitionStatus.OFF);
+
+            // then
+            assertThat(onCount).isEqualTo(numOnCars);
+            assertThat(offCount).isEqualTo(numOffCars);
+        }
     }
 
     @Nested
