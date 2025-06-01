@@ -7,6 +7,7 @@ import org.re.hq.car.dto.CarDisableCommand;
 import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.car.repository.CarRepository;
 import org.re.hq.company.domain.Company;
+import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-@Service
+@DomainService
 @Transactional
 @RequiredArgsConstructor
-public class CarService {
+public class CarDomainService {
     private final CarRepository carRepository;
 
     public Page<Car> getCars(Company company, Pageable pageable) {

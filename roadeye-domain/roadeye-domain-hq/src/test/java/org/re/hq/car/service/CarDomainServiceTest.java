@@ -21,12 +21,12 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Import({CarService.class})
+@Import({CarDomainService.class})
 @DataJpaTest
 @WithCompany
-class CarServiceTest {
+class CarDomainServiceTest {
     @Autowired
-    CarService carService;
+    CarDomainService carDomainService;
 
     @Nested
     @DisplayName("차량 조회 테스트")
@@ -41,11 +41,11 @@ class CarServiceTest {
             // 차량 10개 등록
             for (int i = 0; i < numCars; i++) {
                 var command = CarCreationCommandFixture.create();
-                carService.createCar(company, command);
+                carDomainService.createCar(company, command);
             }
 
             // when
-            var carPage = carService.getCars(company, pageable);
+            var carPage = carDomainService.getCars(company, pageable);
 
             // then
             assertThat(carPage).isNotNull();
@@ -63,17 +63,17 @@ class CarServiceTest {
             // 회사 1에 차량 등록
             for (int i = 0; i < numCarsCompany1; i++) {
                 var command = CarCreationCommandFixture.create();
-                carService.createCar(company1, command);
+                carDomainService.createCar(company1, command);
             }
 
             // 회사 2에 차량 등록
             for (int i = 0; i < numCarsCompany2; i++) {
                 var command = CarCreationCommandFixture.create();
-                carService.createCar(company2, command);
+                carDomainService.createCar(company2, command);
             }
 
             // when
-            var carPage = carService.getCars(company1, pageable);
+            var carPage = carDomainService.getCars(company1, pageable);
 
             // then
             assertThat(carPage).isNotNull();
@@ -90,11 +90,11 @@ class CarServiceTest {
             // 차량 10개 등록
             for (int i = 0; i < numCars; i++) {
                 var command = CarCreationCommandFixture.create();
-                carService.createCar(company, command);
+                carDomainService.createCar(company, command);
             }
 
             // when
-            var carPage = carService.getCars(company, pageable);
+            var carPage = carDomainService.getCars(company, pageable);
 
             // then
             assertThat(carPage).isNotNull();
@@ -106,10 +106,10 @@ class CarServiceTest {
         void 회사차량_단건조회_테스트(Company company) {
             // given
             var command = CarCreationCommandFixture.create();
-            var car = carService.createCar(company, command);
+            var car = carDomainService.createCar(company, command);
 
             // when
-            var retrievedCar = carService.getCarById(company, car.getId());
+            var retrievedCar = carDomainService.getCarById(company, car.getId());
 
             // then
             assertThat(retrievedCar).isNotNull();
@@ -122,11 +122,11 @@ class CarServiceTest {
         void 회사차량_단건조회_다른회사차량_조회되지않음_테스트(Company company1, Company company2) {
             // given
             var command = CarCreationCommandFixture.create();
-            var car = carService.createCar(company1, command);
+            var car = carDomainService.createCar(company1, command);
 
             // when
             assertThrows(Exception.class, () -> {
-                carService.getCarById(company2, car.getId());
+                carDomainService.getCarById(company2, car.getId());
             });
         }
 
@@ -135,10 +135,10 @@ class CarServiceTest {
         void 차량단건조회_활성화상태_테스트(Company company) {
             // given
             var command = CarCreationCommandFixture.create();
-            var car = carService.createCar(company, command);
+            var car = carDomainService.createCar(company, command);
 
             // when
-            var retrievedCar = carService.getCarById(company, car.getId());
+            var retrievedCar = carDomainService.getCarById(company, car.getId());
 
             // then
             assertThat(retrievedCar).isNotNull();
@@ -155,18 +155,18 @@ class CarServiceTest {
 
             // 차량 활성화 상태 등록
             for (int i = 0; i < numActiveCars; i++) {
-                carService.createCar(company, creationCommand);
+                carDomainService.createCar(company, creationCommand);
             }
 
             // 차량 비활성화 상태 등록
             for (int i = 0; i < numDisabledCars; i++) {
-                var car = carService.createCar(company, creationCommand);
-                carService.disable(car, new CarDisableCommand("비활성화 이유"));
+                var car = carDomainService.createCar(company, creationCommand);
+                carDomainService.disable(car, new CarDisableCommand("비활성화 이유"));
             }
 
             // when
-            var activeCars = carService.getCarsByStatus(company, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
-            var disabledCars = carService.getCarsByStatus(company, EntityLifecycleStatus.DISABLED, PageRequest.of(0, 10));
+            var activeCars = carDomainService.getCarsByStatus(company, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
+            var disabledCars = carDomainService.getCarsByStatus(company, EntityLifecycleStatus.DISABLED, PageRequest.of(0, 10));
 
             // then
             assertThat(activeCars).isNotNull();
@@ -185,17 +185,17 @@ class CarServiceTest {
 
             // 회사 1에 차량 활성화 상태 등록
             for (int i = 0; i < numCarsCompany1; i++) {
-                carService.createCar(company1, creationCommand);
+                carDomainService.createCar(company1, creationCommand);
             }
 
             // 회사 2에 차량 활성화 상태 등록
             for (int i = 0; i < numCarsCompany2; i++) {
-                carService.createCar(company2, creationCommand);
+                carDomainService.createCar(company2, creationCommand);
             }
 
             // when
-            var activeCars = carService.getCarsByStatus(company1, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
-            var disabledCars = carService.getCarsByStatus(company2, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
+            var activeCars = carDomainService.getCarsByStatus(company1, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
+            var disabledCars = carDomainService.getCarsByStatus(company2, EntityLifecycleStatus.ACTIVE, PageRequest.of(0, 10));
 
             // then
             assertThat(activeCars).isNotNull();
@@ -214,18 +214,18 @@ class CarServiceTest {
 
             // 차량 활성화 상태 등록
             for (int i = 0; i < numActiveCars; i++) {
-                carService.createCar(company, creationCommand);
+                carDomainService.createCar(company, creationCommand);
             }
 
             // 차량 비활성화 상태 등록
             for (int i = 0; i < numDisabledCars; i++) {
-                var car = carService.createCar(company, creationCommand);
-                carService.disable(car, new CarDisableCommand("비활성화 이유"));
+                var car = carDomainService.createCar(company, creationCommand);
+                carDomainService.disable(car, new CarDisableCommand("비활성화 이유"));
             }
 
             // when
-            var activeCount = carService.countCarsByStatus(company, EntityLifecycleStatus.ACTIVE);
-            var disabledCount = carService.countCarsByStatus(company, EntityLifecycleStatus.DISABLED);
+            var activeCount = carDomainService.countCarsByStatus(company, EntityLifecycleStatus.ACTIVE);
+            var disabledCount = carDomainService.countCarsByStatus(company, EntityLifecycleStatus.DISABLED);
 
             // then
             assertThat(activeCount).isEqualTo(numActiveCars);
@@ -244,7 +244,7 @@ class CarServiceTest {
             var command = CarCreationCommandFixture.create();
 
             // when
-            var car = carService.createCar(company, command);
+            var car = carDomainService.createCar(company, command);
 
             // then
             assertThat(car).isNotNull();
@@ -262,7 +262,7 @@ class CarServiceTest {
             var command = CarCreationCommandFixture.create();
 
             // when
-            var car = carService.createCar(company, command);
+            var car = carDomainService.createCar(company, command);
 
             // then
             assertThat(car).isNotNull();
@@ -282,8 +282,8 @@ class CarServiceTest {
             var updatedCommand = new CarUpdateCommand(nextName, null);
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            var updatedCar = carService.updateCarProfile(car, updatedCommand);
+            var car = carDomainService.createCar(company, creationCommand);
+            var updatedCar = carDomainService.updateCarProfile(car, updatedCommand);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -300,8 +300,8 @@ class CarServiceTest {
             var updatedCommand = new CarUpdateCommand(null, nextImageUrl);
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            var updatedCar = carService.updateCarProfile(car, updatedCommand);
+            var car = carDomainService.createCar(company, creationCommand);
+            var updatedCar = carDomainService.updateCarProfile(car, updatedCommand);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -316,8 +316,8 @@ class CarServiceTest {
             var disableReason = "차량 고장";
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            var disabledCar = carService.disable(car, new CarDisableCommand(disableReason));
+            var car = carDomainService.createCar(company, creationCommand);
+            var disabledCar = carDomainService.disable(car, new CarDisableCommand(disableReason));
 
             // then
             assertThat(disabledCar).isNotNull();
@@ -340,15 +340,15 @@ class CarServiceTest {
 
             // 차량 10개 등록
             var cars = IntStream.range(0, numCars)
-                .mapToObj(i -> carService.createCar(company, creationCommand))
+                .mapToObj(i -> carDomainService.createCar(company, creationCommand))
                 .toList();
             // 차량 5개 삭제
             cars.stream()
                 .limit(numCarsToDelete)
-                .forEach(car -> carService.deleteCar(car));
+                .forEach(car -> carDomainService.deleteCar(car));
 
             // when
-            var carPage = carService.getCars(company, pageable);
+            var carPage = carDomainService.getCars(company, pageable);
 
             // then
             assertThat(carPage).isNotNull();
@@ -362,12 +362,12 @@ class CarServiceTest {
             var creationCommand = CarCreationCommandFixture.create();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            carService.deleteCar(car);
+            var car = carDomainService.createCar(company, creationCommand);
+            carDomainService.deleteCar(car);
 
             // then
             assertThrows(Exception.class, () -> {
-                carService.getCarById(company, car.getId());
+                carDomainService.getCarById(company, car.getId());
             });
         }
     }
@@ -383,8 +383,8 @@ class CarServiceTest {
             var transactionId = UUID.randomUUID();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            var updatedCar = carService.turnOnIgnition(car, transactionId);
+            var car = carDomainService.createCar(company, creationCommand);
+            var updatedCar = carDomainService.turnOnIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -399,8 +399,8 @@ class CarServiceTest {
             var transactionId = UUID.randomUUID();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            var updatedCar = carService.turnOnIgnition(car, transactionId);
+            var car = carDomainService.createCar(company, creationCommand);
+            var updatedCar = carDomainService.turnOnIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -415,9 +415,9 @@ class CarServiceTest {
             var transactionId = UUID.randomUUID();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            carService.turnOnIgnition(car, transactionId);
-            var updatedCar = carService.turnOffIgnition(car, transactionId);
+            var car = carDomainService.createCar(company, creationCommand);
+            carDomainService.turnOnIgnition(car, transactionId);
+            var updatedCar = carDomainService.turnOffIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -433,12 +433,12 @@ class CarServiceTest {
             var wrongTransactionId = UUID.randomUUID();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            carService.turnOnIgnition(car, transactionId);
+            var car = carDomainService.createCar(company, creationCommand);
+            carDomainService.turnOnIgnition(car, transactionId);
 
             // then
             assertThrows(Exception.class, () -> {
-                carService.turnOffIgnition(car, wrongTransactionId);
+                carDomainService.turnOffIgnition(car, wrongTransactionId);
             });
         }
 
@@ -450,9 +450,9 @@ class CarServiceTest {
             var transactionId = UUID.randomUUID();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            carService.turnOnIgnition(car, transactionId);
-            var updatedCar = carService.turnOffIgnition(car, transactionId);
+            var car = carDomainService.createCar(company, creationCommand);
+            carDomainService.turnOnIgnition(car, transactionId);
+            var updatedCar = carDomainService.turnOffIgnition(car, transactionId);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -467,9 +467,9 @@ class CarServiceTest {
             var transactionId = UUID.randomUUID();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            carService.turnOnIgnition(car, transactionId);
-            var updatedCar = carService.resetIgnitionStatus(car);
+            var car = carDomainService.createCar(company, creationCommand);
+            carDomainService.turnOnIgnition(car, transactionId);
+            var updatedCar = carDomainService.resetIgnitionStatus(car);
 
             // then
             assertThat(updatedCar).isNotNull();
@@ -484,9 +484,9 @@ class CarServiceTest {
             var transactionId = UUID.randomUUID();
 
             // when
-            var car = carService.createCar(company, creationCommand);
-            carService.turnOnIgnition(car, transactionId);
-            var updatedCar = carService.resetIgnitionStatus(car);
+            var car = carDomainService.createCar(company, creationCommand);
+            carDomainService.turnOnIgnition(car, transactionId);
+            var updatedCar = carDomainService.resetIgnitionStatus(car);
 
             // then
             assertThat(updatedCar).isNotNull();
