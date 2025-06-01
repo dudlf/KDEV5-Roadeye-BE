@@ -6,7 +6,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.re.hq.security.userdetails.CompanyUserDetails;
 import org.re.hq.security.web.dto.AuthenticationSuccessResponse;
+import org.re.hq.web.method.support.TenantIdArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,11 @@ public class RoadeyeAuthenticationSuccessHandler implements AuthenticationSucces
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         try (var writer = response.getWriter()) {
+            if (authentication.getDetails() instanceof CompanyUserDetails userDetails) {
+                var session = request.getSession(true);
+                session.setAttribute(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, userDetails.getTenantId().value());
+            }
+
             var jsonResponse = AuthenticationSuccessResponse.from(authentication);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.OK.value());

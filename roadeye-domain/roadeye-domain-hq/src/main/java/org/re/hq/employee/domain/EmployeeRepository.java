@@ -18,5 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e WHERE e.credentials.loginId = :username AND e.tenantId = :tenantId")
     Optional<Employee> findByUsernameAndTenantId(Long tenantId, String username);
 
-    Page<Employee> findByTenantId(Long tenantId, Pageable pageable);
+    @Query("SELECT e FROM Employee e WHERE e.tenantId = :tenantId AND e.role = :role")
+    Optional<Employee> findByTenantIdAndRole(Long tenantId, EmployeeRole role);
 }

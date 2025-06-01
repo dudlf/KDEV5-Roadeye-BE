@@ -1,9 +1,11 @@
 package org.re.hq.security.userdetails;
 
 import lombok.Getter;
+import org.jspecify.annotations.NonNull;
 import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.security.domain.AuthMemberType;
+import org.re.hq.tenant.TenantId;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,7 +21,10 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
     private static final Collection<? extends GrantedAuthority> DEFAULT_AUTHORITIES
         = Collections.unmodifiableCollection(AuthorityUtils.createAuthorityList(AuthMemberType.USER.getValue()));
 
+    @NonNull
+    private final TenantId tenantId;
     private final Long userId;
+
     private final String username;
     private String password;
 
@@ -31,6 +36,7 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
     private final boolean enabled;
 
     private CompanyUserDetails(
+        @NonNull TenantId tenantId,
         Long userId,
         String username,
         String password,
@@ -40,6 +46,7 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
         boolean credentialsNonExpired,
         boolean enabled
     ) {
+        this.tenantId = tenantId;
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -51,7 +58,9 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
     }
 
     public static UserDetails from(Employee user) {
+        var tenantId = new TenantId(user.getTenantId());
         return new CompanyUserDetails(
+            tenantId,
             user.getId(),
             user.getCredentials().loginId(),
             user.getCredentials().password(),
@@ -66,7 +75,7 @@ public class CompanyUserDetails implements UserDetails, CredentialsContainer {
     private static Collection<? extends GrantedAuthority> createAuthorities(Employee user) {
         return Stream.concat(
             DEFAULT_AUTHORITIES.stream(),
-            Stream.of(user.getMetadata().getRole())
+            Stream.of(user.getRole())
                 .map((r) -> new SimpleGrantedAuthority(r.name()))
         ).toList();
     }
