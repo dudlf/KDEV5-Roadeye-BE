@@ -1,9 +1,9 @@
 package org.re.hq.employee.api;
 
 import lombok.RequiredArgsConstructor;
-import org.re.hq.employee.api.payload.AccountStatus;
 import org.re.hq.employee.api.payload.EmployeeCreateRequest;
 import org.re.hq.employee.api.payload.EmployeeSearchResponse;
+import org.re.hq.employee.api.payload.EmployeeStatusChangeRequest;
 import org.re.hq.employee.api.payload.EmployeeUpdateRequest;
 import org.re.hq.employee.service.EmployeeService;
 import org.re.hq.tenant.TenantId;
@@ -32,9 +32,9 @@ public class EmployeeApi {
         employeeService.update(tenantId, employeeId, employeeUpdateRequest.toCommand());
     }
 
-    @PatchMapping("/{employeeId}/{status}")
-    public void patch(TenantId tenantId, @PathVariable Long employeeId, @PathVariable AccountStatus status) {
-        employeeService.changeStatus(tenantId, employeeId, status);
+    @PatchMapping("/{employeeId}/status")
+    public void changeStatus(TenantId tenantId, @PathVariable Long employeeId, @RequestBody EmployeeStatusChangeRequest request) {
+        employeeService.changeStatus(tenantId, employeeId, request.status());
     }
 
     @DeleteMapping("/{employeeId}")
