@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.re.hq.car.CarFixture;
+import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.service.CarService;
 import org.re.hq.test.security.MockCompanyUserDetails;
 import org.re.hq.web.method.support.TenantIdArgumentResolver;
@@ -85,6 +86,44 @@ class CarApiTest {
                 .andExpect(jsonPath("$.data.mileageCurrent").value(car.getMileage().getTotal()))
                 .andExpect(jsonPath("$.data.batteryVoltage").value(car.getMdtStatus().getBatteryVoltage()))
                 .andExpect(jsonPath("$.data.ignitionStatus").value(car.getMdtStatus().getIgnition().toString()));
+        }
+    }
+
+    @Nested
+    @DisplayName("검색 테스트")
+    class SearchTest {
+        @Test
+        @DisplayName("시동 상태별 목록 조회 테스트")
+        @MockCompanyUserDetails
+        void search_by_ignition_status_test() throws Exception {
+            // given
+            var tenantId = 111L;
+
+            var nOnCars = 5;
+            var onCars = CarFixture.createList(nOnCars);
+            Mockito.when(carService.searchByIgnitionStatus(Mockito.any(), Mockito.eq(CarIgnitionStatus.ON), Mockito.any()))
+                .thenReturn(new PageImpl<>(onCars));
+
+            var nOffCars = 3;
+            var offCars = CarFixture.createList(nOffCars);
+            Mockito.when(carService.searchByIgnitionStatus(Mockito.any(), Mockito.eq(CarIgnitionStatus.OFF), Mockito.any()))
+                .thenReturn(new PageImpl<>(offCars));
+
+            // 시동 On 차량
+            var reqOn = get("/api/cars/search/ignition")
+                .param("status", CarIgnitionStatus.ON.toString())
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+            mvc.perform(reqOn)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(nOnCars));
+
+            // 시동 Off 차량
+            var reqOff = get("/api/cars/search/ignition")
+                .param("status", CarIgnitionStatus.OFF.toString())
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+            mvc.perform(reqOff)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(nOffCars));
         }
     }
 }

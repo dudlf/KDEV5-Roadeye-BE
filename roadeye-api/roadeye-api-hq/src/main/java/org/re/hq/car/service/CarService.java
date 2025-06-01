@@ -2,6 +2,7 @@ package org.re.hq.car.service;
 
 import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.Car;
+import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.company.service.CompanyService;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
@@ -24,5 +25,10 @@ public class CarService {
     public Car getCarById(TenantId tenantId, Long carId) {
         var company = companyService.findById(tenantId.value());
         return carDomainService.getCarById(company, carId);
+    }
+
+    public Page<Car> searchByIgnitionStatus(TenantId tenantId, CarIgnitionStatus status, Pageable pageable) {
+        var company = companyService.findById(tenantId.value());
+        return carDomainService.searchByIgnitionStatus(company, status, pageable);
     }
 }
