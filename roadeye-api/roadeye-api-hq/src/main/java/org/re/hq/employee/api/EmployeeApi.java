@@ -6,6 +6,7 @@ import org.re.hq.employee.api.payload.EmployeeSearchResponse;
 import org.re.hq.employee.api.payload.EmployeeStatusChangeRequest;
 import org.re.hq.employee.api.payload.EmployeeUpdateRequest;
 import org.re.hq.employee.service.EmployeeService;
+import org.re.hq.security.userdetails.CompanyUserDetails;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
@@ -17,6 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeApi {
 
     private final EmployeeService employeeService;
+
+    @GetMapping("/my")
+    public EmployeeSearchResponse getMyInfo(CompanyUserDetails userDetails) {
+        return EmployeeSearchResponse.from(employeeService.getMyInfo(userDetails));
+    }
 
     @PostMapping
     public void create(TenantId tenantId, @RequestBody EmployeeCreateRequest employeeCreateRequest) {
