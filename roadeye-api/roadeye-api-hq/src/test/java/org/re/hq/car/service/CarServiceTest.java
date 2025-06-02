@@ -3,6 +3,7 @@ package org.re.hq.car.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.re.hq.car.dto.CarCreationRequestFixture;
+import org.re.hq.car.dto.CarUpdateRequestFixture;
 import org.re.hq.company.service.CompanyService;
 import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.tenant.TenantId;
@@ -26,6 +27,32 @@ class CarServiceTest extends BaseServiceTest {
 
     @MockitoBean
     CarDomainService carDomainService;
+
+    @Test
+    @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
+    @DisplayName("일반 사용자는 차량 정보를 수정할 수 없다.")
+    void testCarUpdate() {
+        var tenantId = new TenantId(111L);
+        var carId = 1L;
+        var request = CarUpdateRequestFixture.create();
+
+        assertThrows(AccessDeniedException.class, () -> {
+            carService.updateCarProfile(tenantId, carId, request);
+        });
+    }
+
+    @Test
+    @MockCompanyUserDetails(role = EmployeeRole.ROOT)
+    @DisplayName("관리자 권한을 가진 사용자는 차량 정보를 수정할 수 있다.")
+    void testManagerCanUpdateCar() {
+        var tenantId = new TenantId(111L);
+        var carId = 1L;
+        var request = CarUpdateRequestFixture.create();
+
+        assertDoesNotThrow(() -> {
+            carService.updateCarProfile(tenantId, carId, request);
+        });
+    }
 
     @Test
     @MockCompanyUserDetails(role = EmployeeRole.NORMAL)

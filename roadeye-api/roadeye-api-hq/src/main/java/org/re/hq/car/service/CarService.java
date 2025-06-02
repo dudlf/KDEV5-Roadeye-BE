@@ -47,6 +47,7 @@ public class CarService {
         return carDomainService.createCar(company, command);
     }
 
+    @ManagerOnly
     public Car updateCarProfile(TenantId tenantId, Long carId, CarUpdateRequest request) {
         var company = companyService.findById(tenantId.value());
         var car = carDomainService.getCarById(company, carId);
