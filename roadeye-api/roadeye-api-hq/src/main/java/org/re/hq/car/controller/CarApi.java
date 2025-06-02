@@ -47,4 +47,12 @@ public class CarApi {
         var createdCar = carService.createCar(tenantId, request);
         return SingleItemResponse.of(createdCar, CarResponse::from);
     }
+
+    @DeleteMapping("/{carId}")
+    public void deleteCar(
+        TenantId tenantId,
+        @PathVariable Long carId
+    ) {
+        carService.deleteCar(tenantId, carId);
+    }
 }
