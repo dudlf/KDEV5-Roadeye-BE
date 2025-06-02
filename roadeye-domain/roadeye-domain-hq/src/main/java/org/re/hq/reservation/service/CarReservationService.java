@@ -2,6 +2,8 @@ package org.re.hq.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.re.hq.reservation.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +40,8 @@ public class CarReservationService {
      * 예약 등록
      */
     public void createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
-                                  ReserveReason reserveReason, LocalDateTime reservedAt){
-        checkReservation(carId, reservationPeriod);
+                                  ReserveReason reserveReason, LocalDateTime reservedAt, Long companyId){
+        checkReservation(carId, reservationPeriod, companyId);
 
         CarReservation carReservation = CarReservation.createReservation(carId, reserverId, reservationPeriod, reserveReason, reservedAt);
 
@@ -49,11 +51,12 @@ public class CarReservationService {
     /**
      * 차량은 동일한 시간대에 두 개 이상의 예약을 가질 수 없다.
      */
-    private void checkReservation(Long carId, ReservationPeriod reservationPeriod) {
+    private void checkReservation(Long carId, ReservationPeriod reservationPeriod, Long companyId) {
         boolean exists = carReservationRepository.existsCarReservationsByReservationPeriodContaining(
                 carId,
                 List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
-                reservationPeriod
+                reservationPeriod,
+                companyId
         );
 
         if (exists) {
@@ -65,10 +68,11 @@ public class CarReservationService {
      * 해당 시간대에 예약이 있는 차량 리스트 반환
      */
     @Transactional(readOnly = true)
-    public List<Long> findCarIdsWithReservationPeriod(ReservationPeriod reservationPeriod) {
+    public List<Long> findCarIdsWithReservationPeriod(ReservationPeriod reservationPeriod, Long companyId) {
         return carReservationRepository.findCarIdsWithReservationPeriod(
                 reservationPeriod,
-                List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED)
+                List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
+                companyId
         );
     }
 }
