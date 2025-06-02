@@ -36,4 +36,11 @@ public class CompanyQuoteService {
         quoteDomainService.approve(approver, quote);
         return quote;
     }
+
+    public CompanyQuote rejectQuote(PlatformAdminUserDetails userDetails, Long quoteId) {
+        var quote = quoteDomainService.findById(quoteId);
+        var approver = platformAdminService.findById(userDetails.getId());
+        quoteDomainService.reject(approver, quote);
+        return quote;
+    }
 }

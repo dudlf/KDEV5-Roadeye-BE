@@ -35,4 +35,13 @@ public class CompanyAdminApi {
         var quote = quoteService.approveQuote(userDetails, quoteId);
         return QuoteResponse.from(quote);
     }
+
+    @PostMapping("/{quoteId}/reject")
+    public QuoteResponse rejectQuote(
+        @NonNull PlatformAdminUserDetails userDetails,
+        @PathVariable Long quoteId
+    ) {
+        var quote = quoteService.rejectQuote(userDetails, quoteId);
+        return QuoteResponse.from(quote);
+    }
 }

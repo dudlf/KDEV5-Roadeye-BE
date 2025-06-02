@@ -193,4 +193,63 @@ class CompanyAdminApiTest extends BaseWebMvcTest {
                 .approveQuote(Mockito.any(), Mockito.eq(quoteId));
         }
     }
+
+    @Nested
+    @DisplayName("거절 테스트")
+    class RejectionTest {
+        @Test
+        @DisplayName("업체의 일반 계정은 견적 거절 API를 호출할 수 없다.")
+        @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
+        void service_normal_member_cannot_reject_quote() throws Exception {
+            // given
+            var quoteId = 1L;
+
+            // when
+            var req = post("/api/admin/company/quotes/{quoteId}/reject", quoteId);
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("업체의 루트 계정은 견적 거절 API를 호출할 수 없다.")
+        @MockCompanyUserDetails(role = EmployeeRole.ROOT)
+        void service_root_member_cannot_reject_quote() throws Exception {
+            // given
+            var quoteId = 1L;
+
+            // when
+            var req = post("/api/admin/company/quotes/{quoteId}/reject", quoteId);
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("관리자는 견적 거절 API를 호출할 수 있다.")
+        @MockPlatformAdminUserDetails
+        void service_admin_member_can_reject_quote() throws Exception {
+            // given
+            var quoteId = 1L;
+            Mockito.lenient().when(companyQuoteService.rejectQuote(Mockito.any(PlatformAdminUserDetails.class), Mockito.anyLong()))
+                .thenAnswer(invocation -> {
+                    var id = invocation.getArgument(1, Long.class);
+                    return quotes.stream()
+                        .filter(quote -> Objects.equals(quote.getId(), id))
+                        .findFirst()
+                        .orElseThrow();
+                });
+
+            // when
+            var req = post("/api/admin/company/quotes/{quoteId}/reject", quoteId);
+            mvc.perform(req)
+                .andExpect(status().isOk());
+
+            // then
+            Mockito.verify(companyQuoteService, Mockito.times(1))
+                .rejectQuote(Mockito.any(), Mockito.eq(quoteId));
+        }
+    }
 }
