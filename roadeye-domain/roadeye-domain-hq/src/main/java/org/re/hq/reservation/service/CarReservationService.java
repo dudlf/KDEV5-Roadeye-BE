@@ -75,4 +75,23 @@ public class CarReservationService {
                 companyId
         );
     }
+
+    /**
+     * 예약목록
+     */
+    @Transactional(readOnly = true)
+    public Page<CarReservation> findReservationWithCompanyId(Long companyId, Pageable pageable) {
+        return carReservationRepository.findCarReservationsByCompanyId(companyId, pageable);
+    }
+
+    /**
+     * 차량별 예약목록
+     */
+    @Transactional(readOnly = true)
+    public Page<CarReservation> findReservationWithCarId(Long carId, Pageable pageable) {
+        return carReservationRepository.findCarReservationsByCarId(
+                carId,
+                pageable
+        );
+    }
 }

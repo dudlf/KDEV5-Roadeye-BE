@@ -31,4 +31,13 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
         List<ReserveStatus> statuses,
         Long companyId
     );
+
+    @Query("""
+        SELECT r FROM CarReservation r
+        JOIN Car c ON r.carId = c.id
+        WHERE c.company.id = :companyId
+        """)
+    Page<CarReservation> findCarReservationsByCompanyId(Long companyId, Pageable pageable);
+
+    Page<CarReservation> findCarReservationsByCarId(Long carId, Pageable pageable);
 }
