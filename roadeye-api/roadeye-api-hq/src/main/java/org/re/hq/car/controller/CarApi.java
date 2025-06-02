@@ -5,6 +5,7 @@ import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationRequest;
 import org.re.hq.car.dto.CarDetailsResponse;
 import org.re.hq.car.dto.CarResponse;
+import org.re.hq.car.dto.CarUpdateRequest;
 import org.re.hq.car.service.CarService;
 import org.re.hq.common.dto.PageResponse;
 import org.re.hq.common.dto.SingleItemResponse;
@@ -46,6 +47,16 @@ public class CarApi {
     public SingleItemResponse<CarResponse> createCar(TenantId tenantId, @RequestBody CarCreationRequest request) {
         var createdCar = carService.createCar(tenantId, request);
         return SingleItemResponse.of(createdCar, CarResponse::from);
+    }
+
+    @PatchMapping("/{carId}")
+    public SingleItemResponse<CarResponse> updateCarProfile(
+        TenantId tenantId,
+        @PathVariable Long carId,
+        @RequestBody CarUpdateRequest request
+    ) {
+        var updatedCar = carService.updateCarProfile(tenantId, carId, request);
+        return SingleItemResponse.of(updatedCar, CarResponse::from);
     }
 
     @DeleteMapping("/{carId}")

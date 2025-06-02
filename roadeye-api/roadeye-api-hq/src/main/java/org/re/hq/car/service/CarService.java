@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.Car;
 import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationRequest;
+import org.re.hq.car.dto.CarUpdateRequest;
 import org.re.hq.company.service.CompanyService;
 import org.re.hq.security.access.ManagerOnly;
 import org.re.hq.tenant.TenantId;
@@ -43,6 +44,13 @@ public class CarService {
         var company = companyService.findById(tenantId.value());
         var command = request.toCommand();
         return carDomainService.createCar(company, command);
+    }
+
+    public Car updateCarProfile(TenantId tenantId, Long carId, CarUpdateRequest request) {
+        var company = companyService.findById(tenantId.value());
+        var car = carDomainService.getCarById(company, carId);
+        var command = request.toCommand();
+        return carDomainService.updateCarProfile(car, command);
     }
 
     @ManagerOnly
