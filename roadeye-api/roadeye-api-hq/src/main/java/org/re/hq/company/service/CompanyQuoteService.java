@@ -1,0 +1,19 @@
+package org.re.hq.company.service;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.re.hq.company.domain.CompanyQuote;
+import org.re.hq.company.dto.CompanyQuoteCreationRequest;
+import org.springframework.stereotype.Service;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class CompanyQuoteService {
+    private final CompanyQuoteDomainService quoteDomainService;
+
+    public CompanyQuote createQuote(CompanyQuoteCreationRequest request) {
+        var command = request.toCommand();
+        return quoteDomainService.requestNewQuote(command);
+    }
+}
