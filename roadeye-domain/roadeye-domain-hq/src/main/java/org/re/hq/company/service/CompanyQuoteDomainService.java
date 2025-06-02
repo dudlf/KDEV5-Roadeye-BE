@@ -8,16 +8,16 @@ import org.re.hq.company.domain.CompanyQuote;
 import org.re.hq.company.domain.CompanyQuoteStatus;
 import org.re.hq.company.dto.CompanyQuoteRequestCommand;
 import org.re.hq.company.repository.CompanyQuoteRepository;
+import org.re.hq.domain.common.DomainService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Service
+@DomainService
 @Transactional
 @RequiredArgsConstructor
-public class CompanyQuoteService {
+public class CompanyQuoteDomainService {
     private final CompanyService companyService;
     private final CompanyQuoteRepository companyQuoteRepository;
 

@@ -18,12 +18,12 @@ import org.springframework.data.domain.PageRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import({CompanyQuoteService.class, CompanyService.class, EmployeeDomainService.class})
+@Import({CompanyQuoteDomainService.class, CompanyService.class, EmployeeDomainService.class})
 @DataJpaTest
 @WithPlatformAdmin
-class CompanyQuoteServiceTest {
+class CompanyQuoteDomainServiceTest {
     @Autowired
-    CompanyQuoteService companyQuoteService;
+    CompanyQuoteDomainService companyQuoteDomainService;
 
     @Nested
     @DisplayName("조회 테스트")
@@ -35,12 +35,12 @@ class CompanyQuoteServiceTest {
             var numQuotes = 5;
             for (int i = 0; i < numQuotes; i++) {
                 var command = CompanyQuoteRequestCommandFixture.create();
-                companyQuoteService.requestNewQuote(command);
+                companyQuoteDomainService.requestNewQuote(command);
             }
             var pageable = PageRequest.of(0, 10);
 
             // When
-            var quotes = companyQuoteService.findAll(pageable);
+            var quotes = companyQuoteDomainService.findAll(pageable);
 
             // Then
             assertNotNull(quotes);
@@ -52,10 +52,10 @@ class CompanyQuoteServiceTest {
         void findById_Success() {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            var quote = companyQuoteService.requestNewQuote(command);
+            var quote = companyQuoteDomainService.requestNewQuote(command);
 
             // When
-            var foundQuote = companyQuoteService.findById(quote.getId());
+            var foundQuote = companyQuoteDomainService.findById(quote.getId());
 
             // Then
             assertNotNull(foundQuote);
@@ -69,13 +69,13 @@ class CompanyQuoteServiceTest {
             var numQuotes = 5;
             for (int i = 0; i < numQuotes; i++) {
                 var command = CompanyQuoteRequestCommandFixture.create();
-                companyQuoteService.requestNewQuote(command);
+                companyQuoteDomainService.requestNewQuote(command);
             }
             var quoteStatus = CompanyQuoteStatus.PENDING;
             var pageable = PageRequest.of(0, 10);
 
             // When
-            var quotes = companyQuoteService.findAllByQuoteStatus(quoteStatus, pageable);
+            var quotes = companyQuoteDomainService.findAllByQuoteStatus(quoteStatus, pageable);
 
             // Then
             assertNotNull(quotes);
@@ -92,13 +92,13 @@ class CompanyQuoteServiceTest {
             for (int i = 0; i < numQuotes; i++) {
                 var businessNumber = "1234567890" + i; // 고유한 사업자 번호 생성
                 var command = CompanyQuoteRequestCommandFixture.createWithBusinessNumber(businessNumber);
-                var quote = companyQuoteService.requestNewQuote(command);
+                var quote = companyQuoteDomainService.requestNewQuote(command);
 
                 // 일부는 승인, 일부는 거절 상태로 설정
                 if (i < numApproved) {
-                    companyQuoteService.approve(approver, quote);
+                    companyQuoteDomainService.approve(approver, quote);
                 } else if (i < numApproved + numRejected) {
-                    companyQuoteService.reject(approver, quote);
+                    companyQuoteDomainService.reject(approver, quote);
                 }
             }
             var numExpected = numQuotes - numApproved - numRejected;
@@ -106,7 +106,7 @@ class CompanyQuoteServiceTest {
             var pageable = PageRequest.of(0, 10);
 
             // When
-            var quotes = companyQuoteService.findAllByQuoteStatus(CompanyQuoteStatus.PENDING, pageable);
+            var quotes = companyQuoteDomainService.findAllByQuoteStatus(CompanyQuoteStatus.PENDING, pageable);
 
             // Then
             assertNotNull(quotes);
@@ -124,7 +124,7 @@ class CompanyQuoteServiceTest {
             var quote = Mockito.spy(CompanyQuoteFixture.create());
 
             // When
-            var company = companyQuoteService.approve(approver, quote);
+            var company = companyQuoteDomainService.approve(approver, quote);
 
             // Then
             assertNotNull(company);
@@ -137,12 +137,12 @@ class CompanyQuoteServiceTest {
         void approve_AlreadyApproved_ThrowsException(PlatformAdmin approver) {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            var quote = companyQuoteService.requestNewQuote(command);
+            var quote = companyQuoteDomainService.requestNewQuote(command);
             quote.approve(approver); // 이미 승인된 상태
 
             // When & Then
             assertThrows(RuntimeException.class, () -> {
-                companyQuoteService.approve(approver, quote);
+                companyQuoteDomainService.approve(approver, quote);
             });
         }
 
@@ -151,12 +151,12 @@ class CompanyQuoteServiceTest {
         void approve_AlreadyRejected_ThrowsException(PlatformAdmin approver) {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            var quote = companyQuoteService.requestNewQuote(command);
+            var quote = companyQuoteDomainService.requestNewQuote(command);
             quote.reject(approver); // 이미 거절된 상태
 
             // When & Then
             assertThrows(RuntimeException.class, () -> {
-                companyQuoteService.approve(approver, quote);
+                companyQuoteDomainService.approve(approver, quote);
             });
         }
 
@@ -165,10 +165,10 @@ class CompanyQuoteServiceTest {
         void approve_CreatesCompany(PlatformAdmin approver) {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            var quote = companyQuoteService.requestNewQuote(command);
+            var quote = companyQuoteDomainService.requestNewQuote(command);
 
             // When
-            var company = companyQuoteService.approve(approver, quote);
+            var company = companyQuoteDomainService.approve(approver, quote);
 
             // Then
             assertNotNull(company);
@@ -187,10 +187,10 @@ class CompanyQuoteServiceTest {
         void reject_Success(PlatformAdmin approver) {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            var quote = Mockito.spy(companyQuoteService.requestNewQuote(command));
+            var quote = Mockito.spy(companyQuoteDomainService.requestNewQuote(command));
 
             // When
-            var quotes = companyQuoteService.reject(approver, quote);
+            var quotes = companyQuoteDomainService.reject(approver, quote);
 
             // Then
             assertNotNull(quotes);
@@ -203,12 +203,12 @@ class CompanyQuoteServiceTest {
         void reject_AlreadyRejected_ThrowsException(PlatformAdmin approver) {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            var quote = companyQuoteService.requestNewQuote(command);
+            var quote = companyQuoteDomainService.requestNewQuote(command);
             quote.reject(approver); // 이미 거절된 상태
 
             // When & Then
             assertThrows(RuntimeException.class, () -> {
-                companyQuoteService.reject(approver, quote);
+                companyQuoteDomainService.reject(approver, quote);
             });
         }
 
@@ -217,12 +217,12 @@ class CompanyQuoteServiceTest {
         void reject_AlreadyApproved_ThrowsException(PlatformAdmin approver) {
             // Given
             var command = CompanyQuoteRequestCommandFixture.create();
-            var quote = companyQuoteService.requestNewQuote(command);
+            var quote = companyQuoteDomainService.requestNewQuote(command);
             quote.approve(approver); // 이미 승인된 상태
 
             // When & Then
             assertThrows(RuntimeException.class, () -> {
-                companyQuoteService.reject(approver, quote);
+                companyQuoteDomainService.reject(approver, quote);
             });
         }
     }
@@ -234,7 +234,7 @@ class CompanyQuoteServiceTest {
         var command = CompanyQuoteRequestCommandFixture.create();
 
         // When
-        var quote = companyQuoteService.requestNewQuote(command);
+        var quote = companyQuoteDomainService.requestNewQuote(command);
 
         // Then
         assertNotNull(quote);
