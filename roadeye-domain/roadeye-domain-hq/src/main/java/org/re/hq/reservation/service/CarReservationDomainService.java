@@ -1,6 +1,7 @@
 package org.re.hq.reservation.service;
 
 import lombok.RequiredArgsConstructor;
+import org.re.hq.domain.common.DomainService;
 import org.re.hq.reservation.domain.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
+@DomainService
 @Transactional
 @RequiredArgsConstructor
-public class CarReservationService {
+public class CarReservationDomainService {
     private final CarReservationRepository carReservationRepository;
 
     /**

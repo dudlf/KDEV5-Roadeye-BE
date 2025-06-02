@@ -24,13 +24,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 
-@Import({CarService.class, CarReservationService.class})
+@Import({CarService.class, CarReservationDomainService.class})
 @DataJpaTest
 @WithCompany
-class CarReservationServiceTest {
+class CarReservationDomainServiceTest {
 
     @Autowired
-    private CarReservationService carReservationService;
+    private CarReservationDomainService carReservationDomainService;
 
     @Autowired
     private CarService carService;
@@ -48,13 +48,13 @@ class CarReservationServiceTest {
     }
 
     void rejectReservation(CarReservation reservation) {
-        carReservationService.rejectReservation(reservation.getId(), 100L,"정비로 인하여 대여 불가", LocalDateTime.now());
+        carReservationDomainService.rejectReservation(reservation.getId(), 100L,"정비로 인하여 대여 불가", LocalDateTime.now());
     }
 
     @Test
     void 예약을_승인합니다() {
         CarReservation reservation = carReservationRepository.findAll().getFirst();
-        carReservationService.approveReservation(reservation.getId(), 100L, LocalDateTime.now());
+        carReservationDomainService.approveReservation(reservation.getId(), 100L, LocalDateTime.now());
 
         CarReservation updated = carReservationRepository.findById(reservation.getId())
             .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
@@ -86,7 +86,7 @@ class CarReservationServiceTest {
     void 동일한시간대에는_하나의_예약만_가능합니다(Company company) {
         LocalDateTime now = LocalDateTime.now();
         CarReservation reservation = carReservationRepository.findAll().getFirst();
-        assertThatThrownBy(() -> carReservationService.createReservation(
+        assertThatThrownBy(() -> carReservationDomainService.createReservation(
             reservation.getCarId(),
             10L,
             ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
@@ -103,7 +103,7 @@ class CarReservationServiceTest {
             .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
         rejectReservation(reservation);
 
-        assertThatCode(() -> carReservationService.createReservation(
+        assertThatCode(() -> carReservationDomainService.createReservation(
             reservation.getCarId(),
             10L,
             ReservationPeriod.of(reservation.getReservationPeriod().getRentStartAt(),
@@ -128,7 +128,7 @@ class CarReservationServiceTest {
         );
         carReservationRepository.saveAll(carReservations);
 
-        List<Long> reservationIds = carReservationService.findCarIdsWithReservationPeriod(
+        List<Long> reservationIds = carReservationDomainService.findCarIdsWithReservationPeriod(
             ReservationPeriod.of(LocalDateTime.now().plusDays(4),LocalDateTime.now().plusDays(8)),
             company.getId()
         );
@@ -141,7 +141,7 @@ class CarReservationServiceTest {
 
     @Test
     void 예약시간은_유효한시간이어야한다(Company company){
-        assertThatThrownBy(() -> carReservationService.createReservation(
+        assertThatThrownBy(() -> carReservationDomainService.createReservation(
             1L,
             10L,
             ReservationPeriod.of(LocalDateTime.now().minusHours(3), LocalDateTime.now().plusDays(1)),
@@ -151,7 +151,7 @@ class CarReservationServiceTest {
         )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Rent start time must be after current time");
 
-        assertThatThrownBy(() -> carReservationService.createReservation(
+        assertThatThrownBy(() -> carReservationDomainService.createReservation(
             1L,
             10L,
             ReservationPeriod.of(LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(1)),
@@ -176,7 +176,7 @@ class CarReservationServiceTest {
         );
         carReservationRepository.saveAll(carReservations);
 
-        assertThat(carReservationService.findReservationWithCompanyId(company.getId(), Pageable.ofSize(10)).getTotalElements()).isEqualTo(3);
+        assertThat(carReservationDomainService.findReservationWithCompanyId(company.getId(), Pageable.ofSize(10)).getTotalElements()).isEqualTo(3);
     }
 
     @Test
@@ -194,6 +194,6 @@ class CarReservationServiceTest {
         );
         carReservationRepository.saveAll(carReservations);
 
-        assertThat(carReservationService.findReservationWithCarId(cars.get(0).getId(),Pageable.ofSize(10)).getTotalElements()).isEqualTo(2);
+        assertThat(carReservationDomainService.findReservationWithCarId(cars.get(0).getId(),Pageable.ofSize(10)).getTotalElements()).isEqualTo(2);
     }
 }
