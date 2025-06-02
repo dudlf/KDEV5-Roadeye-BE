@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CompanyAdminApi.class)
-class CompanyAdminApiTest extends BaseWebMvcTest {
+@WebMvcTest(CompanyQuoteAdminApi.class)
+class CompanyQuoteAdminApiTest extends BaseWebMvcTest {
     @MockitoBean
     CompanyQuoteService companyQuoteService;
 

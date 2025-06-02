@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/company/quotes")
 @RequiredArgsConstructor
-public class CompanyApi {
+public class CompanyQuoteApi {
     private final CompanyQuoteService quoteService;
 
     @PostMapping
