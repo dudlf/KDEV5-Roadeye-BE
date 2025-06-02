@@ -8,22 +8,29 @@ import org.mockito.Mockito;
 import org.re.hq.car.CarFixture;
 import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationRequestFixture;
+import org.re.hq.car.dto.CarUpdateRequestFixture;
 import org.re.hq.car.service.CarService;
+import org.re.hq.employee.domain.EmployeeRole;
+import org.re.hq.security.access.ManagerOnlyHandler;
 import org.re.hq.test.security.MockCompanyUserDetails;
 import org.re.hq.web.method.support.TenantIdArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Import({AopAutoConfiguration.class, ManagerOnlyHandler.class})
 @WebMvcTest(CarApi.class)
+@AutoConfigureMockMvc
 class CarApiTest {
     @Autowired
     MockMvc mvc;
@@ -165,35 +172,143 @@ class CarApiTest {
     }
 
     @Nested
-    @DisplayName("생성 테스트")
-    class CreateTest {
+    @DisplayName("수정 테스트")
+    class UpdateTest {
         @Test
-        @DisplayName("차량 생성 테스트")
-        @MockCompanyUserDetails
-        void create_car_test() throws Exception {
-            // given
+        @DisplayName("일반 사용자는 차량 정보를 수정할 수 없다.")
+        @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
+        void testCarUpdate() throws Exception {
             var tenantId = 111L;
+            var carId = 1L;
+
+            // when
+            var body = objectMapper.writeValueAsString(
+                CarUpdateRequestFixture.create()
+            );
+            var req = patch("/api/cars/{carId}", carId)
+                .contentType("application/json")
+                .content(body)
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId)
+                .with(csrf());
+
+            mvc.perform(req)
+                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("관리자 권한을 가진 사용자는 차량 정보를 수정할 수 있다.")
+        @MockCompanyUserDetails(role = EmployeeRole.ROOT)
+        void testManagerCanUpdateCar() throws Exception {
+            var tenantId = 111L;
+            var carId = 1L;
             var car = Mockito.spy(CarFixture.create());
-            Mockito.when(car.getId()).thenReturn(123L);
-            Mockito.when(carService.createCar(Mockito.any(), Mockito.any()))
+            Mockito.when(car.getId()).thenReturn(carId);
+            Mockito.when(carService.updateCarProfile(Mockito.any(), Mockito.anyLong(), Mockito.any()))
                 .thenReturn(car);
 
             // when
+            var body = objectMapper.writeValueAsString(
+                CarUpdateRequestFixture.create()
+            );
+            var req = patch("/api/cars/{carId}", carId)
+                .contentType("application/json")
+                .content(body)
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId)
+                .with(csrf());
+
+            mvc.perform(req)
+                .andExpect(status().isOk());
+        }
+    }
+
+    @Nested
+    @DisplayName("생성 테스트")
+    class CreateTest {
+        @Test
+        @DisplayName("일반 사용자는 차량을 등록할 수 없다.")
+        @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
+        void testCarCreation() throws Exception {
+            // given
+            var tenantId = 111L;
             var request = CarCreationRequestFixture.create();
+
+            // when
             var body = objectMapper.writeValueAsString(request);
             var req = post("/api/cars")
                 .contentType("application/json")
                 .content(body)
-                .with(csrf())
-                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId)
+                .with(csrf());
 
             // then
             mvc.perform(req)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id").value(car.getId()))
-                .andExpect(jsonPath("$.data.name").value(car.getProfile().getName()))
-                .andExpect(jsonPath("$.data.licenseNumber").value(car.getProfile().getLicenseNumber()))
-                .andExpect(jsonPath("$.data.imageUrl").value(car.getProfile().getImageUrl()));
+                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("관리자 권한을 가진 사용자는 차량을 등록할 수 있다.")
+        @MockCompanyUserDetails(role = EmployeeRole.ROOT)
+        void testManagerCanCreateCar() throws Exception {
+            // given
+            var tenantId = 111L;
+            var request = CarCreationRequestFixture.create();
+            var car = Mockito.spy(CarFixture.create());
+            Mockito.when(car.getId()).thenReturn(1L);
+            Mockito.when(carService.createCar(Mockito.any(), Mockito.any()))
+                .thenReturn(car);
+
+            // when
+            var body = objectMapper.writeValueAsString(request);
+            var req = post("/api/cars")
+                .contentType("application/json")
+                .content(body)
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId)
+                .with(csrf());
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isOk());
+        }
+    }
+
+    @Nested
+    @DisplayName("삭제 테스트")
+    class DeletionTest {
+
+        @Test
+        @DisplayName("일반 사용자는 차량을 삭제할 수 없다.")
+        @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
+        void testCarService() throws Exception {
+            // given
+            var tenantId = 111L;
+            var carId = 1L;
+
+            // when
+            var req = delete("/api/cars/{carId}", carId)
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId)
+                .with(csrf());
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("관리자 권한을 가진 사용자는 차량을 삭제할 수 있다.")
+        @MockCompanyUserDetails(role = EmployeeRole.ROOT)
+        void testManagerCanDeleteCar() throws Exception {
+            // given
+            var tenantId = 111L;
+            var carId = 1L;
+
+            // when
+            var req = delete("/api/cars/{carId}", carId)
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId)
+                .with(csrf());
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isOk());
         }
     }
 }

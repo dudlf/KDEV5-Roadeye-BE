@@ -6,7 +6,6 @@ import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationRequest;
 import org.re.hq.car.dto.CarUpdateRequest;
 import org.re.hq.company.service.CompanyService;
-import org.re.hq.security.access.ManagerOnly;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,14 +39,12 @@ public class CarService {
         return carDomainService.countByIgnitionStatus(company, status);
     }
 
-    @ManagerOnly
     public Car createCar(TenantId tenantId, CarCreationRequest request) {
         var company = companyService.findById(tenantId.value());
         var command = request.toCommand();
         return carDomainService.createCar(company, command);
     }
 
-    @ManagerOnly
     public Car updateCarProfile(TenantId tenantId, Long carId, CarUpdateRequest request) {
         var company = companyService.findById(tenantId.value());
         var car = carDomainService.getCarById(company, carId);
@@ -55,7 +52,6 @@ public class CarService {
         return carDomainService.updateCarProfile(car, command);
     }
 
-    @ManagerOnly
     public void deleteCar(TenantId tenantId, Long carId) {
         var company = companyService.findById(tenantId.value());
         var car = carDomainService.getCarById(company, carId);

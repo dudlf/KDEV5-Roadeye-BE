@@ -9,6 +9,7 @@ import org.re.hq.car.dto.CarUpdateRequest;
 import org.re.hq.car.service.CarService;
 import org.re.hq.common.dto.PageResponse;
 import org.re.hq.common.dto.SingleItemResponse;
+import org.re.hq.security.access.ManagerOnly;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -43,12 +44,14 @@ public class CarApi {
         return SingleItemResponse.of(count);
     }
 
+    @ManagerOnly
     @PostMapping
     public SingleItemResponse<CarResponse> createCar(TenantId tenantId, @RequestBody CarCreationRequest request) {
         var createdCar = carService.createCar(tenantId, request);
         return SingleItemResponse.of(createdCar, CarResponse::from);
     }
 
+    @ManagerOnly
     @PatchMapping("/{carId}")
     public SingleItemResponse<CarResponse> updateCarProfile(
         TenantId tenantId,
@@ -59,6 +62,7 @@ public class CarApi {
         return SingleItemResponse.of(updatedCar, CarResponse::from);
     }
 
+    @ManagerOnly
     @DeleteMapping("/{carId}")
     public void deleteCar(
         TenantId tenantId,
