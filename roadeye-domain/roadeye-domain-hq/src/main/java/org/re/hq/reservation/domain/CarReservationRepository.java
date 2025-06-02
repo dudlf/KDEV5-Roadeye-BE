@@ -20,11 +20,10 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
 
     @Query("""
         SELECT DISTINCT r.carId FROM CarReservation r
-        JOIN Car c ON r.carId = c.id
         WHERE r.reserveStatus IN :statuses
         AND r.reservationPeriod.rentStartAt < :#{#reservationPeriod.rentEndAt}
         AND r.reservationPeriod.rentEndAt > :#{#reservationPeriod.rentStartAt}
-        AND c.company.id = :companyId
+        AND r.companyId = :companyId
         """)
     List<Long> findCarIdsWithReservationPeriod(
         ReservationPeriod reservationPeriod,
@@ -34,8 +33,7 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
 
     @Query("""
         SELECT r FROM CarReservation r
-        JOIN Car c ON r.carId = c.id
-        WHERE c.company.id = :companyId
+        WHERE r.companyId = :companyId
         """)
     Page<CarReservation> findCarReservationsByCompanyId(Long companyId, Pageable pageable);
 

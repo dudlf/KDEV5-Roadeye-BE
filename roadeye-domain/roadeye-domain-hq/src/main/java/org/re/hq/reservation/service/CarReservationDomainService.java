@@ -5,7 +5,6 @@ import org.re.hq.domain.common.DomainService;
 import org.re.hq.reservation.domain.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -40,11 +39,11 @@ public class CarReservationDomainService {
     /**
      * 예약 등록
      */
-    public void createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
-                                  ReserveReason reserveReason, LocalDateTime reservedAt, Long companyId){
-        checkReservation(carId, reservationPeriod, companyId);
+    public void createReservation(Long companyId, Long carId, Long reserverId, ReservationPeriod reservationPeriod,
+                                  ReserveReason reserveReason, LocalDateTime reservedAt){
+        checkReservation(companyId, carId, reservationPeriod);
 
-        CarReservation carReservation = CarReservation.createReservation(carId, reserverId, reservationPeriod, reserveReason, reservedAt);
+        CarReservation carReservation = CarReservation.createReservation(companyId, carId, reserverId, reservationPeriod, reserveReason, reservedAt);
 
         carReservationRepository.save(carReservation);
     }
@@ -52,7 +51,7 @@ public class CarReservationDomainService {
     /**
      * 차량은 동일한 시간대에 두 개 이상의 예약을 가질 수 없다.
      */
-    private void checkReservation(Long carId, ReservationPeriod reservationPeriod, Long companyId) {
+    private void checkReservation(Long companyId, Long carId, ReservationPeriod reservationPeriod) {
         boolean exists = carReservationRepository.existsCarReservationsByReservationPeriodContaining(
                 carId,
                 List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
@@ -69,7 +68,7 @@ public class CarReservationDomainService {
      * 해당 시간대에 예약이 있는 차량 리스트 반환
      */
     @Transactional(readOnly = true)
-    public List<Long> findCarIdsWithReservationPeriod(ReservationPeriod reservationPeriod, Long companyId) {
+    public List<Long> findCarIdsWithReservationPeriod(Long companyId, ReservationPeriod reservationPeriod) {
         return carReservationRepository.findCarIdsWithReservationPeriod(
                 reservationPeriod,
                 List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),

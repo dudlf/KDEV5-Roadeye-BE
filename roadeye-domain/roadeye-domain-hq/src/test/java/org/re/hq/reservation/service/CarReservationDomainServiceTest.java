@@ -43,7 +43,7 @@ class CarReservationDomainServiceTest {
         var command = CarCreationCommandFixture.create();
         carService.createCar(company, command);
         Long carId = carService.getCars(company, Pageable.ofSize(10)).getContent().get(0).getId();
-        CarReservation reservation = CarReservationFixture.create(carId,1,5);
+        CarReservation reservation = CarReservationFixture.create(company.getId(),carId,1,5);
         carReservationRepository.save(reservation);
     }
 
@@ -87,12 +87,12 @@ class CarReservationDomainServiceTest {
         LocalDateTime now = LocalDateTime.now();
         CarReservation reservation = carReservationRepository.findAll().getFirst();
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
+            company.getId(),
             reservation.getCarId(),
             10L,
             ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
             ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now(),
-            company.getId()
+            LocalDateTime.now()
         )).isInstanceOf(IllegalStateException.class)
             .hasMessage("Reservation already exists.");
     }
@@ -104,13 +104,13 @@ class CarReservationDomainServiceTest {
         rejectReservation(reservation);
 
         assertThatCode(() -> carReservationDomainService.createReservation(
+            reservation.getCompanyId(),
             reservation.getCarId(),
             10L,
             ReservationPeriod.of(reservation.getReservationPeriod().getRentStartAt(),
                 reservation.getReservationPeriod().getRentEndAt()),
             ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now(),
-            100L
+            LocalDateTime.now()
         )).doesNotThrowAnyException();
     }
 
@@ -122,15 +122,15 @@ class CarReservationDomainServiceTest {
         }
         Page<Car> cars = carService.getCars(company, Pageable.ofSize(10));
         List<CarReservation> carReservations = List.of(
-            CarReservationFixture.create(cars.getContent().get(0).getId(),1,5),
-            CarReservationFixture.create(cars.getContent().get(1).getId(),3,5),
-            CarReservationFixture.create(cars.getContent().get(2).getId(),10,12)
+            CarReservationFixture.create(company.getId(), cars.getContent().get(0).getId(),1,5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(1).getId(),3,5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(2).getId(),10,12)
         );
         carReservationRepository.saveAll(carReservations);
 
         List<Long> reservationIds = carReservationDomainService.findCarIdsWithReservationPeriod(
-            ReservationPeriod.of(LocalDateTime.now().plusDays(4),LocalDateTime.now().plusDays(8)),
-            company.getId()
+            company.getId(),
+            ReservationPeriod.of(LocalDateTime.now().plusDays(4),LocalDateTime.now().plusDays(8))
         );
 
         assertAll(
@@ -140,24 +140,24 @@ class CarReservationDomainServiceTest {
     }
 
     @Test
-    void 예약시간은_유효한시간이어야한다(Company company){
+    void 예약시간은_유효한시간이어야한다(){
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
             1L,
             10L,
+            100L,
             ReservationPeriod.of(LocalDateTime.now().minusHours(3), LocalDateTime.now().plusDays(1)),
             ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now(),
-            company.getId()
+            LocalDateTime.now()
         )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Rent start time must be after current time");
 
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
             1L,
             10L,
+               100L,
             ReservationPeriod.of(LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(1)),
             ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now(),
-            company.getId()
+            LocalDateTime.now()
         )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Rent end time must be after rent start time");
     }
@@ -170,9 +170,9 @@ class CarReservationDomainServiceTest {
         }
         Page<Car> cars = carService.getCars(company, Pageable.ofSize(10));
         List<CarReservation> carReservations = List.of(
-            CarReservationFixture.create(cars.getContent().get(0).getId(),1,5),
-            CarReservationFixture.create(cars.getContent().get(1).getId(),3,5),
-            CarReservationFixture.create(cars.getContent().get(2).getId(),10,12)
+            CarReservationFixture.create(company.getId(), cars.getContent().get(0).getId(),1,5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(1).getId(),3,5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(2).getId(),10,12)
         );
         carReservationRepository.saveAll(carReservations);
 
@@ -187,10 +187,10 @@ class CarReservationDomainServiceTest {
         }
         List<Car> cars = carService.getCars(company, Pageable.ofSize(10)).getContent();
         List<CarReservation> carReservations = List.of(
-            CarReservationFixture.create(cars.get(0).getId(),1,5),
-            CarReservationFixture.create(cars.get(0).getId(),6,8),
-            CarReservationFixture.create(cars.get(1).getId(),3,5),
-            CarReservationFixture.create(cars.get(2).getId(),10,12)
+            CarReservationFixture.create(company.getId(), cars.get(0).getId(),1,5),
+            CarReservationFixture.create(company.getId(), cars.get(0).getId(),6,8),
+            CarReservationFixture.create(company.getId(), cars.get(1).getId(),3,5),
+            CarReservationFixture.create(company.getId(), cars.get(2).getId(),10,12)
         );
         carReservationRepository.saveAll(carReservations);
 
