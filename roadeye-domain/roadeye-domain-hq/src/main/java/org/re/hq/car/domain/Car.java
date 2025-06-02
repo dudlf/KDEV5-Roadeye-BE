@@ -1,12 +1,11 @@
 package org.re.hq.car.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.hq.car.dto.CarUpdateCommand;
+import org.re.hq.company.domain.Company;
 import org.re.hq.domain.common.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -16,9 +15,9 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Car extends BaseEntity {
-
-    @Column(nullable = false)
-    private Long companyId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Company company;
 
     @Embedded
     private CarProfile profile;
@@ -37,16 +36,16 @@ public class Car extends BaseEntity {
 
     private LocalDateTime shippedAt;
 
-    private Car(Long companyId, CarProfile carProfile, int mileageInitial) {
-        this.companyId = companyId;
+    private Car(Company company, CarProfile carProfile, int mileageInitial) {
+        this.company = company;
         this.profile = carProfile;
         this.location = CarLocation.create();
         this.mdtStatus = CarMdtStatus.create();
         this.mileage = new CarMileage(mileageInitial);
     }
 
-    public static Car of(Long companyId, CarProfile carProfile, int mileageInitial) {
-        return new Car(companyId, carProfile, mileageInitial);
+    public static Car of(Company company, CarProfile carProfile, int mileageInitial) {
+        return new Car(company, carProfile, mileageInitial);
     }
 
     public void disable(String reason) {
