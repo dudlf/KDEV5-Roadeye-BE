@@ -18,7 +18,7 @@ public class CarFixture {
     public static List<Car> createList(int size) {
         return IntStream
             .range(0, size)
-            .mapToObj((_) -> CarFixture.create())
+            .mapToObj((c) -> CarFixture.create())
             .toList();
     }
 }

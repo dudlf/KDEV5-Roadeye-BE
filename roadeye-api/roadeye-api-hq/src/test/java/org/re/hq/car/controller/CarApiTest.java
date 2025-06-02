@@ -1,11 +1,13 @@
 package org.re.hq.car.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.re.hq.car.CarFixture;
 import org.re.hq.car.domain.CarIgnitionStatus;
+import org.re.hq.car.dto.CarCreationRequestFixture;
 import org.re.hq.car.service.CarService;
 import org.re.hq.test.security.MockCompanyUserDetails;
 import org.re.hq.web.method.support.TenantIdArgumentResolver;
@@ -15,7 +17,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,6 +27,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CarApiTest {
     @Autowired
     MockMvc mvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockitoBean
     CarService carService;
@@ -154,6 +161,39 @@ class CarApiTest {
             mvc.perform(reqOff)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(nOffCars));
+        }
+    }
+
+    @Nested
+    @DisplayName("생성 테스트")
+    class CreateTest {
+        @Test
+        @DisplayName("차량 생성 테스트")
+        @MockCompanyUserDetails
+        void create_car_test() throws Exception {
+            // given
+            var tenantId = 111L;
+            var car = Mockito.spy(CarFixture.create());
+            Mockito.when(car.getId()).thenReturn(123L);
+            Mockito.when(carService.createCar(Mockito.any(), Mockito.any()))
+                .thenReturn(car);
+
+            // when
+            var request = CarCreationRequestFixture.create();
+            var body = objectMapper.writeValueAsString(request);
+            var req = post("/api/cars")
+                .contentType("application/json")
+                .content(body)
+                .with(csrf())
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(car.getId()))
+                .andExpect(jsonPath("$.data.name").value(car.getProfile().getName()))
+                .andExpect(jsonPath("$.data.licenseNumber").value(car.getProfile().getLicenseNumber()))
+                .andExpect(jsonPath("$.data.imageUrl").value(car.getProfile().getImageUrl()));
         }
     }
 }

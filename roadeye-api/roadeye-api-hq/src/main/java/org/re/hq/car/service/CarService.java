@@ -3,6 +3,7 @@ package org.re.hq.car.service;
 import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.Car;
 import org.re.hq.car.domain.CarIgnitionStatus;
+import org.re.hq.car.dto.CarCreationRequest;
 import org.re.hq.company.service.CompanyService;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
@@ -35,5 +36,11 @@ public class CarService {
     public Long countByIgnitionStatus(TenantId tenantId, CarIgnitionStatus status) {
         var company = companyService.findById(tenantId.value());
         return carDomainService.countByIgnitionStatus(company, status);
+    }
+
+    public Car createCar(TenantId tenantId, CarCreationRequest request) {
+        var company = companyService.findById(tenantId.value());
+        var command = request.toCommand();
+        return carDomainService.createCar(company, command);
     }
 }

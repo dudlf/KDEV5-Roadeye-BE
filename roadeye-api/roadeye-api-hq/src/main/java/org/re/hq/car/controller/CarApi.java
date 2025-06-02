@@ -2,6 +2,7 @@ package org.re.hq.car.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.CarIgnitionStatus;
+import org.re.hq.car.dto.CarCreationRequest;
 import org.re.hq.car.dto.CarDetailsResponse;
 import org.re.hq.car.dto.CarResponse;
 import org.re.hq.car.service.CarService;
@@ -39,5 +40,11 @@ public class CarApi {
     public SingleItemResponse<Long> countCarsByIgnition(TenantId tenantId, @RequestParam CarIgnitionStatus status) {
         var count = carService.countByIgnitionStatus(tenantId, status);
         return SingleItemResponse.of(count);
+    }
+
+    @PostMapping
+    public SingleItemResponse<CarResponse> createCar(TenantId tenantId, @RequestBody CarCreationRequest request) {
+        var createdCar = carService.createCar(tenantId, request);
+        return SingleItemResponse.of(createdCar, CarResponse::from);
     }
 }
