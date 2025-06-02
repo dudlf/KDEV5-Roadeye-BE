@@ -40,6 +40,7 @@ public class CarService {
         return carDomainService.countByIgnitionStatus(company, status);
     }
 
+    @ManagerOnly
     public Car createCar(TenantId tenantId, CarCreationRequest request) {
         var company = companyService.findById(tenantId.value());
         var command = request.toCommand();
