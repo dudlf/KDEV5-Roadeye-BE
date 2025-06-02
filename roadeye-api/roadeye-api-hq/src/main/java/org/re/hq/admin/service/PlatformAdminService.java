@@ -15,6 +15,11 @@ public class PlatformAdminService {
 
     private final PasswordEncoder passwordEncoder;
 
+    public PlatformAdmin findById(Long id) {
+        return platformAdminRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Platform admin not found with id: " + id));
+    }
+
     public PlatformAdmin createAdmin(String username, String rawPassword) {
         var encodedPassword = passwordEncoder.encode(rawPassword);
         var admin = PlatformAdmin.create(username, encodedPassword);

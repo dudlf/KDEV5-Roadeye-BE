@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.re.hq.company.CompanyQuoteFixture;
+import org.re.hq.company.domain.CompanyQuote;
 import org.re.hq.company.service.CompanyQuoteService;
 import org.re.hq.employee.domain.EmployeeRole;
+import org.re.hq.security.userdetails.PlatformAdminUserDetails;
 import org.re.hq.test.base.BaseWebMvcTest;
 import org.re.hq.test.security.MockCompanyUserDetails;
 import org.re.hq.test.security.MockPlatformAdminUserDetails;
@@ -15,9 +17,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CompanyAdminApi.class)
@@ -25,30 +29,32 @@ class CompanyAdminApiTest extends BaseWebMvcTest {
     @MockitoBean
     CompanyQuoteService companyQuoteService;
 
+    List<CompanyQuote> quotes;
+
+    @BeforeEach
+    void setUp() {
+        var id = new long[]{1,};
+        var nQuotes = 10;
+        quotes = CompanyQuoteFixture.createList(nQuotes)
+            .stream()
+            .map(Mockito::spy)
+            .peek(quote -> Mockito.lenient().when(quote.getId()).thenReturn(id[0]++))
+            .toList();
+        Mockito.lenient().when(companyQuoteService.findAll(Mockito.any()))
+            .thenReturn(new PageImpl<>(quotes));
+        Mockito.lenient().when(companyQuoteService.findById(Mockito.anyLong()))
+            .thenAnswer(invocation -> {
+                var quoteId = invocation.getArgument(0, Long.class);
+                return quotes.stream()
+                    .filter(quote -> Objects.equals(quote.getId(), quoteId))
+                    .findFirst()
+                    .orElseThrow();
+            });
+    }
+
     @Nested
     @DisplayName("조회 테스트")
     class FindTest {
-        @BeforeEach
-        void setUp() {
-            var id = new long[]{1,};
-            var nQuotes = 10;
-            var quotes = CompanyQuoteFixture.createList(nQuotes)
-                .stream()
-                .map(Mockito::spy)
-                .peek(quote -> Mockito.lenient().when(quote.getId()).thenReturn(id[0]++))
-                .toList();
-            Mockito.lenient().when(companyQuoteService.findAll(Mockito.any()))
-                .thenReturn(new PageImpl<>(quotes));
-            Mockito.lenient().when(companyQuoteService.findById(Mockito.anyLong()))
-                .thenAnswer(invocation -> {
-                    var quoteId = invocation.getArgument(0, Long.class);
-                    return quotes.stream()
-                        .filter(quote -> Objects.equals(quote.getId(), quoteId))
-                        .findFirst()
-                        .orElseThrow();
-                });
-        }
-
         @Test
         @DisplayName("업체의 일반 계정은 견적 목록 조회 API를 호출할 수 없다.")
         @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
@@ -126,6 +132,65 @@ class CompanyAdminApiTest extends BaseWebMvcTest {
             // then
             Mockito.verify(companyQuoteService, Mockito.times(1))
                 .findById(quoteId);
+        }
+    }
+
+    @Nested
+    @DisplayName("승인 테스트")
+    class ApprovalTest {
+        @Test
+        @DisplayName("업체의 일반 계정은 견적 승인 API를 호출할 수 없다.")
+        @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
+        void service_normal_member_cannot_approve_quote() throws Exception {
+            // given
+            var quoteId = 1L;
+
+            // when
+            var req = post("/api/admin/company/quotes/{quoteId}/approve", quoteId);
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("업체의 루트 계정은 견적 승인 API를 호출할 수 없다.")
+        @MockCompanyUserDetails(role = EmployeeRole.ROOT)
+        void service_root_member_cannot_approve_quote() throws Exception {
+            // given
+            var quoteId = 1L;
+
+            // when
+            var req = post("/api/admin/company/quotes/{quoteId}/approve", quoteId);
+
+            // then
+            mvc.perform(req)
+                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("관리자는 견적 승인 API를 호출할 수 있다.")
+        @MockPlatformAdminUserDetails
+        void service_admin_member_can_approve_quote() throws Exception {
+            // given
+            var quoteId = 1L;
+            Mockito.lenient().when(companyQuoteService.approveQuote(Mockito.any(PlatformAdminUserDetails.class), Mockito.anyLong()))
+                .thenAnswer(invocation -> {
+                    var id = invocation.getArgument(1, Long.class);
+                    return quotes.stream()
+                        .filter(quote -> Objects.equals(quote.getId(), id))
+                        .findFirst()
+                        .orElseThrow();
+                });
+
+            // when
+            var req = post("/api/admin/company/quotes/{quoteId}/approve", quoteId);
+            mvc.perform(req)
+                .andExpect(status().isOk());
+
+            // then
+            Mockito.verify(companyQuoteService, Mockito.times(1))
+                .approveQuote(Mockito.any(), Mockito.eq(quoteId));
         }
     }
 }
