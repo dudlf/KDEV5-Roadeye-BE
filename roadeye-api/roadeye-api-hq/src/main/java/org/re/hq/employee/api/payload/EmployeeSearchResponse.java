@@ -7,7 +7,7 @@ public record EmployeeSearchResponse(
     Long tenantId,
     String loginId,
     String name,
-    String password
+    String position
 ) {
 
     public static EmployeeSearchResponse from(Employee employee) {

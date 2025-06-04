@@ -17,7 +17,7 @@ public enum CompanyQuoteStatus {
 
     public static CompanyQuoteStatus of(int code) {
         for (CompanyQuoteStatus status : values()) {
-            if (status.ordinal() == code) {
+            if (status.code == code) {
                 return status;
             }
         }
