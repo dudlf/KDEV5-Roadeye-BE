@@ -11,6 +11,7 @@ import org.re.hq.security.web.authentication.RoadeyeAuthenticationFailureHandler
 import org.re.hq.security.web.authentication.RoadeyeAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -100,6 +101,7 @@ public class WebSecurityConfig {
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/auth/sign-in").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/company/quotes").permitAll()
                     .anyRequest().hasAuthority(AuthMemberType.USER.getValue())
                 )
                 .csrf(AbstractHttpConfigurer::disable)
