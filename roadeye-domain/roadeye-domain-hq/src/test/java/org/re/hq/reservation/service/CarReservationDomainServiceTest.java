@@ -14,7 +14,9 @@ import org.re.hq.reservation.CarReservationFixture;
 import org.re.hq.reservation.domain.*;
 import org.re.hq.test.api.extension.CarParameterResolver;
 import org.re.hq.test.api.extension.EmployeeParameterResolver;
+import org.re.hq.test.supports.WithCar;
 import org.re.hq.test.supports.WithCompany;
+import org.re.hq.test.supports.WithEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -31,10 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @Import({CarDomainService.class, CarReservationDomainService.class, EmployeeDomainService.class})
 @DataJpaTest
 @WithCompany
-@ExtendWith({
-    CarParameterResolver.class,
-    EmployeeParameterResolver.class
-})
+@WithEmployee
+@WithCar
 class CarReservationDomainServiceTest {
 
     @Autowired
