@@ -12,8 +12,7 @@ import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.service.EmployeeDomainService;
 import org.re.hq.reservation.CarReservationFixture;
 import org.re.hq.reservation.domain.*;
-import org.re.hq.test.api.extension.CarParameterResolver;
-import org.re.hq.test.api.extension.EmployeeParameterResolver;
+import org.re.hq.reservation.dto.CreateCarReservationCommand;
 import org.re.hq.test.supports.WithCar;
 import org.re.hq.test.supports.WithCompany;
 import org.re.hq.test.supports.WithEmployee;
@@ -96,12 +95,14 @@ class CarReservationDomainServiceTest {
         LocalDateTime now = LocalDateTime.now();
 
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
-            company.getId(),
-            reservation.getCar(),
-            normalEmployee,
-            ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
-            ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now()
+            new CreateCarReservationCommand(
+                    company.getId(),
+                    reservation.getCar(),
+                    normalEmployee,
+                    ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
+                    ReserveReason.BUSINESS_TRIP,
+                    LocalDateTime.now()
+            )
         )).isInstanceOf(IllegalStateException.class)
             .hasMessage("Reservation already exists.");
     }
@@ -116,13 +117,15 @@ class CarReservationDomainServiceTest {
         rejectReservation(reservation, rootEmployee);
 
         assertThatCode(() -> carReservationDomainService.createReservation(
-            reservation.getCompanyId(),
-            reservation.getCar(),
-            normalEmployee,
-            ReservationPeriod.of(reservation.getReservationPeriod().getRentStartAt(),
-                reservation.getReservationPeriod().getRentEndAt()),
-            ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now()
+            new CreateCarReservationCommand(
+                reservation.getCompanyId(),
+                reservation.getCar(),
+                normalEmployee,
+                ReservationPeriod.of(reservation.getReservationPeriod().getRentStartAt(),
+                        reservation.getReservationPeriod().getRentEndAt()),
+                ReserveReason.BUSINESS_TRIP,
+                LocalDateTime.now()
+            )
         )).doesNotThrowAnyException();
     }
 
@@ -154,22 +157,26 @@ class CarReservationDomainServiceTest {
     @Test
     void 예약시간은_유효한시간이어야한다(Company company, Car car, Employee normalEmployee, Employee rootEmployee) {
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
-            1L,
-            car,
-            normalEmployee,
-            ReservationPeriod.of(LocalDateTime.now().minusHours(3), LocalDateTime.now().plusDays(1)),
-            ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now()
+            new CreateCarReservationCommand(
+                1L,
+                car,
+                normalEmployee,
+                ReservationPeriod.of(LocalDateTime.now().minusHours(3), LocalDateTime.now().plusDays(1)),
+                ReserveReason.BUSINESS_TRIP,
+                LocalDateTime.now()
+            )
         )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Rent start time must be after current time");
 
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
-            1L,
-            car,
-            normalEmployee,
-            ReservationPeriod.of(LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(1)),
-            ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now()
+            new CreateCarReservationCommand(
+                1L,
+                car,
+                normalEmployee,
+                ReservationPeriod.of(LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(1)),
+                ReserveReason.BUSINESS_TRIP,
+                LocalDateTime.now()
+            )
         )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Rent end time must be after rent start time");
     }

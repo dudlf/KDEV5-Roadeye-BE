@@ -1,8 +1,6 @@
 package org.re.hq.reservation;
 
-import org.re.hq.car.CarFixture;
 import org.re.hq.car.domain.Car;
-import org.re.hq.company.CompanyFixture;
 import org.re.hq.employee.domain.Employee;
 import org.re.hq.reservation.domain.CarReservation;
 import org.re.hq.reservation.domain.ReservationPeriod;
