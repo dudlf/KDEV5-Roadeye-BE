@@ -12,12 +12,21 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
+import org.re.hq.tenant.TenantId;
 import org.re.hq.web.filter.TenantIdContextFilter;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Configuration
 public class SwaggerConfig {
+    static {
+        SpringDocUtils.getConfig()
+            .addRequestWrapperToIgnore(TenantId.class)
+            .addRequestWrapperToIgnore(UserDetails.class);
+    }
+
     @Bean
     public OpenAPI roadeyeOpenAPI() {
         var info = new Info();
