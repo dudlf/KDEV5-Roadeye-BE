@@ -26,6 +26,11 @@ public class CompanyParameterResolver implements ParameterResolver {
         var company = CompanyFixture.create();
         em.persist(company);
         em.flush();
+
+        // Store에 저장
+        extensionContext.getStore(ExtensionContext.Namespace.GLOBAL)
+            .put("company", company);
+
         return company;
     }
 }
