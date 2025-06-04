@@ -3,10 +3,9 @@ package org.re.hq.reservation.service;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.re.hq.car.domain.Car;
 import org.re.hq.car.dto.CarCreationCommandFixture;
-import org.re.hq.car.service.CarService;
+import org.re.hq.car.service.CarDomainService;
 import org.re.hq.company.domain.Company;
 import org.re.hq.reservation.CarReservationFixture;
 import org.re.hq.reservation.domain.*;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 
-@Import({CarService.class, CarReservationDomainService.class})
+@Import({CarDomainService.class, CarReservationDomainService.class})
 @DataJpaTest
 @WithCompany
 class CarReservationDomainServiceTest {
@@ -33,7 +32,7 @@ class CarReservationDomainServiceTest {
     private CarReservationDomainService carReservationDomainService;
 
     @Autowired
-    private CarService carService;
+    private CarDomainService carDomainService;
 
     @Autowired
     private CarReservationRepository carReservationRepository;
@@ -41,14 +40,14 @@ class CarReservationDomainServiceTest {
     @BeforeEach
     void setUp(Company company) {
         var command = CarCreationCommandFixture.create();
-        carService.createCar(company, command);
-        Long carId = carService.getCars(company, Pageable.ofSize(10)).getContent().get(0).getId();
-        CarReservation reservation = CarReservationFixture.create(company.getId(),carId,1,5);
+        carDomainService.createCar(company, command);
+        Long carId = carDomainService.getCars(company, Pageable.ofSize(10)).getContent().get(0).getId();
+        CarReservation reservation = CarReservationFixture.create(company.getId(), carId, 1, 5);
         carReservationRepository.save(reservation);
     }
 
     void rejectReservation(CarReservation reservation) {
-        carReservationDomainService.rejectReservation(reservation.getId(), 100L,"정비로 인하여 대여 불가", LocalDateTime.now());
+        carReservationDomainService.rejectReservation(reservation.getId(), 100L, "정비로 인하여 대여 불가", LocalDateTime.now());
     }
 
     @Test
@@ -59,9 +58,9 @@ class CarReservationDomainServiceTest {
         CarReservation updated = carReservationRepository.findById(reservation.getId())
             .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
         assertAll(
-                () -> assertThat(updated.getReserveStatus()).isEqualTo(ReserveStatus.APPROVED),
-                () -> assertThat(updated.getApproverId()).isEqualTo(100L),
-                () -> assertThat(updated.getProcessedAt()).isNotNull()
+            () -> assertThat(updated.getReserveStatus()).isEqualTo(ReserveStatus.APPROVED),
+            () -> assertThat(updated.getApproverId()).isEqualTo(100L),
+            () -> assertThat(updated.getProcessedAt()).isNotNull()
         );
 
     }
@@ -73,11 +72,11 @@ class CarReservationDomainServiceTest {
         rejectReservation(reservation);
 
         CarReservation updated = carReservationRepository.findById(reservation.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
         assertAll(
-                () -> assertThat(updated.getReserveStatus()).isEqualTo(ReserveStatus.REJECTED),
-                () -> assertThat(updated.getApproverId()).isEqualTo(100L),
-                () -> assertThat(updated.getProcessedAt()).isNotNull()
+            () -> assertThat(updated.getReserveStatus()).isEqualTo(ReserveStatus.REJECTED),
+            () -> assertThat(updated.getApproverId()).isEqualTo(100L),
+            () -> assertThat(updated.getProcessedAt()).isNotNull()
         );
 
     }
@@ -98,7 +97,7 @@ class CarReservationDomainServiceTest {
     }
 
     @Test
-    void 반려된예약_시간대에는_예약이_가능합니다(){
+    void 반려된예약_시간대에는_예약이_가능합니다() {
         CarReservation reservation = carReservationRepository.findById(1L)
             .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
         rejectReservation(reservation);
@@ -115,32 +114,32 @@ class CarReservationDomainServiceTest {
     }
 
     @Test
-    void 특정시간대에_유효한예약이_존재하는_차량들(Company company){
+    void 특정시간대에_유효한예약이_존재하는_차량들(Company company) {
         for (int i = 0; i < 3; i++) {
             var command = CarCreationCommandFixture.create();
-            carService.createCar(company, command);
+            carDomainService.createCar(company, command);
         }
-        Page<Car> cars = carService.getCars(company, Pageable.ofSize(10));
+        Page<Car> cars = carDomainService.getCars(company, Pageable.ofSize(10));
         List<CarReservation> carReservations = List.of(
-            CarReservationFixture.create(company.getId(), cars.getContent().get(0).getId(),1,5),
-            CarReservationFixture.create(company.getId(), cars.getContent().get(1).getId(),3,5),
-            CarReservationFixture.create(company.getId(), cars.getContent().get(2).getId(),10,12)
+            CarReservationFixture.create(company.getId(), cars.getContent().get(0).getId(), 1, 5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(1).getId(), 3, 5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(2).getId(), 10, 12)
         );
         carReservationRepository.saveAll(carReservations);
 
         List<Long> reservationIds = carReservationDomainService.findCarIdsWithReservationPeriod(
             company.getId(),
-            ReservationPeriod.of(LocalDateTime.now().plusDays(4),LocalDateTime.now().plusDays(8))
+            ReservationPeriod.of(LocalDateTime.now().plusDays(4), LocalDateTime.now().plusDays(8))
         );
 
         assertAll(
             () -> assertThat(reservationIds).asInstanceOf(InstanceOfAssertFactories.LIST).hasSize(2),
-            () -> assertThat(reservationIds).asInstanceOf(InstanceOfAssertFactories.LIST).contains(cars.getContent().get(0).getId(),cars.getContent().get(1).getId())
+            () -> assertThat(reservationIds).asInstanceOf(InstanceOfAssertFactories.LIST).contains(cars.getContent().get(0).getId(), cars.getContent().get(1).getId())
         );
     }
 
     @Test
-    void 예약시간은_유효한시간이어야한다(){
+    void 예약시간은_유효한시간이어야한다() {
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
             1L,
             10L,
@@ -154,7 +153,7 @@ class CarReservationDomainServiceTest {
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
             1L,
             10L,
-               100L,
+            100L,
             ReservationPeriod.of(LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(1)),
             ReserveReason.BUSINESS_TRIP,
             LocalDateTime.now()
@@ -163,16 +162,16 @@ class CarReservationDomainServiceTest {
     }
 
     @Test
-    void 예약목록_조회(Company company){
+    void 예약목록_조회(Company company) {
         for (int i = 0; i < 3; i++) {
             var command = CarCreationCommandFixture.create();
-            carService.createCar(company, command);
+            carDomainService.createCar(company, command);
         }
-        Page<Car> cars = carService.getCars(company, Pageable.ofSize(10));
+        Page<Car> cars = carDomainService.getCars(company, Pageable.ofSize(10));
         List<CarReservation> carReservations = List.of(
-            CarReservationFixture.create(company.getId(), cars.getContent().get(0).getId(),1,5),
-            CarReservationFixture.create(company.getId(), cars.getContent().get(1).getId(),3,5),
-            CarReservationFixture.create(company.getId(), cars.getContent().get(2).getId(),10,12)
+            CarReservationFixture.create(company.getId(), cars.getContent().get(0).getId(), 1, 5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(1).getId(), 3, 5),
+            CarReservationFixture.create(company.getId(), cars.getContent().get(2).getId(), 10, 12)
         );
         carReservationRepository.saveAll(carReservations);
 
@@ -180,20 +179,20 @@ class CarReservationDomainServiceTest {
     }
 
     @Test
-    void 차량별_예약목록_조회(Company company){
+    void 차량별_예약목록_조회(Company company) {
         for (int i = 0; i < 3; i++) {
             var command = CarCreationCommandFixture.create();
-            carService.createCar(company, command);
+            carDomainService.createCar(company, command);
         }
-        List<Car> cars = carService.getCars(company, Pageable.ofSize(10)).getContent();
+        List<Car> cars = carDomainService.getCars(company, Pageable.ofSize(10)).getContent();
         List<CarReservation> carReservations = List.of(
-            CarReservationFixture.create(company.getId(), cars.get(0).getId(),1,5),
-            CarReservationFixture.create(company.getId(), cars.get(0).getId(),6,8),
-            CarReservationFixture.create(company.getId(), cars.get(1).getId(),3,5),
-            CarReservationFixture.create(company.getId(), cars.get(2).getId(),10,12)
+            CarReservationFixture.create(company.getId(), cars.get(0).getId(), 1, 5),
+            CarReservationFixture.create(company.getId(), cars.get(0).getId(), 6, 8),
+            CarReservationFixture.create(company.getId(), cars.get(1).getId(), 3, 5),
+            CarReservationFixture.create(company.getId(), cars.get(2).getId(), 10, 12)
         );
         carReservationRepository.saveAll(carReservations);
 
-        assertThat(carReservationDomainService.findReservationWithCarId(cars.get(0).getId(),Pageable.ofSize(10)).getTotalElements()).isEqualTo(2);
+        assertThat(carReservationDomainService.findReservationWithCarId(cars.get(0).getId(), Pageable.ofSize(10)).getTotalElements()).isEqualTo(2);
     }
 }
