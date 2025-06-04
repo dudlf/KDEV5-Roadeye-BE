@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CollectionId;
 import org.re.hq.domain.common.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarReservation extends BaseEntity {
+
+    @Column(nullable = false)
+    private Long companyId;
 
     @Column(nullable = false)
     private Long carId;
@@ -36,8 +40,9 @@ public class CarReservation extends BaseEntity {
 
     private String rejectReason;
 
-    private CarReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
+    private CarReservation(Long companyId, Long carId, Long reserverId, ReservationPeriod reservationPeriod,
                            ReserveReason reserveReason, LocalDateTime reservedAt) {
+        this.companyId = companyId;
         this.carId = carId;
         this.reserverId = reserverId;
         this.reservationPeriod = reservationPeriod;
@@ -46,9 +51,9 @@ public class CarReservation extends BaseEntity {
         this.reservedAt = reservedAt;
     }
 
-    public static CarReservation createReservation(Long carId, Long reserverId, ReservationPeriod reservationPeriod,
+    public static CarReservation createReservation(Long companyId, Long carId, Long reserverId, ReservationPeriod reservationPeriod,
                                                    ReserveReason reserveReason, LocalDateTime reservedAt) {
-        return new CarReservation(carId, reserverId, reservationPeriod, reserveReason, reservedAt);
+        return new CarReservation(companyId, carId, reserverId, reservationPeriod, reserveReason, reservedAt);
     }
 
     public void approve(Long approverId, LocalDateTime processedAt) {
