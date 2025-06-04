@@ -7,8 +7,10 @@ import org.re.hq.car.domain.Car;
 import org.re.hq.car.dto.CarCreationCommandFixture;
 import org.re.hq.car.service.CarDomainService;
 import org.re.hq.company.domain.Company;
+import org.re.hq.domain.exception.DomainException;
 import org.re.hq.reservation.CarReservationFixture;
 import org.re.hq.reservation.domain.*;
+import org.re.hq.reservation.exception.CarReservationDomainException;
 import org.re.hq.test.supports.WithCompany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -92,7 +94,7 @@ class CarReservationDomainServiceTest {
             ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
             ReserveReason.BUSINESS_TRIP,
             LocalDateTime.now()
-        )).isInstanceOf(IllegalStateException.class)
+        )).isInstanceOf(DomainException.class)
             .hasMessage("Reservation already exists.");
     }
 
@@ -140,25 +142,31 @@ class CarReservationDomainServiceTest {
 
     @Test
     void 예약시간은_유효한시간이어야한다() {
-        assertThatThrownBy(() -> carReservationDomainService.createReservation(
-            1L,
-            10L,
-            100L,
-            ReservationPeriod.of(LocalDateTime.now().minusHours(3), LocalDateTime.now().plusDays(1)),
-            ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now()
-        )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Rent start time must be after current time");
+        assertThatThrownBy(() -> {
+            var now = LocalDateTime.now();
+            carReservationDomainService.createReservation(
+                1L,
+                10L,
+                100L,
+                ReservationPeriod.of(now.minusHours(3), now.plusDays(1)),
+                ReserveReason.BUSINESS_TRIP,
+                now
+            );
+        }).isInstanceOf(DomainException.class)
+            .hasMessage(CarReservationDomainException.RENT_START_TIME_INVALID.getMessage());
 
-        assertThatThrownBy(() -> carReservationDomainService.createReservation(
-            1L,
-            10L,
-            100L,
-            ReservationPeriod.of(LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(1)),
-            ReserveReason.BUSINESS_TRIP,
-            LocalDateTime.now()
-        )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Rent end time must be after rent start time");
+        assertThatThrownBy(() -> {
+            var now = LocalDateTime.now();
+            carReservationDomainService.createReservation(
+                1L,
+                10L,
+                100L,
+                ReservationPeriod.of(now.plusDays(3), now.plusDays(1)),
+                ReserveReason.BUSINESS_TRIP,
+                now
+            );
+        }).isInstanceOf(DomainException.class)
+            .hasMessage(CarReservationDomainException.RENT_END_TIME_INVALID.getMessage());
     }
 
     @Test
