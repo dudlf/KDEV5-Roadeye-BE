@@ -1,5 +1,7 @@
 package org.re.hq.reservation.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,16 +16,26 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
         AND r.reservationPeriod.rentStartAt <= :#{#reservationPeriod.rentEndAt}
         AND r.reservationPeriod.rentEndAt >= :#{#reservationPeriod.rentStartAt}
         """)
-    boolean existsCarReservationsByReservationPeriodContaining(Long carId, List<ReserveStatus> statuses, ReservationPeriod reservationPeriod);
+    boolean existsCarReservationsByReservationPeriodContaining(Long carId, List<ReserveStatus> statuses, ReservationPeriod reservationPeriod, Long companyId);
 
     @Query("""
         SELECT DISTINCT r.carId FROM CarReservation r
         WHERE r.reserveStatus IN :statuses
         AND r.reservationPeriod.rentStartAt < :#{#reservationPeriod.rentEndAt}
         AND r.reservationPeriod.rentEndAt > :#{#reservationPeriod.rentStartAt}
+        AND r.companyId = :companyId
         """)
     List<Long> findCarIdsWithReservationPeriod(
         ReservationPeriod reservationPeriod,
-        List<ReserveStatus> statuses
+        List<ReserveStatus> statuses,
+        Long companyId
     );
+
+    @Query("""
+        SELECT r FROM CarReservation r
+        WHERE r.companyId = :companyId
+        """)
+    Page<CarReservation> findCarReservationsByCompanyId(Long companyId, Pageable pageable);
+
+    Page<CarReservation> findCarReservationsByCarId(Long carId, Pageable pageable);
 }

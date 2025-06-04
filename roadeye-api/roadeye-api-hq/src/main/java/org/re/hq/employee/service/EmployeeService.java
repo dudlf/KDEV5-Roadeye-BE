@@ -12,6 +12,7 @@ import org.re.hq.security.userdetails.CompanyUserDetails;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,17 +21,18 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     private final EmployeeDomainService employeeDomainService;
+    private final PasswordEncoder passwordEncoder;
 
     public Employee getMyInfo(CompanyUserDetails userDetails) {
         return read(userDetails.getTenantId(), userDetails.getUserId());
     }
 
     public Long createRoot(TenantId tenantId, EmployeeCredentials credentials, EmployeeMetadata metadata) {
-
         employeeDomainService.validateExistsRootAccount(tenantId.value());
+
         var employee = Employee.createRoot(
             tenantId.value(),
-            credentials,
+            credentials.withPassword(passwordEncoder.encode(credentials.password())),
             metadata
         );
         return employeeDomainService.create(employee);
@@ -39,7 +41,7 @@ public class EmployeeService {
     public Long createNormal(TenantId tenantId, EmployeeCredentials credentials, EmployeeMetadata metadata) {
         var employee = Employee.createNormal(
             tenantId.value(),
-            credentials,
+            credentials.withPassword(passwordEncoder.encode(credentials.password())),
             metadata
         );
         return employeeDomainService.create(employee);

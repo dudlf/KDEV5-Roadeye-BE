@@ -2,23 +2,24 @@ package org.re.hq.car.service;
 
 import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.Car;
+import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationCommand;
 import org.re.hq.car.dto.CarDisableCommand;
 import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.car.repository.CarRepository;
 import org.re.hq.company.domain.Company;
+import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-@Service
+@DomainService
 @Transactional
 @RequiredArgsConstructor
-public class CarService {
+public class CarDomainService {
     private final CarRepository carRepository;
 
     public Page<Car> getCars(Company company, Pageable pageable) {
@@ -37,9 +38,19 @@ public class CarService {
             .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
     }
 
+    public Page<Car> searchByIgnitionStatus(Company company, CarIgnitionStatus status, Pageable pageable) {
+        var companyId = company.getId();
+        return carRepository.findByCompanyIdAndIgnitionStatusAndStatus(companyId, status, EntityLifecycleStatus.ACTIVE, pageable);
+    }
+
     public Long countCarsByStatus(Company company, EntityLifecycleStatus status) {
         var companyId = company.getId();
         return carRepository.countByCompanyIdAndStatus(companyId, status);
+    }
+
+    public Long countByIgnitionStatus(Company company, CarIgnitionStatus status) {
+        var companyId = company.getId();
+        return carRepository.countByCompanyIdAndIgnitionStatusAndStatus(companyId, status, EntityLifecycleStatus.ACTIVE);
     }
 
     public Car createCar(Company company, CarCreationCommand command) {

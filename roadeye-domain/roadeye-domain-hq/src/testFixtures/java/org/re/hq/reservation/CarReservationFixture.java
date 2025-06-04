@@ -8,8 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class CarReservationFixture {
-    public static CarReservation create(Long carId, int start, int end) {
+    public static CarReservation create(Long companyId, Long carId, int start, int end) {
         return CarReservation.createReservation(
+            companyId,
             carId,
             10L,
             ReservationPeriod.of(LocalDateTime.now().plusDays(start), LocalDateTime.now().plusDays(end)),

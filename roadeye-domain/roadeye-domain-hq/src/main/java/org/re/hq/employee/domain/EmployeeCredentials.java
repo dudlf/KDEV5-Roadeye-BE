@@ -18,4 +18,8 @@ public record EmployeeCredentials(
     public static EmployeeCredentials create(String loginId, String password) {
         return new EmployeeCredentials(loginId, password);
     }
+
+    public EmployeeCredentials withPassword(String password) {
+        return new EmployeeCredentials(loginId, password);
+    }
 }
