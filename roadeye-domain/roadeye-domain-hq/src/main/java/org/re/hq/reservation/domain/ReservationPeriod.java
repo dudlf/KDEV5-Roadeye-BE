@@ -4,6 +4,8 @@ import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.hq.domain.exception.DomainException;
+import org.re.hq.reservation.exception.CarReservationDomainException;
 
 import java.time.LocalDateTime;
 
@@ -16,12 +18,12 @@ public class ReservationPeriod {
     private LocalDateTime rentEndAt;
 
     private ReservationPeriod(LocalDateTime rentStartAt, LocalDateTime rentEndAt) {
-        if(rentStartAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Rent start time must be after current time");
+        if (rentStartAt.isBefore(LocalDateTime.now())) {
+            throw new DomainException(CarReservationDomainException.RENT_START_TIME_INVALID);
         }
 
-        if(!rentEndAt.isAfter(rentStartAt)) {
-            throw new IllegalArgumentException("Rent end time must be after rent start time");
+        if (!rentEndAt.isAfter(rentStartAt)) {
+            throw new DomainException(CarReservationDomainException.RENT_END_TIME_INVALID);
         }
 
         this.rentStartAt = rentStartAt;
