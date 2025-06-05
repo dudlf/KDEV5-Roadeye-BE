@@ -219,4 +219,25 @@ class CarReservationDomainServiceTest {
 
         assertThat(carReservationDomainService.findReservationWithCarId(cars.getContent().get(0).getId(),Pageable.ofSize(10)).getTotalElements()).isEqualTo(2);
     }
+
+    @Test
+    void 시간과_차량정보로_예약아이디찾기(Company company, Employee normalEmployee, Employee rootEmployee) {
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < 3; i++) {
+            var command = CarCreationCommandFixture.create();
+            carDomainService.createCar(company, command);
+        }
+        Page<Car> cars = carDomainService.getCars(company, Pageable.ofSize(10));
+        List<CarReservation> carReservations = List.of(
+                CarReservationFixture.create(cars.getContent().get(0),normalEmployee,1,5),
+                CarReservationFixture.create(cars.getContent().get(0),normalEmployee,6,8),
+                CarReservationFixture.create(cars.getContent().get(1),normalEmployee,3,5),
+                CarReservationFixture.create(cars.getContent().get(2),normalEmployee,10,12)
+        );
+        carReservationRepository.saveAll(carReservations);
+
+        var reservation = carReservationDomainService.findReservationWithCarId(cars.getContent().get(1).getId(),Pageable.ofSize(10)).getContent().getFirst();
+        carReservationDomainService.approveReservation(reservation.getId(), rootEmployee, now);
+        assertThat(carReservationDomainService.findReservationId(cars.getContent().get(1),now.plusDays(4))).isEqualTo(reservation.getId());
+    }
 }
