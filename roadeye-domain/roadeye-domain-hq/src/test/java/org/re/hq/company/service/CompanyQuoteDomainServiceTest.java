@@ -9,6 +9,7 @@ import org.re.hq.company.CompanyQuoteFixture;
 import org.re.hq.company.domain.CompanyQuoteStatus;
 import org.re.hq.company.dto.CompanyQuoteRequestCommandFixture;
 import org.re.hq.employee.service.EmployeeDomainService;
+import org.re.hq.test.config.SecurityTestConfig;
 import org.re.hq.test.supports.WithPlatformAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import({CompanyQuoteDomainService.class, CompanyService.class, EmployeeDomainService.class})
+@Import({CompanyQuoteDomainService.class, CompanyService.class, EmployeeDomainService.class, SecurityTestConfig.class})
 @DataJpaTest
 @WithPlatformAdmin
 class CompanyQuoteDomainServiceTest {

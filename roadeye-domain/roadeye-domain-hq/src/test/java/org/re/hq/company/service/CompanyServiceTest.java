@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.re.hq.company.CompanyQuoteFixture;
 import org.re.hq.employee.service.EmployeeDomainService;
+import org.re.hq.test.config.SecurityTestConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Import;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Import({CompanyService.class, EmployeeDomainService.class})
+@Import({CompanyService.class, EmployeeDomainService.class, SecurityTestConfig.class})
 @DataJpaTest
 class CompanyServiceTest {
     @Autowired
