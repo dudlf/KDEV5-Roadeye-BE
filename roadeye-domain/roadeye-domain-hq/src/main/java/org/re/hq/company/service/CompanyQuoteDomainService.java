@@ -13,6 +13,7 @@ import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.exception.DomainException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,8 @@ import java.time.LocalDateTime;
 public class CompanyQuoteDomainService {
     private final CompanyService companyService;
     private final CompanyQuoteRepository companyQuoteRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     public Page<CompanyQuote> findAll(Pageable pageable) {
         return companyQuoteRepository.findAll(pageable);
@@ -40,7 +43,8 @@ public class CompanyQuoteDomainService {
         if (companyService.isBusinessNumberExists(command.businessNumber())) {
             throw new DomainException(CompanyQuoteDomainException.BUSINESS_NUMBER_EXISTS);
         }
-        var quoteInfo = command.toQuoteInfo();
+        var encodedPassword = passwordEncoder.encode(command.password());
+        var quoteInfo = command.toQuoteInfo().withPassword(encodedPassword);
         var requestedAt = LocalDateTime.now();
         var quote = new CompanyQuote(quoteInfo, requestedAt);
         return companyQuoteRepository.save(quote);

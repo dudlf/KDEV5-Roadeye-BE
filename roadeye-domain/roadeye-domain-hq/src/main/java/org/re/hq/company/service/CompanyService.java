@@ -44,7 +44,7 @@ public class CompanyService {
 
         var company = quote.toCompany();
         companyRepository.save(company);
-        var credential = EmployeeCredentials.from(quote).withEncodedPassword(passwordEncoder);
+        var credential = EmployeeCredentials.from(quote);
         employeeService.createRootAccount(company.getId(), credential, "Root", "Administrator");
         return company;
     }
