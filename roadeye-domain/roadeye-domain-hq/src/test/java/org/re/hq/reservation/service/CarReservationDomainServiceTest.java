@@ -169,7 +169,7 @@ class CarReservationDomainServiceTest {
                 ReserveReason.BUSINESS_TRIP,
                 LocalDateTime.now()
             )
-        }).isInstanceOf(DomainException.class)
+        )).isInstanceOf(DomainException.class)
             .hasMessage(CarReservationDomainException.RENT_START_TIME_INVALID.getMessage());
 
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
@@ -181,7 +181,7 @@ class CarReservationDomainServiceTest {
                 ReserveReason.BUSINESS_TRIP,
                 LocalDateTime.now()
             )
-        }).isInstanceOf(DomainException.class)
+        )).isInstanceOf(DomainException.class)
             .hasMessage(CarReservationDomainException.RENT_END_TIME_INVALID.getMessage());
     }
 
