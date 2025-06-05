@@ -12,6 +12,7 @@ import org.re.hq.car.dto.CarUpdateRequestFixture;
 import org.re.hq.car.service.CarService;
 import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.security.access.ManagerOnlyHandler;
+import org.re.hq.tenant.TenantId;
 import org.re.hq.test.security.MockCompanyUserDetails;
 import org.re.hq.web.method.support.TenantIdArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ class CarApiTest {
         @MockCompanyUserDetails
         void car_list_test() throws Exception {
             // given
+            var tenantId = new TenantId(111L);
             var nCars = 10;
             var cars = CarFixture.createList(nCars);
             var page = new PageImpl<>(cars);
@@ -60,7 +62,7 @@ class CarApiTest {
                 .param("tenantId", "111")
                 .param("page", "0")
                 .param("size", "10")
-                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, 111L);
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
 
             // then
             mvc.perform(req)
@@ -74,7 +76,7 @@ class CarApiTest {
         @MockCompanyUserDetails
         void car_detail_test() throws Exception {
             // given
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var carId = 123L;
             var car = Mockito.spy(CarFixture.create());
             Mockito.when(car.getId()).thenReturn(carId);
@@ -107,7 +109,7 @@ class CarApiTest {
         @MockCompanyUserDetails
         void count_by_ignition_status_test() throws Exception {
             // given
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var nOnCars = 5L;
             Mockito.when(carService.countByIgnitionStatus(Mockito.any(), Mockito.eq(CarIgnitionStatus.ON)))
                 .thenReturn(nOnCars);
@@ -141,7 +143,7 @@ class CarApiTest {
         @MockCompanyUserDetails
         void search_by_ignition_status_test() throws Exception {
             // given
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
 
             var nOnCars = 5;
             var onCars = CarFixture.createList(nOnCars);
@@ -178,7 +180,7 @@ class CarApiTest {
         @DisplayName("일반 사용자는 차량 정보를 수정할 수 없다.")
         @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
         void testCarUpdate() throws Exception {
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var carId = 1L;
 
             // when
@@ -199,7 +201,7 @@ class CarApiTest {
         @DisplayName("관리자 권한을 가진 사용자는 차량 정보를 수정할 수 있다.")
         @MockCompanyUserDetails(role = EmployeeRole.ROOT)
         void testManagerCanUpdateCar() throws Exception {
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var carId = 1L;
             var car = Mockito.spy(CarFixture.create());
             Mockito.when(car.getId()).thenReturn(carId);
@@ -229,7 +231,7 @@ class CarApiTest {
         @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
         void testCarCreation() throws Exception {
             // given
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var request = CarCreationRequestFixture.create();
 
             // when
@@ -250,7 +252,7 @@ class CarApiTest {
         @MockCompanyUserDetails(role = EmployeeRole.ROOT)
         void testManagerCanCreateCar() throws Exception {
             // given
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var request = CarCreationRequestFixture.create();
             var car = Mockito.spy(CarFixture.create());
             Mockito.when(car.getId()).thenReturn(1L);
@@ -280,7 +282,7 @@ class CarApiTest {
         @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
         void testCarService() throws Exception {
             // given
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var carId = 1L;
 
             // when
@@ -298,7 +300,7 @@ class CarApiTest {
         @MockCompanyUserDetails(role = EmployeeRole.ROOT)
         void testManagerCanDeleteCar() throws Exception {
             // given
-            var tenantId = 111L;
+            var tenantId = new TenantId(111L);
             var carId = 1L;
 
             // when
