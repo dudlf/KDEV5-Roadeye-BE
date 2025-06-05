@@ -28,7 +28,6 @@ public class TenantIdArgumentResolver implements HandlerMethodArgumentResolver {
         if (session == null) {
             return null;
         }
-        var tenantId = (Long) session.getAttribute(TENANT_ID_SESSION_ATTRIBUTE_NAME);
-        return new TenantId(tenantId);
+        return (TenantId) session.getAttribute(TENANT_ID_SESSION_ATTRIBUTE_NAME);
     }
 }

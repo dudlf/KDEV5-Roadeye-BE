@@ -24,12 +24,12 @@ public class TenantIdTest {
     @Test
     @DisplayName("TenantId를 정상적으로 받아올 수 있어야 한다")
     public void tenantIdShouldBeResolvedCorrectly() throws Exception {
-        var tenantId = 123L;
+        var tenantId = new TenantId(123L);
 
         var req = get("/test/tenant-id")
             .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId);
         mvc.perform(req)
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.tenantId").value(tenantId));
+            .andExpect(jsonPath("$.tenantId").value(tenantId.value()));
     }
 }
