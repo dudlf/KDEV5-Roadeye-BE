@@ -13,11 +13,10 @@ import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.domain.EmployeeRole;
 import org.re.hq.reservation.CarReservationFixture;
 import org.re.hq.reservation.api.CarReservationApi;
-import org.re.hq.reservation.domain.ReserveReason;
-import org.re.hq.reservation.domain.ReserveStatus;
 import org.re.hq.reservation.dto.CarReservationResponse;
 import org.re.hq.reservation.service.CarReservationService;
 import org.re.hq.security.access.ManagerOnlyHandler;
+import org.re.hq.tenant.TenantId;
 import org.re.hq.test.security.MockCompanyUserDetails;
 import org.re.hq.web.method.support.TenantIdArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -47,9 +45,6 @@ class CarReservationApiTest {
     @Autowired
     MockMvc mvc;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     @MockitoBean
     CarReservationService carReservationService;
 
@@ -61,8 +56,9 @@ class CarReservationApiTest {
         @DisplayName("차량 예약 목록 조회")
         @MockCompanyUserDetails
         void carReservationListTest() throws Exception {
+            TenantId tenantId = new TenantId(111L);
             var pageable = PageRequest.of(0, 10);
-            var company = Mockito.spy(CompanyFixture.create());
+            var company = CompanyFixture.create();
             var car = Mockito.spy(CarFixture.create()); // 실제 Car 객체 생성
             var employee = Mockito.spy(EmployeeFixture.createNormal(company));
             var reservationResponse = Mockito.spy(CarReservationFixture.create(car,employee,1,5));
@@ -75,7 +71,8 @@ class CarReservationApiTest {
             var req = get("/api/reservation")
                 .param("page", "0")
                 .param("size", "10")
-                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, 111L);
+                .sessionAttr(TenantIdArgumentResolver.TENANT_ID_SESSION_ATTRIBUTE_NAME, tenantId)
+                .with(csrf());
 
             // then
             mvc.perform(req)
@@ -92,7 +89,7 @@ class CarReservationApiTest {
         @MockCompanyUserDetails(role = EmployeeRole.NORMAL)
         void approveCarReservationTest() throws Exception {
             Long reservationId = 10L;
-            Long tenantId = 1L;
+            TenantId tenantId = new TenantId(1L);
 
             var req = patch("/api/reservation/{reservationId}/approve", reservationId)
                 .contentType("application/json")
@@ -108,7 +105,7 @@ class CarReservationApiTest {
         @MockCompanyUserDetails(role = EmployeeRole.ROOT)
         void managerApproveCarReservationTest() throws Exception {
             Long reservationId = 10L;
-            Long tenantId = 1L;
+            TenantId tenantId = new TenantId(1L);
 
             var req = patch("/api/reservation/{reservationId}/approve", reservationId)
                 .contentType("application/json")
