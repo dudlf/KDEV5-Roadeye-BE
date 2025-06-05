@@ -11,7 +11,6 @@ import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.service.EmployeeDomainService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Service;
 public class CompanyService {
     private final EmployeeDomainService employeeService;
     private final CompanyRepository companyRepository;
-
-    private final PasswordEncoder passwordEncoder;
 
     public Page<Company> findAll(Pageable pageable) {
         return companyRepository.findAll(pageable);

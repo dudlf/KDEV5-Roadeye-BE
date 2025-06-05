@@ -8,6 +8,7 @@ import org.re.hq.company.dto.CompanyQuoteCreationRequest;
 import org.re.hq.security.userdetails.PlatformAdminUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +18,15 @@ public class CompanyQuoteService {
     private final CompanyQuoteDomainService quoteDomainService;
     private final PlatformAdminService platformAdminService;
 
+    private final PasswordEncoder passwordEncoder;
+
     public Page<CompanyQuote> findAll(Pageable pageable) {
         return quoteDomainService.findAll(pageable);
     }
 
     public CompanyQuote createQuote(CompanyQuoteCreationRequest request) {
-        var command = request.toCommand();
+        var encodedPassword = passwordEncoder.encode(request.rootAccountPassword());
+        var command = request.toCommand().withPassword(encodedPassword);
         return quoteDomainService.requestNewQuote(command);
     }
 
