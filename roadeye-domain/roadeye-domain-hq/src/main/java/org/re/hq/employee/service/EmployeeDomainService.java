@@ -51,6 +51,10 @@ public class EmployeeDomainService {
      * 일반 계정을 생성하는 도메인 서비스
      */
     public Employee createNormalAccount(Long tenantId, EmployeeCredentials credentials, String name, String position) {
+        if (employeeRepository.existsByTenantIdAndLoginId(tenantId, credentials.loginId())) {
+            throw new DomainException(EmployeeDomainException.USERNAME_DUPLICATED);
+        }
+
         var employee = Employee.createNormal(tenantId, credentials, EmployeeMetadata.create(name, position));
 
         return employeeRepository.save(employee);
