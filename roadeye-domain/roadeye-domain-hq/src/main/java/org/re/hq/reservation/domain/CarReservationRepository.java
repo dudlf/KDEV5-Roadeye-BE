@@ -11,7 +11,7 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
     @Query("""
         SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END
         FROM CarReservation r
-        WHERE r.carId = :carId
+        WHERE r.car.id = :carId
         AND r.reserveStatus IN :statuses
         AND r.reservationPeriod.rentStartAt <= :#{#reservationPeriod.rentEndAt}
         AND r.reservationPeriod.rentEndAt >= :#{#reservationPeriod.rentStartAt}
@@ -19,7 +19,7 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
     boolean existsCarReservationsByReservationPeriodContaining(Long carId, List<ReserveStatus> statuses, ReservationPeriod reservationPeriod, Long companyId);
 
     @Query("""
-        SELECT DISTINCT r.carId FROM CarReservation r
+        SELECT DISTINCT r.car.id FROM CarReservation r
         WHERE r.reserveStatus IN :statuses
         AND r.reservationPeriod.rentStartAt < :#{#reservationPeriod.rentEndAt}
         AND r.reservationPeriod.rentEndAt > :#{#reservationPeriod.rentStartAt}

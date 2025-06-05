@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.re.hq.domain.common.BaseEntity;
 import org.re.hq.domain.exception.DomainException;
 import org.re.hq.reservation.exception.CarReservationDomainException;
+import org.re.hq.car.domain.Car;
+import org.re.hq.domain.common.BaseEntity;
+import org.re.hq.employee.domain.Employee;
+
 
 import java.time.LocalDateTime;
 
@@ -18,13 +21,17 @@ public class CarReservation extends BaseEntity {
     @Column(nullable = false)
     private Long companyId;
 
-    @Column(nullable = false)
-    private Long carId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Car car;
 
-    @Column(nullable = false)
-    private Long reserverId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Employee reserver;
 
-    private Long approverId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false)
+    private Employee approver;
 
     @Embedded
     private ReservationPeriod reservationPeriod;
@@ -41,37 +48,37 @@ public class CarReservation extends BaseEntity {
 
     private String rejectReason;
 
-    private CarReservation(Long companyId, Long carId, Long reserverId, ReservationPeriod reservationPeriod,
+    private CarReservation(Long companyId, Car car, Employee reserver, ReservationPeriod reservationPeriod,
                            ReserveReason reserveReason, LocalDateTime reservedAt) {
         this.companyId = companyId;
-        this.carId = carId;
-        this.reserverId = reserverId;
+        this.car = car;
+        this.reserver = reserver;
         this.reservationPeriod = reservationPeriod;
         this.reserveStatus = ReserveStatus.REQUESTED;
         this.reserveReason = reserveReason;
         this.reservedAt = reservedAt;
     }
 
-    public static CarReservation createReservation(Long companyId, Long carId, Long reserverId, ReservationPeriod reservationPeriod,
+    public static CarReservation createReservation(Long companyId, Car car, Employee reserver, ReservationPeriod reservationPeriod,
                                                    ReserveReason reserveReason, LocalDateTime reservedAt) {
-        return new CarReservation(companyId, carId, reserverId, reservationPeriod, reserveReason, reservedAt);
+        return new CarReservation(companyId, car, reserver, reservationPeriod, reserveReason, reservedAt);
     }
 
-    public void approve(Long approverId, LocalDateTime processedAt) {
+    public void approve(Employee approver, LocalDateTime processedAt) {
         if (this.reserveStatus != ReserveStatus.REQUESTED) {
             throw new DomainException(CarReservationDomainException.RESERVATION_STATUS_IS_NOT_REQUESTED);
         }
         this.reserveStatus = ReserveStatus.APPROVED;
-        this.approverId = approverId;
+        this.approver = approver;
         this.processedAt = processedAt;
     }
 
-    public void reject(Long approverId, String rejectReason, LocalDateTime processedAt) {
+    public void reject(Employee approver, String rejectReason, LocalDateTime processedAt) {
         if (this.reserveStatus != ReserveStatus.REQUESTED) {
             throw new DomainException(CarReservationDomainException.RESERVATION_STATUS_IS_NOT_REQUESTED);
         }
         this.reserveStatus = ReserveStatus.REJECTED;
-        this.approverId = approverId;
+        this.approver = approver;
         this.rejectReason = rejectReason;
         this.processedAt = processedAt;
     }
