@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/session")
 @RequiredArgsConstructor
 public class SessionApi {
-    @GetMapping
+    @GetMapping("/my")
     public SessionInfoResponse getSessionInfo(
         HttpServletRequest request
     ) {
