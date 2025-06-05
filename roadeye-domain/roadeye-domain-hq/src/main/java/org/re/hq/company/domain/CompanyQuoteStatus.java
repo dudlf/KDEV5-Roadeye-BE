@@ -2,10 +2,11 @@ package org.re.hq.company.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.re.hq.domain.common.PersistenceEnum;
 
 @Getter
 @RequiredArgsConstructor
-public enum CompanyQuoteStatus {
+public enum CompanyQuoteStatus implements PersistenceEnum<Integer> {
     // @formatter:off
     PENDING  (1),
     APPROVED (2),
@@ -13,14 +14,5 @@ public enum CompanyQuoteStatus {
     ;
     // @formatter:on
 
-    private final int code;
-
-    public static CompanyQuoteStatus of(int code) {
-        for (CompanyQuoteStatus status : values()) {
-            if (status.code == code) {
-                return status;
-            }
-        }
-        throw new IllegalArgumentException("Unknown CompanyQuoteStatus code: " + code);
-    }
+    private final Integer code;
 }
