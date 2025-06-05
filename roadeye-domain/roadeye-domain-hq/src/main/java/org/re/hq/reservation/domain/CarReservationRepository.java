@@ -47,5 +47,5 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
         AND r.reserveStatus = 'APPROVED'
         AND :ignitionAt BETWEEN r.reservationPeriod.rentStartAt AND r.reservationPeriod.rentEndAt
         """)
-    Optional<Long> findIdByCar(Long carId, LocalDateTime ignitionAt);
+    Optional<Long> findIdByCarIdAndIgnitionAt(Long carId, LocalDateTime ignitionAt);
 }

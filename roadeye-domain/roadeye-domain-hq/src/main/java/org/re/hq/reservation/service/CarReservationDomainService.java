@@ -75,7 +75,7 @@ public class CarReservationDomainService {
      * 차량, 현재시간이 일치하는 예약 번호 찾기
      */
     public Long findReservationId(Car car, LocalDateTime ignitionAt){
-        return carReservationRepository.findIdByCar(car.getId(), ignitionAt)
+        return carReservationRepository.findIdByCarIdAndIgnitionAt(car.getId(), ignitionAt)
                 .orElseThrow(() -> new DomainException(CarReservationDomainException.RESERVATION_NOT_FOUND));
     }
 
