@@ -6,10 +6,12 @@ import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationCommand;
 import org.re.hq.car.dto.CarDisableCommand;
 import org.re.hq.car.dto.CarUpdateCommand;
+import org.re.hq.car.exception.CarDomainException;
 import org.re.hq.car.repository.CarRepository;
 import org.re.hq.company.domain.Company;
 import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.common.EntityLifecycleStatus;
+import org.re.hq.domain.exception.DomainException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,7 @@ public class CarDomainService {
     public Car getCarById(Company company, Long carId) {
         var companyId = company.getId();
         return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
-            .orElseThrow(() -> new IllegalArgumentException("Car not found for companyId: " + companyId + " and carId: " + carId));
+            .orElseThrow(() -> new DomainException(CarDomainException.CAR_NOT_FOUND));
     }
 
     public Page<Car> searchByIgnitionStatus(Company company, CarIgnitionStatus status, Pageable pageable) {

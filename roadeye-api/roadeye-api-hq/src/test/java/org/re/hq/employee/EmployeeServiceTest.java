@@ -2,6 +2,7 @@ package org.re.hq.employee;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.re.hq.domain.exception.DomainException;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeMetadata;
 import org.re.hq.employee.domain.EmployeeRole;
@@ -37,7 +38,7 @@ class EmployeeServiceTest {
         employeeService.createRoot(defaultTenantId, credentials, EmployeeMetadata.create("root", "root"));
 
         assertThatThrownBy(() -> employeeService.createRoot(defaultTenantId, credentials, EmployeeMetadata.create("root", "root")))
-            .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(DomainException.class);
     }
 
     @Test

@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.hq.admin.domain.PlatformAdmin;
 import org.re.hq.company.converter.CompanyQuoteStatusConverter;
+import org.re.hq.company.exception.CompanyQuoteDomainException;
 import org.re.hq.domain.common.BaseEntity;
+import org.re.hq.domain.exception.DomainException;
 
 import java.time.LocalDateTime;
 
@@ -46,7 +48,7 @@ public class CompanyQuote extends BaseEntity {
 
     public void approve(PlatformAdmin approver) {
         if (this.quoteStatus != CompanyQuoteStatus.PENDING) {
-            throw new IllegalStateException("Cannot approve a quote request that is not pending.");
+            throw new DomainException(CompanyQuoteDomainException.QUOTE_STATE_IS_NOT_PENDING);
         }
         this.approver = approver;
         this.quoteStatus = CompanyQuoteStatus.APPROVED;
@@ -59,7 +61,7 @@ public class CompanyQuote extends BaseEntity {
 
     public void reject(PlatformAdmin approver) {
         if (this.quoteStatus != CompanyQuoteStatus.PENDING) {
-            throw new IllegalStateException("Cannot reject a quote request that is not pending.");
+            throw new DomainException(CompanyQuoteDomainException.QUOTE_STATE_IS_NOT_PENDING);
         }
         this.approver = approver;
         this.quoteStatus = CompanyQuoteStatus.REJECTED;

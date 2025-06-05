@@ -3,8 +3,10 @@ package org.re.hq.reservation.service;
 import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.Car;
 import org.re.hq.domain.common.DomainService;
-import org.re.hq.employee.domain.Employee;
+import org.re.hq.domain.exception.DomainException;
 import org.re.hq.reservation.domain.*;
+import org.re.hq.reservation.exception.CarReservationDomainException;
+import org.re.hq.employee.domain.Employee;
 import org.re.hq.reservation.dto.CreateCarReservationCommand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,7 @@ public class CarReservationDomainService {
      */
     public CarReservation approveReservation(Long reservationId, Employee approver, LocalDateTime processedAt) {
         CarReservation reservation = carReservationRepository.findById(reservationId)
-            .orElseThrow(() -> new IllegalArgumentException("Reservation not found with ID"));
+            .orElseThrow(() -> new DomainException(CarReservationDomainException.RESERVATION_NOT_FOUND));
 
         reservation.approve(approver, processedAt);
         return reservation;
@@ -35,7 +37,7 @@ public class CarReservationDomainService {
      */
     public CarReservation rejectReservation(Long reservationId, Employee approver, String rejectReason, LocalDateTime processedAt) {
         CarReservation reservation = carReservationRepository.findById(reservationId)
-            .orElseThrow(() -> new IllegalArgumentException("Reservation not found with ID"));
+            .orElseThrow(() -> new DomainException(CarReservationDomainException.RESERVATION_NOT_FOUND));
 
         reservation.reject(approver, rejectReason, processedAt);
         return reservation;
@@ -44,6 +46,7 @@ public class CarReservationDomainService {
     /**
      * 예약 등록
      */
+
     public CarReservation createReservation(CreateCarReservationCommand command) {
         checkReservation(command.companyId(), command.car(), command.reservationPeriod());
 
@@ -57,14 +60,14 @@ public class CarReservationDomainService {
      */
     private void checkReservation(Long companyId, Car car, ReservationPeriod reservationPeriod) {
         boolean exists = carReservationRepository.existsCarReservationsByReservationPeriodContaining(
-                car.getId(),
-                List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
-                reservationPeriod,
-                companyId
+              car.getId(),
+              List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
+              reservationPeriod,
+              companyId
         );
 
         if (exists) {
-            throw new IllegalStateException("Reservation already exists.");
+            throw new DomainException(CarReservationDomainException.RESERVATION_ALREADY_EXISTS);
         }
     }
 
@@ -74,9 +77,9 @@ public class CarReservationDomainService {
     @Transactional(readOnly = true)
     public List<Long> findCarIdsWithReservationPeriod(Long companyId, ReservationPeriod reservationPeriod) {
         return carReservationRepository.findCarIdsWithReservationPeriod(
-                reservationPeriod,
-                List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
-                companyId
+            reservationPeriod,
+            List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
+            companyId
         );
     }
 
@@ -94,8 +97,8 @@ public class CarReservationDomainService {
     @Transactional(readOnly = true)
     public Page<CarReservation> findReservationWithCarId(Long carId, Pageable pageable) {
         return carReservationRepository.findCarReservationsByCarId(
-                carId,
-                pageable
+            carId,
+            pageable
         );
     }
 }

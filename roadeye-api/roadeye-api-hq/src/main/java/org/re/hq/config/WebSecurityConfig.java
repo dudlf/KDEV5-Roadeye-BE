@@ -100,7 +100,7 @@ public class WebSecurityConfig {
             return http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/api/auth/sign-in").permitAll()
+                    .requestMatchers("/api/auth/sign-in", "/api/session").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/company/quotes").permitAll()
                     .anyRequest().hasAuthority(AuthMemberType.USER.getValue())
                 )

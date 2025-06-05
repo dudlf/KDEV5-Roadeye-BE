@@ -2,8 +2,10 @@ package org.re.hq.employee.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.re.hq.domain.exception.DomainException;
 import org.re.hq.employee.domain.*;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
+import org.re.hq.employee.exception.EmployeeDomainException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,13 @@ public class EmployeeDomainService {
 
     public void validateExistsRootAccount(Long tenantId) {
         if (employeeRepository.existsByTenantId(tenantId)) {
-            // TODO 도메인 객체 예외 처리로 바꿀 것
-            throw new IllegalStateException("Root account already exists");
+            throw new DomainException(EmployeeDomainException.ROOT_ACCOUNT_ALREADY_EXISTS);
         }
     }
 
     public Employee findCompanyRootAccount(Long companyId) {
         return employeeRepository.findByTenantIdAndRole(companyId, EmployeeRole.ROOT)
-            .orElseThrow(() -> new IllegalArgumentException("Root account not found for tenant id: " + companyId));
+            .orElseThrow(() -> new DomainException(EmployeeDomainException.ROOT_ACCOUNT_NOT_FOUND));
     }
 
     /**
@@ -38,8 +39,7 @@ public class EmployeeDomainService {
      */
     public Employee createRootAccount(Long tenantId, EmployeeCredentials credentials, String name, String position) {
         if (employeeRepository.existsByTenantId(tenantId)) {
-            // TODO 도메인 객체 예외 처리로 바꿀 것
-            throw new IllegalStateException("Root account already exists");
+            throw new DomainException(EmployeeDomainException.ROOT_ACCOUNT_ALREADY_EXISTS);
         }
 
         var employee = Employee.createRoot(tenantId, credentials, EmployeeMetadata.create(name, position));
@@ -72,7 +72,7 @@ public class EmployeeDomainService {
     // TODO 도메인 서비스 용도로 read라는 메서드를 사용했지만 내부 메서드에서 사용하기에는 정보가 너무 부족하다 별도의 클래스로 분리하는게 나을듯?
     public Employee read(Long tenantId, Long employeeId) {
         return employeeRepository.findByIdAndTenantId(employeeId, tenantId)
-            .orElseThrow(() -> new IllegalArgumentException("Employee with id " + employeeId + " does not exist"));
+            .orElseThrow(() -> new DomainException(EmployeeDomainException.ACCOUNT_NOT_FOUND));
     }
 
     /**

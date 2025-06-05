@@ -8,10 +8,13 @@ import org.re.hq.car.domain.Car;
 import org.re.hq.car.dto.CarCreationCommandFixture;
 import org.re.hq.car.service.CarDomainService;
 import org.re.hq.company.domain.Company;
+import org.re.hq.domain.exception.DomainException;
+import org.re.hq.reservation.CarReservationFixture;
+import org.re.hq.reservation.domain.*;
+import org.re.hq.reservation.exception.CarReservationDomainException;
 import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.service.EmployeeDomainService;
 import org.re.hq.reservation.CarReservationFixture;
-import org.re.hq.reservation.domain.*;
 import org.re.hq.reservation.dto.CreateCarReservationCommand;
 import org.re.hq.test.supports.WithCar;
 import org.re.hq.test.supports.WithCompany;
@@ -96,14 +99,15 @@ class CarReservationDomainServiceTest {
 
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
             new CreateCarReservationCommand(
-                    company.getId(),
-                    reservation.getCar(),
-                    normalEmployee,
-                    ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
-                    ReserveReason.BUSINESS_TRIP,
-                    LocalDateTime.now()
+                  company.getId(),
+                  reservation.getCar(),
+                  normalEmployee,
+                  ReservationPeriod.of(now.plusDays(4), now.plusDays(7)),
+                  ReserveReason.BUSINESS_TRIP,
+                  LocalDateTime.now()
             )
-        )).isInstanceOf(IllegalStateException.class)
+        )).isInstanceOf(DomainException.class)
+
             .hasMessage("Reservation already exists.");
     }
 
@@ -165,8 +169,8 @@ class CarReservationDomainServiceTest {
                 ReserveReason.BUSINESS_TRIP,
                 LocalDateTime.now()
             )
-        )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Rent start time must be after current time");
+        )).isInstanceOf(DomainException.class)
+            .hasMessage(CarReservationDomainException.RENT_START_TIME_INVALID.getMessage());
 
         assertThatThrownBy(() -> carReservationDomainService.createReservation(
             new CreateCarReservationCommand(
@@ -177,8 +181,8 @@ class CarReservationDomainServiceTest {
                 ReserveReason.BUSINESS_TRIP,
                 LocalDateTime.now()
             )
-        )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Rent end time must be after rent start time");
+        )).isInstanceOf(DomainException.class)
+            .hasMessage(CarReservationDomainException.RENT_END_TIME_INVALID.getMessage());
     }
 
     @Test
