@@ -11,12 +11,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     boolean existsByTenantId(Long tenantId);
 
-    @Query("""
-        SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END
-        FROM Employee e
-        WHERE e.tenantId = :tenantId AND e.credentials.loginId = :loginId
-        """)
-    boolean existsByTenantIdAndLoginId(Long tenantId, String loginId);
+    boolean existsByTenantIdAndCredentialsLoginId(Long tenantId, String loginId);
 
     Optional<Employee> findByIdAndTenantId(Long id, Long tenantId);
 
