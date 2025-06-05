@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.re.hq.company.domain.Company;
 import org.re.hq.company.domain.CompanyQuote;
+import org.re.hq.company.exception.CompanyDomainException;
 import org.re.hq.company.repository.CompanyRepository;
+import org.re.hq.domain.exception.DomainException;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.service.EmployeeDomainService;
 import org.springframework.data.domain.Page;
@@ -24,7 +26,7 @@ public class CompanyService {
 
     public Company findById(Long id) {
         return companyRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Company not found with id: " + id));
+            .orElseThrow(() -> new DomainException(CompanyDomainException.COMPANY_NOT_FOUND));
     }
 
     public boolean isBusinessNumberExists(String businessNumber) {
@@ -34,7 +36,7 @@ public class CompanyService {
     public Company createCompany(CompanyQuote quote) {
         var bisNo = quote.getQuoteInfo().getCompanyBusinessNumber();
         if (isBusinessNumberExists(bisNo)) {
-            throw new IllegalArgumentException("Business number already exists: " + bisNo);
+            throw new DomainException(CompanyDomainException.BUSINESS_NUMBER_EXISTS);
         }
 
         var company = quote.toCompany();

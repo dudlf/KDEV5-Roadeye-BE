@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.re.hq.domain.common.EntityLifecycleStatus;
+import org.re.hq.domain.exception.DomainException;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.dto.UpdateEmployeeCommand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ class EmployeeDomainServiceTest {
         var updateEmployeeCommand = new UpdateEmployeeCommand("name", "position");
 
         assertThatThrownBy(() -> employeeDomainService.updateMetadata(1L, 1L, updateEmployeeCommand))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(DomainException.class);
 
     }
 

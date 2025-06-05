@@ -7,8 +7,10 @@ import org.re.hq.company.domain.Company;
 import org.re.hq.company.domain.CompanyQuote;
 import org.re.hq.company.domain.CompanyQuoteStatus;
 import org.re.hq.company.dto.CompanyQuoteRequestCommand;
+import org.re.hq.company.exception.CompanyQuoteDomainException;
 import org.re.hq.company.repository.CompanyQuoteRepository;
 import org.re.hq.domain.common.DomainService;
+import org.re.hq.domain.exception.DomainException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,12 +33,12 @@ public class CompanyQuoteDomainService {
 
     public CompanyQuote findById(Long id) {
         return companyQuoteRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Quote request not found with id: " + id));
+            .orElseThrow(() -> new DomainException(CompanyQuoteDomainException.QUOTE_NOT_FOUND));
     }
 
     public CompanyQuote requestNewQuote(CompanyQuoteRequestCommand command) {
         if (companyService.isBusinessNumberExists(command.businessNumber())) {
-            throw new IllegalArgumentException("Business number already exists: " + command.businessNumber());
+            throw new DomainException(CompanyQuoteDomainException.BUSINESS_NUMBER_EXISTS);
         }
         var quoteInfo = command.toQuoteInfo();
         var requestedAt = LocalDateTime.now();

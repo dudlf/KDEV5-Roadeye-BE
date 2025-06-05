@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.hq.car.converter.CarIgnitionStatusConverter;
+import org.re.hq.car.exception.CarDomainException;
+import org.re.hq.domain.exception.DomainException;
 import org.re.util.Integers;
 
 import java.util.UUID;
@@ -37,7 +39,7 @@ public class CarMdtStatus {
 
     public void turnOnIgnition(UUID transactionId) {
         if (this.ignition != CarIgnitionStatus.OFF) {
-            throw new IllegalStateException("Ignition is already ON or in an invalid state.");
+            throw new DomainException(CarDomainException.IGNITION_IS_NOT_OFF);
         }
         this.ignition = CarIgnitionStatus.ON;
         this.activeTuid = transactionId;
@@ -45,10 +47,10 @@ public class CarMdtStatus {
 
     public void turnOffIgnition(UUID transactionId) {
         if (this.ignition != CarIgnitionStatus.ON) {
-            throw new IllegalStateException("Ignition is already OFF or in an invalid state.");
+            throw new DomainException(CarDomainException.IGNITION_IS_NOT_ON);
         }
         if (!this.activeTuid.equals(transactionId)) {
-            throw new IllegalArgumentException("Transaction ID does not match the active transaction.");
+            throw new DomainException(CarDomainException.TRANSACTION_ID_MISMATCH);
         }
         this.ignition = CarIgnitionStatus.OFF;
         this.activeTuid = null;

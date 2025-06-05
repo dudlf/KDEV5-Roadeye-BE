@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.re.hq.domain.exception.DomainException;
+import org.re.hq.reservation.exception.CarReservationDomainException;
 import org.re.hq.car.domain.Car;
 import org.re.hq.domain.common.BaseEntity;
 import org.re.hq.employee.domain.Employee;
+
 
 import java.time.LocalDateTime;
 
@@ -63,7 +66,7 @@ public class CarReservation extends BaseEntity {
 
     public void approve(Employee approver, LocalDateTime processedAt) {
         if (this.reserveStatus != ReserveStatus.REQUESTED) {
-            throw new IllegalStateException("Only reservations with REQUESTED status can be approved.");
+            throw new DomainException(CarReservationDomainException.RESERVATION_STATUS_IS_NOT_REQUESTED);
         }
         this.reserveStatus = ReserveStatus.APPROVED;
         this.approver = approver;
@@ -72,7 +75,7 @@ public class CarReservation extends BaseEntity {
 
     public void reject(Employee approver, String rejectReason, LocalDateTime processedAt) {
         if (this.reserveStatus != ReserveStatus.REQUESTED) {
-            throw new IllegalStateException("Only reservations with REQUESTED status can be approved.");
+            throw new DomainException(CarReservationDomainException.RESERVATION_STATUS_IS_NOT_REQUESTED);
         }
         this.reserveStatus = ReserveStatus.REJECTED;
         this.approver = approver;
