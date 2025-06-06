@@ -1,6 +1,7 @@
 package org.re.hq.employee.service;
 
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -69,8 +70,10 @@ class EmployeeDomainServiceTest {
     void 계정_정보를_조회합니다() {
         IntStream.iterate(0, i -> i + 1)
             .limit(30)
-            .forEach((ignore) -> {
-                var credentials = new EmployeeCredentials("root", "root");
+            .forEach((idx) -> {
+                var username = "root" + idx;
+                var password = "password";
+                var credentials = new EmployeeCredentials(username, password);
                 employeeDomainService.createNormalAccount(1L, credentials, "root", "root");
             });
 
@@ -84,8 +87,10 @@ class EmployeeDomainServiceTest {
     void 소프트_딜리트로_삭제된_정보는_전체_조회에서_보이지_않는다() {
         var sample = IntStream.iterate(0, i -> i + 1)
             .limit(30)
-            .mapToObj((ignore) -> {
-                var credentials = new EmployeeCredentials("root", "root");
+            .mapToObj((idx) -> {
+                var username = "root" + idx;
+                var password = "password";
+                var credentials = new EmployeeCredentials(username, password);
                 return employeeDomainService.createNormalAccount(1L, credentials, "root", "root");
             }).toList();
 
@@ -97,4 +102,16 @@ class EmployeeDomainServiceTest {
         assertThat(actual.getSize()).isEqualTo(10);
     }
 
+    @Test
+    @DisplayName("일반 계정 생성시 로그인 아이디가 중복되면 예외가 발생한다")
+    void 일반_계정_생성시_로그인_아이디가_중복되면_예외가_발생한다() {
+        var username = "user";
+        var password = "password";
+        var credentials = new EmployeeCredentials(username, password);
+
+        assertThatThrownBy(() -> {
+            employeeDomainService.createNormalAccount(1L, credentials, "User One", "Position One");
+            employeeDomainService.createNormalAccount(1L, credentials, "User Two", "Position Two");
+        }).isInstanceOf(DomainException.class);
+    }
 }

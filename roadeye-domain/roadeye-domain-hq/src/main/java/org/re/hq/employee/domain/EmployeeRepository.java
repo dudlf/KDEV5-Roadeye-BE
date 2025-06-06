@@ -11,6 +11,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     boolean existsByTenantId(Long tenantId);
 
+    boolean existsByTenantIdAndCredentialsLoginId(Long tenantId, String loginId);
+
     Optional<Employee> findByIdAndTenantId(Long id, Long tenantId);
 
     Page<Employee> findByTenantId(Long tenantId, Pageable pageable);
