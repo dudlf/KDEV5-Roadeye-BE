@@ -38,4 +38,14 @@ public class CompanyQuoteInfo {
         this.companyEmail = companyEmail;
         this.companyBusinessNumber = companyBusinessNumber;
     }
+
+    public CompanyQuoteInfo withPassword(String newPassword) {
+        return new CompanyQuoteInfo(
+            this.companyName,
+            this.rootAccountUsername,
+            newPassword,
+            this.companyEmail,
+            this.companyBusinessNumber
+        );
+    }
 }
