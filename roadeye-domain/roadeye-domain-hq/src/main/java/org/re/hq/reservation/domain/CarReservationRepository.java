@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarReservationRepository extends JpaRepository<CarReservation, Long> {
     @Query("""
@@ -38,4 +39,6 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
     Page<CarReservation> findCarReservationsByCompanyId(Long companyId, Pageable pageable);
 
     Page<CarReservation> findCarReservationsByCarId(Long carId, Pageable pageable);
+
+    Optional<CarReservation> findByIdAndCompanyId(Long reservationId, Long companyId);
 }

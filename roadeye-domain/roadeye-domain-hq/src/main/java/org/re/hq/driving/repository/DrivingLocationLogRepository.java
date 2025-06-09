@@ -4,6 +4,7 @@ import org.re.hq.driving.domain.DrivingLocationLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DrivingLocationLogRepository extends JpaRepository<DrivingLocationLog, Long> {
@@ -18,4 +19,11 @@ public interface DrivingLocationLogRepository extends JpaRepository<DrivingLocat
            )
         """)
     Optional<DrivingLocationLog> findLastLogByReservationId(Long id);
+
+    @Query("""
+        SELECT h
+          FROM DrivingLocationLog h
+         WHERE h.id.carReservation.id = :id
+        """)
+    List<DrivingLocationLog> findAllByReservationId(Long id);
 }

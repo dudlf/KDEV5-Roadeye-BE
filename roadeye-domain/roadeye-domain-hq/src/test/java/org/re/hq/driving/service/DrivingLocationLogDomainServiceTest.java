@@ -83,4 +83,25 @@ class DrivingLocationLogDomainServiceTest {
         assertNotNull(lastHistory);
         assertEquals(history.getId(), lastHistory.getId());
     }
+
+    @Test
+    @DisplayName("예약의 위치 이력 목록을 조회할 때 모든 위치 이력이 조회되야 한다.")
+    void find_all_location_logs_of_reservation_test() {
+        // given
+        var nHistories = 10;
+        var histories = new DrivingLocationLog[nHistories];
+        histories[0] = drivingLocationLogDomainService.createHistory(
+            DrivingLocationLogCreationCommandFixture.createFirst(carReservation)
+        );
+        for (int i = 1; i < nHistories; i++) {
+            var command = DrivingLocationLogCreationCommandFixture.create(carReservation, histories[i - 1]);
+            histories[i] = drivingLocationLogDomainService.createHistory(command);
+        }
+
+        // when
+        var logs = drivingLocationLogDomainService.findAllLogsOfReservation(carReservation);
+
+        // then
+        assertEquals(nHistories, logs.size());
+    }
 }
