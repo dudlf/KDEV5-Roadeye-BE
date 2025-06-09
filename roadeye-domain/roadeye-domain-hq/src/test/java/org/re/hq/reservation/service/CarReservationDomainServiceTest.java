@@ -1,5 +1,7 @@
 package org.re.hq.reservation.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 
@@ -48,6 +50,9 @@ class CarReservationDomainServiceTest {
     @Autowired
     private CarDomainService carDomainService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     void rejectReservation(CarReservation reservation, Employee rootEmployee) {
         carReservationDomainService.rejectReservation(reservation.getId(), rootEmployee,"정비로 인하여 대여 불가", LocalDateTime.now());
     }
@@ -59,6 +64,9 @@ class CarReservationDomainServiceTest {
 
         CarReservation reservation = carReservationRepository.findAll().getFirst();
         carReservationDomainService.approveReservation(reservation.getId(), rootEmployee, LocalDateTime.now());
+
+        entityManager.flush();
+        entityManager.clear();
 
         CarReservation updated = carReservationRepository.findById(reservation.getId())
             .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));

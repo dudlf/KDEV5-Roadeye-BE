@@ -30,7 +30,7 @@ public class CarReservation extends BaseEntity {
     private Employee reserver;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(updatable = false)
+    @JoinColumn
     private Employee approver;
 
     @Embedded
