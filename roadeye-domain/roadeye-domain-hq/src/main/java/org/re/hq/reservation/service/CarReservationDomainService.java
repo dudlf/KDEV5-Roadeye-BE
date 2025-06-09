@@ -72,6 +72,14 @@ public class CarReservationDomainService {
     }
 
     /**
+     * 차량, 현재시간이 일치하는 예약 번호 찾기
+     */
+    public Long findReservationId(Car car, LocalDateTime ignitionAt){
+        return carReservationRepository.findIdByCarIdAndIgnitionAt(car.getId(), ignitionAt)
+                .orElseThrow(() -> new DomainException(CarReservationDomainException.RESERVATION_NOT_FOUND));
+    }
+
+    /**
      * 해당 시간대에 예약이 있는 차량 리스트 반환
      */
     @Transactional(readOnly = true)
