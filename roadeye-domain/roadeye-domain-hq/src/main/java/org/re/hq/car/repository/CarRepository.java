@@ -3,6 +3,7 @@ package org.re.hq.car.repository;
 import org.re.hq.car.domain.Car;
 import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.domain.common.EntityLifecycleStatus;
+import org.re.hq.reservation.dto.DateTimeRange;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,4 +35,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     Long countByCompanyIdAndIgnitionStatusAndStatus(Long companyId, CarIgnitionStatus ignitionStatus, EntityLifecycleStatus entityLifecycleStatus);
 
     Optional<Car> findByCompanyIdAndIdAndStatus(Long companyId, Long id, EntityLifecycleStatus status);
+
+    @Query("""
+            select c from Car c
+                    left join CarReservation r on r.car = c
+                    and r.reservationPeriod.rentStartAt < :#{range.end()}
+                    and r.reservationPeriod.rentEndAt > :#{range.start()}
+                    where r.id is null
+        """)
+    Page<Car> findAvailableCarReservations(DateTimeRange range, Pageable pageable);
 }
