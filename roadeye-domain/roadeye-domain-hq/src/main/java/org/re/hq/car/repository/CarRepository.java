@@ -39,8 +39,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query("""
             select c from Car c
                     left join CarReservation r on r.car = c
-                    and r.reservationPeriod.rentStartAt < :#{range.end()}
-                    and r.reservationPeriod.rentEndAt > :#{range.start()}
+                    and r.reservationPeriod.rentStartAt < :#{#range.end}
+                    and r.reservationPeriod.rentEndAt > :#{#range.start}
                     where r.id is null
         """)
     Page<Car> findAvailableCarReservations(DateTimeRange range, Pageable pageable);
