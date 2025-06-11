@@ -52,7 +52,7 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
 
     @Query("""
             SELECT r FROM CarReservation  r
-                join fetch r.approver
+                LEFT JOIN Employee e on r.approver.id = e.id
                 WHERE r.reserver.id = :employeeId
         """)
     Page<CarReservation> findAllByReserverId(Long employeeId, Pageable pageable);
