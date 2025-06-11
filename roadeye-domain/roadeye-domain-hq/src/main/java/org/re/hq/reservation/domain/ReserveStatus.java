@@ -8,4 +8,8 @@ public enum ReserveStatus {
     public boolean isRequested() {
         return this == REQUESTED;
     }
+
+    public boolean isRejected() {
+        return this == REJECTED;
+    }
 }
