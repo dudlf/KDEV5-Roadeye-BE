@@ -1,5 +1,7 @@
 package org.re.hq.reservation.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 
@@ -48,6 +50,9 @@ class CarReservationDomainServiceTest {
     @Autowired
     private CarDomainService carDomainService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     void rejectReservation(CarReservation reservation, Employee rootEmployee) {
         carReservationDomainService.rejectReservation(reservation.getId(), rootEmployee,"정비로 인하여 대여 불가", LocalDateTime.now());
     }
@@ -59,6 +64,9 @@ class CarReservationDomainServiceTest {
 
         CarReservation reservation = carReservationRepository.findAll().getFirst();
         carReservationDomainService.approveReservation(reservation.getId(), rootEmployee, LocalDateTime.now());
+
+        entityManager.flush();
+        entityManager.clear();
 
         CarReservation updated = carReservationRepository.findById(reservation.getId())
             .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
@@ -218,5 +226,26 @@ class CarReservationDomainServiceTest {
         carReservationRepository.saveAll(carReservations);
 
         assertThat(carReservationDomainService.findReservationWithCarId(cars.getContent().get(0).getId(),Pageable.ofSize(10)).getTotalElements()).isEqualTo(2);
+    }
+
+    @Test
+    void 시간과_차량정보로_예약아이디찾기(Company company, Employee normalEmployee, Employee rootEmployee) {
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < 3; i++) {
+            var command = CarCreationCommandFixture.create();
+            carDomainService.createCar(company, command);
+        }
+        Page<Car> cars = carDomainService.getCars(company, Pageable.ofSize(10));
+        List<CarReservation> carReservations = List.of(
+                CarReservationFixture.create(cars.getContent().get(0),normalEmployee,1,5),
+                CarReservationFixture.create(cars.getContent().get(0),normalEmployee,6,8),
+                CarReservationFixture.create(cars.getContent().get(1),normalEmployee,3,5),
+                CarReservationFixture.create(cars.getContent().get(2),normalEmployee,10,12)
+        );
+        carReservationRepository.saveAll(carReservations);
+
+        var reservation = carReservationDomainService.findReservationWithCarId(cars.getContent().get(1).getId(),Pageable.ofSize(10)).getContent().getFirst();
+        carReservationDomainService.approveReservation(reservation.getId(), rootEmployee, now);
+        assertThat(carReservationDomainService.findReservationId(cars.getContent().get(1),now.plusDays(4))).isEqualTo(reservation.getId());
     }
 }

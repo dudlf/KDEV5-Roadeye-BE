@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,4 +42,20 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
     Page<CarReservation> findCarReservationsByCarId(Long carId, Pageable pageable);
 
     Optional<CarReservation> findByIdAndCompanyId(Long reservationId, Long companyId);
+
+    @Query("""
+        SELECT r.id FROM CarReservation  r
+        WHERE r.car.id = :carId
+        AND r.reserveStatus = 'APPROVED'
+        AND :ignitionAt BETWEEN r.reservationPeriod.rentStartAt AND r.reservationPeriod.rentEndAt
+        """)
+    Optional<Long> findIdByCarIdAndIgnitionAt(Long carId, LocalDateTime ignitionAt);
+
+
+    @Query("""
+            SELECT r FROM CarReservation  r
+                LEFT JOIN Employee e on r.approver.id = e.id
+                WHERE r.reserver.id = :employeeId
+        """)
+    Page<CarReservation> findAllByReserverId(Long employeeId, Pageable pageable);
 }

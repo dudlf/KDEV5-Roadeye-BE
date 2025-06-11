@@ -30,7 +30,7 @@ public class CarReservation extends BaseEntity {
     private Employee reserver;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(updatable = false)
+    @JoinColumn
     private Employee approver;
 
     @Embedded
@@ -65,7 +65,7 @@ public class CarReservation extends BaseEntity {
     }
 
     public void approve(Employee approver, LocalDateTime processedAt) {
-        if (this.reserveStatus != ReserveStatus.REQUESTED) {
+        if (!this.reserveStatus.isRequested()) {
             throw new DomainException(CarReservationDomainException.RESERVATION_STATUS_IS_NOT_REQUESTED);
         }
         this.reserveStatus = ReserveStatus.APPROVED;
@@ -74,7 +74,7 @@ public class CarReservation extends BaseEntity {
     }
 
     public void reject(Employee approver, String rejectReason, LocalDateTime processedAt) {
-        if (this.reserveStatus != ReserveStatus.REQUESTED) {
+        if (!this.reserveStatus.isRequested()) {
             throw new DomainException(CarReservationDomainException.RESERVATION_STATUS_IS_NOT_REQUESTED);
         }
         this.reserveStatus = ReserveStatus.REJECTED;

@@ -12,6 +12,7 @@ import org.re.hq.reservation.domain.CarReservation;
 import org.re.hq.reservation.dto.CarReservationCreateRequest;
 import org.re.hq.reservation.dto.CarReservationResponse;
 import org.re.hq.reservation.dto.CreateCarReservationCommand;
+import org.re.hq.reservation.dto.DateTimeRange;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +49,7 @@ public class CarReservationService {
     public CarReservationResponse rejectReservation(TenantId tenantId, Long reservationId, Long approverId, String rejectReason) {
         LocalDateTime now = LocalDateTime.now();
         Employee approver = employeeDomainService.read(tenantId.value(), approverId);
-        CarReservation reservation = carReservationDomainService.rejectReservation(reservationId,approver,rejectReason,now);
+        CarReservation reservation = carReservationDomainService.rejectReservation(reservationId, approver, rejectReason, now);
         return CarReservationResponse.from(reservation);
     }
 
@@ -56,9 +57,16 @@ public class CarReservationService {
         Company company = companyService.findById(tenantId.value());
         Car car = carDomainService.getCarById(company, request.carId());
         Employee reserver = employeeDomainService.read(tenantId.value(), reserverId);
-        CreateCarReservationCommand command = request.toCommand(tenantId.value(), car,reserver);
+        CreateCarReservationCommand command = request.toCommand(tenantId.value(), car, reserver);
         CarReservation reservation = carReservationDomainService.createReservation(command);
         return CarReservationResponse.from(reservation);
     }
 
+    public Page<Car> findAvailableCarReservations(DateTimeRange range, Pageable pageable) {
+        return carDomainService.findAvailableCarReservations(range, pageable);
+    }
+
+    public Page<CarReservation> findByEmployeeId(Long employeeId, Pageable pageable) {
+        return carReservationDomainService.findByEmployeeId(employeeId, pageable);
+    }
 }
