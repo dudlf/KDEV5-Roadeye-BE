@@ -64,7 +64,7 @@ public class CarReservationApi {
     }
 
     @ManagerOnly
-    @PatchMapping("/{reservationId}")
+    @PatchMapping("/{reservationId}/reject")
     public SingleItemResponse<CarReservationResponse> rejectReservation(
         TenantId tenantId,
         CompanyUserDetails userDetails,
