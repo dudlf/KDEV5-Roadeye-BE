@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.re.hq.car.dto.CarResponse;
 import org.re.hq.common.dto.PageResponse;
 import org.re.hq.common.dto.SingleItemResponse;
+import org.re.hq.reservation.api.payload.MyReservationResponse;
 import org.re.hq.reservation.dto.CarReservationCreateRequest;
 import org.re.hq.reservation.dto.CarReservationResponse;
 import org.re.hq.reservation.dto.DateTimeRange;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class CarReservationApi {
     private final CarReservationService carReservationService;
 
-
     @GetMapping
     public PageResponse<CarReservationResponse> findReservationByTenantId(TenantId tenantId, Pageable pageable) {
         Page<CarReservationResponse> reservations = carReservationService.findByTenantId(tenantId, pageable);
@@ -32,6 +32,11 @@ public class CarReservationApi {
     public PageResponse<CarReservationResponse> findReservationByCarId(@PathVariable Long carId, Pageable pageable) {
         Page<CarReservationResponse> reservations = carReservationService.findByCarId(carId, pageable);
         return PageResponse.of(reservations);
+    }
+
+    @GetMapping("/my")
+    public PageResponse<MyReservationResponse> findMyReservations(CompanyUserDetails user, Pageable pageable) {
+        return PageResponse.of(carReservationService.findByEmployeeId(user.getUserId(), pageable), MyReservationResponse::from);
     }
 
     @GetMapping("/cars/available")
@@ -62,6 +67,7 @@ public class CarReservationApi {
         CarReservationResponse response = carReservationService.approveReservation(tenantId, reservationId, userDetails.getUserId());
         return SingleItemResponse.of(response);
     }
+
 
     @ManagerOnly
     @PatchMapping("/{reservationId}/reject")

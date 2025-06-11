@@ -65,4 +65,8 @@ public class CarReservationService {
     public Page<Car> findAvailableCarReservations(DateTimeRange range, Pageable pageable) {
         return carDomainService.findAvailableCarReservations(range, pageable);
     }
+
+    public Page<CarReservation> findByEmployeeId(Long employeeId, Pageable pageable) {
+        return carReservationDomainService.findByEmployeeId(employeeId, pageable);
+    }
 }

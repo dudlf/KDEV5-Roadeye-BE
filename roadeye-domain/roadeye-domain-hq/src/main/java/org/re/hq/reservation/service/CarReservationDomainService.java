@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.Car;
 import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.exception.DomainException;
-import org.re.hq.reservation.domain.*;
-import org.re.hq.reservation.exception.CarReservationDomainException;
 import org.re.hq.employee.domain.Employee;
+import org.re.hq.reservation.domain.CarReservation;
+import org.re.hq.reservation.domain.CarReservationRepository;
+import org.re.hq.reservation.domain.ReservationPeriod;
+import org.re.hq.reservation.domain.ReserveStatus;
 import org.re.hq.reservation.dto.CreateCarReservationCommand;
+import org.re.hq.reservation.exception.CarReservationDomainException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,10 +63,10 @@ public class CarReservationDomainService {
      */
     private void checkReservation(Long companyId, Car car, ReservationPeriod reservationPeriod) {
         boolean exists = carReservationRepository.existsCarReservationsByReservationPeriodContaining(
-              car.getId(),
-              List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
-              reservationPeriod,
-              companyId
+            car.getId(),
+            List.of(ReserveStatus.APPROVED, ReserveStatus.REQUESTED),
+            reservationPeriod,
+            companyId
         );
 
         if (exists) {
@@ -74,9 +77,9 @@ public class CarReservationDomainService {
     /**
      * 차량, 현재시간이 일치하는 예약 번호 찾기
      */
-    public Long findReservationId(Car car, LocalDateTime ignitionAt){
+    public Long findReservationId(Car car, LocalDateTime ignitionAt) {
         return carReservationRepository.findIdByCarIdAndIgnitionAt(car.getId(), ignitionAt)
-                .orElseThrow(() -> new DomainException(CarReservationDomainException.RESERVATION_NOT_FOUND));
+            .orElseThrow(() -> new DomainException(CarReservationDomainException.RESERVATION_NOT_FOUND));
     }
 
     /**
@@ -108,5 +111,10 @@ public class CarReservationDomainService {
             carId,
             pageable
         );
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CarReservation> findByEmployeeId(Long employeeId, Pageable pageable) {
+        return carReservationRepository.findAllByReserverId(employeeId, pageable);
     }
 }

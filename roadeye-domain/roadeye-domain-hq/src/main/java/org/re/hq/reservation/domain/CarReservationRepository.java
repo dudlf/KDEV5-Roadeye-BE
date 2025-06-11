@@ -48,4 +48,12 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
         AND :ignitionAt BETWEEN r.reservationPeriod.rentStartAt AND r.reservationPeriod.rentEndAt
         """)
     Optional<Long> findIdByCarIdAndIgnitionAt(Long carId, LocalDateTime ignitionAt);
+
+
+    @Query("""
+            SELECT r FROM CarReservation  r
+                join fetch r.approver
+                WHERE r.reserver.id = :employeeId
+        """)
+    Page<CarReservation> findAllByReserverId(Long employeeId, Pageable pageable);
 }
