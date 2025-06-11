@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @DomainService
@@ -28,6 +29,11 @@ public class CarDomainService {
     public Page<Car> getCars(Company company, Pageable pageable) {
         var companyId = company.getId();
         return carRepository.findByCompanyIdAndStatus(companyId, EntityLifecycleStatus.ACTIVE, pageable);
+    }
+
+    public List<Car> getCars(Company company) {
+        var companyId = company.getId();
+        return carRepository.findAllByCompanyIdAndStatus(companyId, EntityLifecycleStatus.ACTIVE);
     }
 
     public Page<Car> getCarsByStatus(Company company, EntityLifecycleStatus status, Pageable pageable) {

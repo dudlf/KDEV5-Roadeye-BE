@@ -74,6 +74,13 @@ public class CarReservationDomainService {
         }
     }
 
+
+    @Transactional(readOnly = true)
+    public CarReservation findByIdAndCompanyId(Long reservationId, Long companyId) {
+        return carReservationRepository.findByIdAndCompanyId(reservationId, companyId)
+            .orElseThrow(() -> new DomainException(CarReservationDomainException.RESERVATION_NOT_FOUND));
+    }
+
     /**
      * 차량, 현재시간이 일치하는 예약 번호 찾기
      */

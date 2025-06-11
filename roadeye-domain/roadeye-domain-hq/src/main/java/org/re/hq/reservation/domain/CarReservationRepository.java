@@ -41,6 +41,8 @@ public interface CarReservationRepository extends JpaRepository<CarReservation, 
 
     Page<CarReservation> findCarReservationsByCarId(Long carId, Pageable pageable);
 
+    Optional<CarReservation> findByIdAndCompanyId(Long reservationId, Long companyId);
+
     @Query("""
         SELECT r.id FROM CarReservation  r
         WHERE r.car.id = :carId
