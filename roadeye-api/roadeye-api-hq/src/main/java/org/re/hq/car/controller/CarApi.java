@@ -7,6 +7,7 @@ import org.re.hq.car.dto.CarDetailsResponse;
 import org.re.hq.car.dto.CarResponse;
 import org.re.hq.car.dto.CarUpdateRequest;
 import org.re.hq.car.service.CarService;
+import org.re.hq.common.dto.ListResponse;
 import org.re.hq.common.dto.PageResponse;
 import org.re.hq.common.dto.SingleItemResponse;
 import org.re.hq.security.access.ManagerOnly;
@@ -24,6 +25,12 @@ public class CarApi {
     public PageResponse<CarResponse> getCars(TenantId tenantId, Pageable pageable) {
         var page = carService.getCars(tenantId, pageable);
         return PageResponse.of(page, CarResponse::from);
+    }
+
+    @GetMapping("/all")
+    public ListResponse<CarDetailsResponse> getAllCars(TenantId tenantId) {
+        var page = carService.getAllCars(tenantId);
+        return ListResponse.of(page, CarDetailsResponse::from);
     }
 
     @GetMapping("/{carId}")
