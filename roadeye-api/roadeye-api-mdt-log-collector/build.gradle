@@ -14,6 +14,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation(testFixtures(project(":roadeye-domain:roadeye-domain-core")))
 
     testFixturesImplementation(project(":roadeye-domain:roadeye-domain-core"))
 }

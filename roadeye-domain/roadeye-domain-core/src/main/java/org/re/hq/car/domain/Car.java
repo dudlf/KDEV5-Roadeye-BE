@@ -73,5 +73,9 @@ public class Car extends BaseEntity {
             profile.setImageUrl(command.imageUrl());
         }
     }
+
+    public void updateLocation(CarLocation lastLocation) {
+        this.location = lastLocation;
+    }
 }
 
