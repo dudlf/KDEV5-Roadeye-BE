@@ -2,11 +2,11 @@ package org.re.hq.car.dto;
 
 import org.re.hq.car.domain.Car;
 import org.re.hq.car.domain.CarIgnitionStatus;
+import org.re.mdtlog.domain.MdtTransactionId;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 public record CarDetailsResponse(
     Long id,
@@ -37,7 +37,7 @@ public record CarDetailsResponse(
             car.getMileage().getTotal(),
             car.getMdtStatus().getBatteryVoltage(),
             car.getMdtStatus().getIgnition(),
-            Optional.ofNullable(car.getMdtStatus().getActiveTuid()).map(UUID::toString).orElse(null),
+            Optional.ofNullable(car.getMdtStatus().getActiveTuid()).map(MdtTransactionId::toString).orElse(null),
             car.getCreatedAt(),
             car.getUpdatedAt()
         );
