@@ -11,7 +11,7 @@ public class MdtAddCycleLogRequestFixture {
             .toList();
 
         return MdtAddCycleLogRequest.builder()
-            .carId("car001")
+            .carId(1L)
             .terminalId("term001")
             .manufacturerId("man001")
             .packetVersion(1)

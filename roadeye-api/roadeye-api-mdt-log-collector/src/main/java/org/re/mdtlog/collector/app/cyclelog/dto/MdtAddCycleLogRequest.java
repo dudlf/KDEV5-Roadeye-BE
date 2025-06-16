@@ -21,7 +21,7 @@ import java.util.List;
 public record MdtAddCycleLogRequest(
     @JsonProperty("mdn")
     @NotNull
-    String carId,
+    Long carId,
 
     @JsonProperty("tid")
     @NotNull
