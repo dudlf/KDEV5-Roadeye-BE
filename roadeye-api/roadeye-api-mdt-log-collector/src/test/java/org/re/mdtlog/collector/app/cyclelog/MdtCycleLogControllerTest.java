@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.cyclelog.dto.MdtAddCycleLogRequest;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -54,7 +54,7 @@ class MdtCycleLogControllerTest {
 
         Mockito.verify(cycleLogService, Mockito.times(1))
             .addCycleLogs(
-                Mockito.any(MdtTransactionId.class),
+                Mockito.any(TransactionUUID.class),
                 Mockito.any(MdtAddCycleLogRequest.class),
                 Mockito.any(MdtLogRequestTimeInfo.class)
             );

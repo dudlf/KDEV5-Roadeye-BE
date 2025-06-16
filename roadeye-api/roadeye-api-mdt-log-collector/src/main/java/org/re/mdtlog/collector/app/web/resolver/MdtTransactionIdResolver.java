@@ -1,7 +1,7 @@
 package org.re.mdtlog.collector.app.web.resolver;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -13,11 +13,11 @@ public class MdtTransactionIdResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return MdtTransactionId.class.isAssignableFrom(parameter.getParameterType());
+        return TransactionUUID.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override
-    public MdtTransactionId resolveArgument(
+    public TransactionUUID resolveArgument(
         MethodParameter parameter,
         ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest,
@@ -28,6 +28,6 @@ public class MdtTransactionIdResolver implements HandlerMethodArgumentResolver {
         if (tuid == null) {
             return null;
         }
-        return new MdtTransactionId(tuid);
+        return new TransactionUUID(tuid);
     }
 }

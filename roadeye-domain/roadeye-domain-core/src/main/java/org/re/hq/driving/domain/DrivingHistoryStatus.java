@@ -1,0 +1,18 @@
+package org.re.hq.driving.domain;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.re.hq.domain.common.PersistenceEnum;
+
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public enum DrivingHistoryStatus implements PersistenceEnum<String> {
+    // @formatter:off
+    DRIVING ("InProgress"),
+    ENDED   ("Ended"),
+    ;
+    // @formatter:on
+    private final String code;
+
+}
