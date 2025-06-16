@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Transactional
 @RequiredArgsConstructor
 public class CompanyQuoteDomainService {
-    private final CompanyService companyService;
+    private final CompanyDomainService companyDomainService;
     private final CompanyQuoteRepository companyQuoteRepository;
 
     public Page<CompanyQuote> findAll(Pageable pageable) {
@@ -37,7 +37,7 @@ public class CompanyQuoteDomainService {
     }
 
     public CompanyQuote requestNewQuote(CompanyQuoteRequestCommand command) {
-        if (companyService.isBusinessNumberExists(command.businessNumber())) {
+        if (companyDomainService.isBusinessNumberExists(command.businessNumber())) {
             throw new DomainException(CompanyQuoteDomainException.BUSINESS_NUMBER_EXISTS);
         }
         var quoteInfo = command.toQuoteInfo();
@@ -48,7 +48,7 @@ public class CompanyQuoteDomainService {
 
     public Company approve(PlatformAdmin approver, CompanyQuote quote) {
         quote.approve(approver);
-        return companyService.createCompany(quote);
+        return companyDomainService.createCompany(quote);
     }
 
     public CompanyQuote reject(PlatformAdmin approver, CompanyQuote quote) {

@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import({CompanyQuoteDomainService.class, CompanyService.class, EmployeeDomainService.class})
+@Import({CompanyQuoteDomainService.class, CompanyDomainService.class, EmployeeDomainService.class})
 @DataJpaTest
 @WithPlatformAdmin
 class CompanyQuoteDomainServiceTest {
