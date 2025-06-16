@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MdtIgnitionController {
     private final MdtIgnitionService mdtIgnitionService;
 
+    // TODO JSON_VALUE 없애기
     @PostMapping(
         value = "/on",
         consumes = MediaType.APPLICATION_JSON_VALUE
