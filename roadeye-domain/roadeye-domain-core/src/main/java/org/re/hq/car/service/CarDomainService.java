@@ -40,6 +40,11 @@ public class CarDomainService {
         return carRepository.findByCompanyIdAndStatus(companyId, status, pageable);
     }
 
+    public Car getCarById(Long carId) {
+        return carRepository.findByIdAndStatus(carId, EntityLifecycleStatus.ACTIVE)
+            .orElseThrow(() -> new DomainException(CarDomainException.CAR_NOT_FOUND));
+    }
+
     public Car getCarById(Company company, Long carId) {
         var companyId = company.getId();
         return carRepository.findByCompanyIdAndIdAndStatus(companyId, carId, EntityLifecycleStatus.ACTIVE)
