@@ -1,18 +1,11 @@
 package org.re.hq.driving.domain;
 
-import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.re.hq.domain.common.AbstractPersistenceEnumConverter;
 
 @Converter(autoApply = true)
-public class DrivingHistoryStatusConverter implements AttributeConverter<DrivingHistoryStatus, String> {
-
-    @Override
-    public String convertToDatabaseColumn(DrivingHistoryStatus drivingHistoryStatus) {
-        return drivingHistoryStatus.getValue();
-    }
-
-    @Override
-    public DrivingHistoryStatus convertToEntityAttribute(String s) {
-        return DrivingHistoryStatus.from(s);
+public class DrivingHistoryStatusConverter extends AbstractPersistenceEnumConverter<DrivingHistoryStatus, String> {
+    public DrivingHistoryStatusConverter() {
+        super(DrivingHistoryStatus.class);
     }
 }
