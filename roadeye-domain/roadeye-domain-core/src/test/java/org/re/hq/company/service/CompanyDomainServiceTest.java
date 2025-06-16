@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Import;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Import({CompanyService.class, EmployeeDomainService.class})
+@Import({CompanyDomainService.class, EmployeeDomainService.class})
 @DataJpaTest
-class CompanyServiceTest {
+class CompanyDomainServiceTest {
     @Autowired
-    CompanyService companyService;
+    CompanyDomainService companyDomainService;
 
     @Autowired
     EmployeeDomainService employeeDomainService;
@@ -31,7 +31,7 @@ class CompanyServiceTest {
             var quote = CompanyQuoteFixture.create();
 
             // When
-            var company = companyService.createCompany(quote);
+            var company = companyDomainService.createCompany(quote);
 
             // Then
             assertNotNull(company);
@@ -43,11 +43,11 @@ class CompanyServiceTest {
         void createCompany_DuplicateBusinessNumber_Failure() {
             // Given
             var quote = CompanyQuoteFixture.create();
-            companyService.createCompany(quote);
+            companyDomainService.createCompany(quote);
 
             // When & Then
             assertThrows(RuntimeException.class, () -> {
-                companyService.createCompany(quote);
+                companyDomainService.createCompany(quote);
             });
         }
 
@@ -58,7 +58,7 @@ class CompanyServiceTest {
             var quote = CompanyQuoteFixture.create();
 
             // When
-            var company = companyService.createCompany(quote);
+            var company = companyDomainService.createCompany(quote);
             var rootAccount = employeeDomainService.findCompanyRootAccount(company.getId());
 
             // Then
