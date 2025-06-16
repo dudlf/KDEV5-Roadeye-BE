@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.mdtlog.converter.MdtLogEventTypeConverter;
 import org.re.mdtlog.converter.MdtLogGpsConditionConverter;
-import org.re.mdtlog.converter.MdtTransactionIdConverter;
+import org.re.mdtlog.converter.TransactionIdConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,9 +31,9 @@ public class MdtLog {
     @Column(name = "event_type", length = 10, nullable = false)
     private MdtLogEventType eventType;
 
-    @Convert(converter = MdtTransactionIdConverter.class)
+    @Convert(converter = TransactionIdConverter.class)
     @Column(name = "tx_uid", columnDefinition = "BINARY(16)", nullable = false)
-    private MdtTransactionId txUid;
+    private TransactionUUID txUid;
 
     @Column(name = "car_id", nullable = false)
     private Long carId;
@@ -85,7 +85,7 @@ public class MdtLog {
     private LocalDateTime receivedAt;
 
     @Builder
-    MdtLog(int packetVer, MdtLogEventType eventType, MdtTransactionId txUid, Long carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
+    MdtLog(int packetVer, MdtLogEventType eventType, TransactionUUID txUid, Long carId, String terminalId, String manufactureId, String deviceId, MdtLogGpsCondition gpsCond, BigDecimal gpsLat, BigDecimal gpsLon, int mdtAngle, int mdtSpeed, int mdtMileageSum, Integer mdtBatteryVoltage, LocalDateTime mdtIgnitionOnTime, LocalDateTime mdtIgnitionOffTime, LocalDateTime occurredAt, LocalDateTime sentAt, LocalDateTime receivedAt) {
         this.packetVer = packetVer;
         this.eventType = eventType;
         this.txUid = txUid;

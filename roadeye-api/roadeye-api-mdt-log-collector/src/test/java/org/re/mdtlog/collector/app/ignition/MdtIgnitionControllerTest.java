@@ -10,7 +10,7 @@ import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
 import org.re.mdtlog.collector.exception.MdtLogExceptionCode;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -48,7 +48,7 @@ class MdtIgnitionControllerTest {
         Mockito.doAnswer((invocation) -> null)
             .when(mdtIgnitionService)
             .ignitionOn(
-                Mockito.any(MdtTransactionId.class),
+                Mockito.any(TransactionUUID.class),
                 Mockito.any(MdtIgnitionOnRequest.class),
                 Mockito.any(MdtLogRequestTimeInfo.class)
             );
@@ -69,7 +69,7 @@ class MdtIgnitionControllerTest {
 
         Mockito.verify(mdtIgnitionService, Mockito.times(1))
             .ignitionOn(
-                Mockito.any(MdtTransactionId.class),
+                Mockito.any(TransactionUUID.class),
                 Mockito.any(MdtIgnitionOnRequest.class),
                 Mockito.any(MdtLogRequestTimeInfo.class)
             );
@@ -227,7 +227,7 @@ class MdtIgnitionControllerTest {
         Mockito.doAnswer((invocation) -> null)
             .when(mdtIgnitionService)
             .ignitionOff(
-                Mockito.any(MdtTransactionId.class),
+                Mockito.any(TransactionUUID.class),
                 Mockito.any(MdtIgnitionOffRequest.class),
                 Mockito.any(MdtLogRequestTimeInfo.class)
             );
@@ -248,7 +248,7 @@ class MdtIgnitionControllerTest {
 
         Mockito.verify(mdtIgnitionService, Mockito.times(1))
             .ignitionOff(
-                Mockito.any(MdtTransactionId.class),
+                Mockito.any(TransactionUUID.class),
                 Mockito.any(MdtIgnitionOffRequest.class),
                 Mockito.any(MdtLogRequestTimeInfo.class)
             );

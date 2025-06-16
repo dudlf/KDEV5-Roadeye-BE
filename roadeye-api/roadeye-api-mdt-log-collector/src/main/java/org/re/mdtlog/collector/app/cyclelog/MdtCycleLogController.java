@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.re.mdtlog.collector.app.common.dto.BaseMdtLogResponse;
 import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.cyclelog.dto.MdtAddCycleLogRequest;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ public class MdtCycleLogController {
     public BaseMdtLogResponse addCycleLogs(
         @Valid @RequestBody MdtAddCycleLogRequest dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
-        MdtTransactionId tuid
+        TransactionUUID tuid
     ) {
         cycleLogService.addCycleLogs(tuid, dto, timeInfo);
         return new BaseMdtLogResponse(dto.carId());

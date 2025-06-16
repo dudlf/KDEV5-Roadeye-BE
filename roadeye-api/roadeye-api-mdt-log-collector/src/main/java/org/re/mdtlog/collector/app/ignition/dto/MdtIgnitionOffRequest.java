@@ -12,7 +12,7 @@ import org.re.mdtlog.collector.app.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -72,7 +72,7 @@ public record MdtIgnitionOffRequest(
     @Max(9999999)
     int mdtMileageSum
 ) {
-    public MdtLog toMdtLog(MdtTransactionId tuid, MdtLogRequestTimeInfo timeInfo) {
+    public MdtLog toMdtLog(TransactionUUID tuid, MdtLogRequestTimeInfo timeInfo) {
         return MdtLog.builder()
             .eventType(MdtLogEventType.IGNITION)
             .txUid(tuid)
