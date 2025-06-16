@@ -7,7 +7,7 @@ import org.re.mdtlog.collector.app.common.dto.BaseMdtLogResponse;
 import org.re.mdtlog.collector.app.common.dto.MdtLogRequestTimeInfo;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOffRequest;
 import org.re.mdtlog.collector.app.ignition.dto.MdtIgnitionOnRequest;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +30,7 @@ public class MdtIgnitionController {
     public BaseMdtLogResponse ignitionOn(
         @Valid @RequestBody MdtIgnitionOnRequest dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
-        MdtTransactionId tuid
+        TransactionUUID tuid
     ) {
         mdtIgnitionService.ignitionOn(tuid, dto, timeInfo);
         return new BaseMdtLogResponse(dto.carId());
@@ -43,7 +43,7 @@ public class MdtIgnitionController {
     public BaseMdtLogResponse ignitionOn(
         @Valid @RequestBody MdtIgnitionOffRequest dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
-        MdtTransactionId tuid
+        TransactionUUID tuid
     ) {
         mdtIgnitionService.ignitionOff(tuid, dto, timeInfo);
         return new BaseMdtLogResponse(dto.carId());

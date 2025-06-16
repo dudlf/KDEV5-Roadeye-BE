@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.re.mdtlog.converter.TransactionIdConverter;
+import org.re.mdtlog.domain.TransactionUUID;
 
 @Getter
 @Entity
@@ -16,8 +18,12 @@ public class DrivingHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    @Convert(converter = DrivingHistoryStatusConverter.class)
     private DrivingHistoryStatus status;
-    private String txid;
+
+    @Convert(converter = TransactionIdConverter.class)
+    private TransactionUUID txUid;
 
     @Embedded
     @AttributeOverrides({
@@ -38,14 +44,14 @@ public class DrivingHistory {
     })
     private DrivingSnapShot endDrivingSnapShot;
 
-    public DrivingHistory(DrivingHistoryStatus status, String txid, DrivingSnapShot previousDrivingSnapShot) {
+    public DrivingHistory(DrivingHistoryStatus status, TransactionUUID txUid, DrivingSnapShot previousDrivingSnapShot) {
         this.status = status;
-        this.txid = txid;
+        this.txUid = txUid;
         this.previousDrivingSnapShot = previousDrivingSnapShot;
     }
 
-    public static DrivingHistory of(String txid, DrivingSnapShot drivingSnapShot) {
-        return new DrivingHistory(DrivingHistoryStatus.DRIVING, txid, drivingSnapShot);
+    public static DrivingHistory of(TransactionUUID txUid, DrivingSnapShot drivingSnapShot) {
+        return new DrivingHistory(DrivingHistoryStatus.DRIVING, txUid, drivingSnapShot);
     }
 
     public void end(DrivingSnapShot drivingSnapShot) {

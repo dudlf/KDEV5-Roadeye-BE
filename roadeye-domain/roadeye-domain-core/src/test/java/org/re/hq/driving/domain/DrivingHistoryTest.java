@@ -2,9 +2,11 @@ package org.re.hq.driving.domain;
 
 import org.junit.jupiter.api.Test;
 import org.re.hq.car.domain.CarLocation;
+import org.re.mdtlog.domain.TransactionUUID;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -21,7 +23,7 @@ class DrivingHistoryTest {
     @Test
     void of_정상_생성() {
         // given
-        String txid = "TX001";
+        var txid = TransactionUUID.from(UUID.randomUUID().toString().getBytes());
         DrivingSnapShot startSnap = createSnapShot(1000, 37.123456, 127.654321, LocalDateTime.now());
 
         // when
@@ -29,7 +31,7 @@ class DrivingHistoryTest {
 
         // then
         assertThat(history.getStatus()).isEqualTo(DrivingHistoryStatus.DRIVING);
-        assertThat(history.getTxid()).isEqualTo(txid);
+        assertThat(history.getTxUid()).isEqualTo(txid);
         assertThat(history.getPreviousDrivingSnapShot()).isEqualTo(startSnap);
         assertThat(history.getEndDrivingSnapShot()).isNull();
     }
@@ -37,7 +39,7 @@ class DrivingHistoryTest {
     @Test
     void end_정상_상태_전이() {
         // given
-        String txid = "TX002";
+        var txid = TransactionUUID.from(UUID.randomUUID().toString().getBytes());
         LocalDateTime now = LocalDateTime.now();
         DrivingSnapShot startSnap = createSnapShot(1000, 37.0, 127.0, now);
         DrivingSnapShot endSnap = createSnapShot(1050, 37.1, 127.1, now.plusMinutes(30));
@@ -54,7 +56,7 @@ class DrivingHistoryTest {
     @Test
     void end_이미종료된_이력_예외_발생() {
         // given
-        String txid = "TX003";
+        var txid = TransactionUUID.from(UUID.randomUUID().toString().getBytes());
         DrivingSnapShot startSnap = createSnapShot(2000, 37.0, 127.0, LocalDateTime.now());
         DrivingHistory history = DrivingHistory.of(txid, startSnap);
 
