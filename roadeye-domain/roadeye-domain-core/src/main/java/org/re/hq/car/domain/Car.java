@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.company.domain.Company;
 import org.re.hq.domain.common.BaseEntity;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 
 import java.time.LocalDateTime;
 
@@ -53,11 +53,11 @@ public class Car extends BaseEntity {
         super.disable();
     }
 
-    public void turnOnIgnition(MdtTransactionId transactionId) {
+    public void turnOnIgnition(TransactionUUID transactionId) {
         this.mdtStatus.turnOnIgnition(transactionId);
     }
 
-    public void turnOffIgnition(MdtTransactionId transactionId) {
+    public void turnOffIgnition(TransactionUUID transactionId) {
         this.mdtStatus.turnOffIgnition(transactionId);
     }
 

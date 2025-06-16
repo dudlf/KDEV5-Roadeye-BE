@@ -2,7 +2,7 @@ package org.re.hq.car.dto;
 
 import org.re.hq.car.domain.Car;
 import org.re.hq.car.domain.CarIgnitionStatus;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ public record CarDetailsResponse(
             car.getMileage().getTotal(),
             car.getMdtStatus().getBatteryVoltage(),
             car.getMdtStatus().getIgnition(),
-            Optional.ofNullable(car.getMdtStatus().getActiveTuid()).map(MdtTransactionId::toString).orElse(null),
+            Optional.ofNullable(car.getMdtStatus().getActiveTuid()).map(TransactionUUID::toString).orElse(null),
             car.getCreatedAt(),
             car.getUpdatedAt()
         );

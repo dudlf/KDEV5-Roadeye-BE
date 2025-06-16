@@ -13,7 +13,7 @@ import org.re.mdtlog.collector.ignition.MdtIgnitionOffRequestFixture;
 import org.re.mdtlog.collector.ignition.MdtIgnitionOnRequestFixture;
 import org.re.mdtlog.collector.ignition.MdtLogRequestTimeInfoFixture;
 import org.re.mdtlog.domain.MdtLogRepository;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.UUID;
@@ -42,7 +42,7 @@ class MdtIgnitionServiceTest {
     @DisplayName("시동 ON 이벤트 송신 시 도메인 서비스의 시동 On 메소드를 호출해야 한다.")
     void sendIgnitionOnEvent_ShouldCallTurnOffIgnition() {
         // Given
-        var tuid = new MdtTransactionId(UUID.randomUUID().toString());
+        var tuid = new TransactionUUID(UUID.randomUUID().toString());
         var dto = MdtIgnitionOnRequestFixture.create();
         var timeInfo = MdtLogRequestTimeInfoFixture.create();
 
@@ -58,7 +58,7 @@ class MdtIgnitionServiceTest {
     @DisplayName("시동 Off 이벤트 송신 시 도메인 서비스의 시동 Off 메소드를 호출해야 한다.")
     void sendIgnitionOffEvent_ShouldCallTurnOffIgnition() {
         // Given
-        var tuid = new MdtTransactionId(UUID.randomUUID().toString());
+        var tuid = new TransactionUUID(UUID.randomUUID().toString());
         var dto = MdtIgnitionOffRequestFixture.create();
         var timeInfo = MdtLogRequestTimeInfoFixture.create();
 

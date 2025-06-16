@@ -8,7 +8,7 @@ import org.re.hq.car.service.CarDomainService;
 import org.re.hq.company.CompanyFixture;
 import org.re.mdtlog.collector.app.cyclelog.dto.MdtAddCycleLogRequestFixture;
 import org.re.mdtlog.collector.ignition.MdtLogRequestTimeInfoFixture;
-import org.re.mdtlog.domain.MdtTransactionId;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -35,7 +35,7 @@ class MdtCycleLogServiceTest {
         var car = em.merge(CarFixture.create(company));
 
         var nCnt = 10;
-        var tuid = new MdtTransactionId(UUID.randomUUID().toString());
+        var tuid = new TransactionUUID(UUID.randomUUID().toString());
         var dto = MdtAddCycleLogRequestFixture.create(nCnt);
         var timeInfo = MdtLogRequestTimeInfoFixture.create();
 
