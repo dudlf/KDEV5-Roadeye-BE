@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":roadeye-domain:roadeye-domain-common"))
+    api(project(":roadeye-domain:roadeye-domain-common"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
