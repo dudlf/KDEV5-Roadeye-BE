@@ -1,6 +1,6 @@
 package org.re.hq.employee;
 
-import org.re.hq.company.domain.Company;
+import org.re.company.domain.Company;
 import org.re.hq.employee.domain.Employee;
 import org.re.hq.employee.domain.EmployeeCredentials;
 import org.re.hq.employee.domain.EmployeeMetadata;

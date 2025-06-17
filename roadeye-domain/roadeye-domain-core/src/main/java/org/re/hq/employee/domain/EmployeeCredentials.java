@@ -1,7 +1,7 @@
 package org.re.hq.employee.domain;
 
 import jakarta.persistence.Embeddable;
-import org.re.hq.company.domain.CompanyQuote;
+import org.re.company.domain.CompanyQuote;
 
 @Embeddable
 public record EmployeeCredentials(

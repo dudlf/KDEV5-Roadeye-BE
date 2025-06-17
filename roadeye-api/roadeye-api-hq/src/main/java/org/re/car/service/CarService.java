@@ -5,7 +5,7 @@ import org.re.car.domain.Car;
 import org.re.car.domain.CarIgnitionStatus;
 import org.re.car.dto.CarCreationRequest;
 import org.re.car.dto.CarUpdateRequest;
-import org.re.hq.company.service.CompanyDomainService;
+import org.re.company.service.CompanyDomainService;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -2,8 +2,8 @@ package org.re.car;
 
 import org.re.car.domain.Car;
 import org.re.car.domain.CarProfile;
-import org.re.hq.company.CompanyFixture;
-import org.re.hq.company.domain.Company;
+import org.re.company.CompanyFixture;
+import org.re.company.domain.Company;
 
 import java.util.List;
 import java.util.stream.IntStream;

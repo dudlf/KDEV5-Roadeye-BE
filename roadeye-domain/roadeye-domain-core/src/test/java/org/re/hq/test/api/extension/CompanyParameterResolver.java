@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.re.hq.company.CompanyFixture;
-import org.re.hq.company.domain.Company;
+import org.re.company.CompanyFixture;
+import org.re.company.domain.Company;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 

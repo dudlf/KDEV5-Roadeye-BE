@@ -8,7 +8,7 @@ import org.re.car.dto.CarDisableCommand;
 import org.re.car.dto.CarUpdateCommand;
 import org.re.car.exception.CarDomainException;
 import org.re.car.repository.CarRepository;
-import org.re.hq.company.domain.Company;
+import org.re.company.domain.Company;
 import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.re.hq.domain.exception.DomainException;

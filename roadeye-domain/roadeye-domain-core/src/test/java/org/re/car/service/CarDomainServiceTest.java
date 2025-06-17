@@ -7,7 +7,7 @@ import org.re.car.domain.CarIgnitionStatus;
 import org.re.car.dto.CarCreationCommandFixture;
 import org.re.car.dto.CarDisableCommand;
 import org.re.car.dto.CarUpdateCommand;
-import org.re.hq.company.domain.Company;
+import org.re.company.domain.Company;
 import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.re.hq.test.supports.WithCompany;
 import org.springframework.beans.factory.annotation.Autowired;

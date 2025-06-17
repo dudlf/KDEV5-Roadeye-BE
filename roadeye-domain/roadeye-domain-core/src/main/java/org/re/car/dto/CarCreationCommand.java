@@ -4,7 +4,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.re.car.domain.Car;
 import org.re.car.domain.CarProfile;
-import org.re.hq.company.domain.Company;
+import org.re.company.domain.Company;
 
 public record CarCreationCommand(
     @NonNull
