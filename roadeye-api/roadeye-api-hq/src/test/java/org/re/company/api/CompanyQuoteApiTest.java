@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.re.company.CompanyQuoteFixture;
-import org.re.company.dto.CompanyQuoteCreationRequestFixture;
+import org.re.company.api.payload.CompanyQuoteCreationRequestFixture;
 import org.re.company.service.CompanyQuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

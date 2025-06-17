@@ -2,8 +2,8 @@ package org.re.company.api;
 
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.re.common.dto.PageResponse;
-import org.re.company.dto.QuoteResponse;
+import org.re.common.api.payload.PageResponse;
+import org.re.company.api.payload.QuoteResponse;
 import org.re.company.service.CompanyQuoteService;
 import org.re.security.userdetails.PlatformAdminUserDetails;
 import org.springframework.data.domain.Pageable;

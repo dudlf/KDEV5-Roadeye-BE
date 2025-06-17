@@ -1,7 +1,7 @@
 package org.re.web.resolver;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.re.common.dto.MdtLogRequestTimeInfo;
+import org.re.common.api.payload.MdtLogRequestTimeInfo;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

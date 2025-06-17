@@ -1,10 +1,10 @@
 package org.re.car.service;
 
 import lombok.RequiredArgsConstructor;
+import org.re.car.api.payload.CarCreationRequest;
+import org.re.car.api.payload.CarUpdateRequest;
 import org.re.car.domain.Car;
 import org.re.car.domain.CarIgnitionStatus;
-import org.re.car.dto.CarCreationRequest;
-import org.re.car.dto.CarUpdateRequest;
 import org.re.company.service.CompanyDomainService;
 import org.re.tenant.TenantId;
 import org.springframework.data.domain.Page;

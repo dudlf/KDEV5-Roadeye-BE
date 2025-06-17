@@ -1,15 +1,15 @@
 package org.re.car.api;
 
 import lombok.RequiredArgsConstructor;
+import org.re.car.api.payload.CarCreationRequest;
+import org.re.car.api.payload.CarDetailsResponse;
+import org.re.car.api.payload.CarResponse;
+import org.re.car.api.payload.CarUpdateRequest;
 import org.re.car.domain.CarIgnitionStatus;
-import org.re.car.dto.CarCreationRequest;
-import org.re.car.dto.CarDetailsResponse;
-import org.re.car.dto.CarResponse;
-import org.re.car.dto.CarUpdateRequest;
 import org.re.car.service.CarService;
-import org.re.common.dto.ListResponse;
-import org.re.common.dto.PageResponse;
-import org.re.common.dto.SingleItemResponse;
+import org.re.common.api.payload.ListResponse;
+import org.re.common.api.payload.PageResponse;
+import org.re.common.api.payload.SingleItemResponse;
 import org.re.security.access.ManagerOnly;
 import org.re.tenant.TenantId;
 import org.springframework.data.domain.Pageable;

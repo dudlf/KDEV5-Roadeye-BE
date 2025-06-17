@@ -1,6 +1,6 @@
 package org.re.web.advice;
 
-import org.re.common.dto.ErrorResponse;
+import org.re.common.api.payload.ErrorResponse;
 import org.re.common.exception.DomainException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

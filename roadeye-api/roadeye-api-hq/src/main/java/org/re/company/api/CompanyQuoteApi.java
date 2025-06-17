@@ -1,9 +1,9 @@
 package org.re.company.api;
 
 import lombok.RequiredArgsConstructor;
-import org.re.common.dto.SingleItemResponse;
-import org.re.company.dto.CompanyQuoteCreationRequest;
-import org.re.company.dto.QuoteResponse;
+import org.re.common.api.payload.SingleItemResponse;
+import org.re.company.api.payload.CompanyQuoteCreationRequest;
+import org.re.company.api.payload.QuoteResponse;
 import org.re.company.service.CompanyQuoteService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
