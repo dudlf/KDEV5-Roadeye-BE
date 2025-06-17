@@ -3,7 +3,7 @@ package org.re.hq.security;
 import org.aspectj.lang.annotation.Aspect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.re.hq.employee.domain.EmployeeRole;
+import org.re.employee.domain.EmployeeRole;
 import org.re.hq.test.security.MockCompanyUserDetails;
 import org.re.test.controller.HelloController;
 import org.springframework.beans.factory.annotation.Autowired;

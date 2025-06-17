@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.re.company.CompanyQuoteFixture;
 import org.re.company.domain.CompanyQuote;
 import org.re.company.service.CompanyQuoteService;
-import org.re.hq.employee.domain.EmployeeRole;
+import org.re.employee.domain.EmployeeRole;
 import org.re.hq.security.userdetails.PlatformAdminUserDetails;
 import org.re.hq.test.base.BaseWebMvcTest;
 import org.re.hq.test.security.MockCompanyUserDetails;

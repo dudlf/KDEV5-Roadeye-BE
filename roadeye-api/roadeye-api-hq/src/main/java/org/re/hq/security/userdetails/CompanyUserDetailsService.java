@@ -1,7 +1,7 @@
 package org.re.hq.security.userdetails;
 
 import lombok.RequiredArgsConstructor;
-import org.re.hq.employee.domain.EmployeeRepository;
+import org.re.employee.domain.EmployeeRepository;
 import org.re.hq.tenant.TenantIdProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +18,7 @@ public class CompanyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var tenantId = tenantIdProvider.getCurrentTenantId();
         var user = employeeRepository.findByUsernameAndTenantId(tenantId, username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+            .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         return CompanyUserDetails.from(user);
     }
 }

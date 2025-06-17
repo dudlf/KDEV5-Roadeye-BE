@@ -1,6 +1,6 @@
 package org.re.hq.test.security;
 
-import org.re.hq.employee.domain.EmployeeRole;
+import org.re.employee.domain.EmployeeRole;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.Retention;

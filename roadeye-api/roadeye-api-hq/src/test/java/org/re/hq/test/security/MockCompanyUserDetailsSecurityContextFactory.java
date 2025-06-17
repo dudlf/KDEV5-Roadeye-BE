@@ -1,8 +1,8 @@
 package org.re.hq.test.security;
 
-import org.re.hq.employee.domain.Employee;
-import org.re.hq.employee.domain.EmployeeCredentials;
-import org.re.hq.employee.domain.EmployeeMetadata;
+import org.re.employee.domain.Employee;
+import org.re.employee.domain.EmployeeCredentials;
+import org.re.employee.domain.EmployeeMetadata;
 import org.re.hq.security.userdetails.CompanyUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;

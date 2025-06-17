@@ -6,10 +6,10 @@ import org.re.company.domain.Company;
 import org.re.company.domain.CompanyQuote;
 import org.re.company.exception.CompanyDomainException;
 import org.re.company.repository.CompanyRepository;
+import org.re.employee.domain.EmployeeCredentials;
+import org.re.employee.service.EmployeeDomainService;
 import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.exception.DomainException;
-import org.re.hq.employee.domain.EmployeeCredentials;
-import org.re.hq.employee.service.EmployeeDomainService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -10,7 +10,7 @@ import org.re.car.domain.CarIgnitionStatus;
 import org.re.car.dto.CarCreationRequestFixture;
 import org.re.car.dto.CarUpdateRequestFixture;
 import org.re.car.service.CarService;
-import org.re.hq.employee.domain.EmployeeRole;
+import org.re.employee.domain.EmployeeRole;
 import org.re.hq.security.access.ManagerOnlyHandler;
 import org.re.hq.tenant.TenantId;
 import org.re.hq.test.security.MockCompanyUserDetails;

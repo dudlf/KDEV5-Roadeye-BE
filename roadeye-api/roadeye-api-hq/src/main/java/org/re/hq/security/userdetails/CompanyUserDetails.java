@@ -2,8 +2,8 @@ package org.re.hq.security.userdetails;
 
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
-import org.re.hq.employee.domain.Employee;
-import org.re.hq.employee.domain.EmployeeRole;
+import org.re.employee.domain.Employee;
+import org.re.employee.domain.EmployeeRole;
 import org.re.hq.security.domain.AuthMemberType;
 import org.re.hq.tenant.TenantId;
 import org.springframework.security.core.CredentialsContainer;

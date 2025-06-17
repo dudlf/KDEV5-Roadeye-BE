@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.re.company.domain.Company;
-import org.re.hq.employee.EmployeeFixture;
-import org.re.hq.employee.domain.Employee;
+import org.re.employee.EmployeeFixture;
+import org.re.employee.domain.Employee;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 public class EmployeeParameterResolver implements ParameterResolver {
