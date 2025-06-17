@@ -1,7 +1,7 @@
 package org.re.mdtlog.collector.exception;
 
 import lombok.Getter;
-import org.re.exception.AppExceptionCode;
+import org.re.common.exception.AppExceptionCode;
 import org.springframework.http.HttpStatus;
 
 @Getter

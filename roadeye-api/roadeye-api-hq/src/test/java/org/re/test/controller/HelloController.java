@@ -1,7 +1,7 @@
 package org.re.test.controller;
 
-import org.re.domain.common.CommonAppExceptionCode;
-import org.re.exception.AppException;
+import org.re.common.exception.AppException;
+import org.re.common.exception.CommonAppExceptionCode;
 import org.re.security.access.ManagerOnly;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -2,10 +2,10 @@ package org.re.common.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.re.common.exception.AppException;
+import org.re.common.exception.AppExceptionCode;
 import org.re.common.exception.DomainException;
 import org.re.common.exception.DomainExceptionCode;
-import org.re.exception.AppException;
-import org.re.exception.AppExceptionCode;
 
 @Getter
 @RequiredArgsConstructor

@@ -1,9 +1,8 @@
-package org.re.domain.common;
+package org.re.common.exception;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.re.exception.AppExceptionCode;
 import org.springframework.http.HttpStatus;
 
 @Getter

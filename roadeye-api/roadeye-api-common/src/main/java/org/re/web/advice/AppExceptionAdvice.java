@@ -1,8 +1,8 @@
-package org.re.app.common;
+package org.re.web.advice;
 
 import lombok.extern.slf4j.Slf4j;
-import org.re.domain.common.CommonAppExceptionCode;
-import org.re.exception.AppException;
+import org.re.common.exception.AppException;
+import org.re.common.exception.CommonAppExceptionCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
