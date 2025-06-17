@@ -1,11 +1,11 @@
 package org.re.mdtlog.domain;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum MdtLogEventType {
     // @formatter:off
     CYCLE_LOG  ("cycle-log", "주기 정보"),

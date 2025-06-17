@@ -1,12 +1,12 @@
 package org.re.common.exception;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CommonAppExceptionCode implements AppExceptionCode {
     // @formatter:off
     INVALID_HTTP_MESSAGE ("400", "Invalid HTTP message",  HttpStatus.BAD_REQUEST),
