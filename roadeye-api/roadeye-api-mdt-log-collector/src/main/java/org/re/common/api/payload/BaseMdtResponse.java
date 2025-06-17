@@ -1,10 +1,10 @@
 package org.re.common.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.re.common.exception.MdtLogExceptionCode;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BaseMdtResponse {
     private final MdtLogExceptionCode code;
 
