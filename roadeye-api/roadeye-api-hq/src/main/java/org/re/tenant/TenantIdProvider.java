@@ -1,4 +1,4 @@
-package org.re.hq.tenant;
+package org.re.tenant;
 
 @FunctionalInterface
 public interface TenantIdProvider {

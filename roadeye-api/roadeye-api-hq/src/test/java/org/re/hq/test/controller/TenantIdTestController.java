@@ -1,7 +1,7 @@
 package org.re.hq.test.controller;
 
 import org.jspecify.annotations.Nullable;
-import org.re.hq.tenant.TenantId;
+import org.re.tenant.TenantId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

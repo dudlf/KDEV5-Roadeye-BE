@@ -1,4 +1,4 @@
-package org.re.hq.tenant;
+package org.re.tenant;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

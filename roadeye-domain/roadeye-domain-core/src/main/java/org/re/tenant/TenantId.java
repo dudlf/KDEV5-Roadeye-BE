@@ -1,4 +1,4 @@
-package org.re.hq.tenant;
+package org.re.tenant;
 
 public record TenantId(
     long value

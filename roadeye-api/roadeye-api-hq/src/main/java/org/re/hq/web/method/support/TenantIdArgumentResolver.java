@@ -1,7 +1,7 @@
 package org.re.hq.web.method.support;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.re.hq.tenant.TenantId;
+import org.re.tenant.TenantId;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

@@ -1,6 +1,6 @@
-package org.re.hq.tenant.context;
+package org.re.tenant.context;
 
-import org.re.hq.tenant.TenantId;
+import org.re.tenant.TenantId;
 
 public class TenantIdContext {
     private static final ThreadLocal<TenantId> tenantIdHolder = new ThreadLocal<>();

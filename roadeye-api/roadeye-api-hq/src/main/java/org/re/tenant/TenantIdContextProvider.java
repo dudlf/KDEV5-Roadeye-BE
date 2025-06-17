@@ -1,9 +1,9 @@
-package org.re.hq.tenant;
+package org.re.tenant;
 
 import org.jspecify.annotations.Nullable;
-import org.re.hq.tenant.context.TenantIdContext;
+import org.re.tenant.context.TenantIdContext;
 
-public class TenantIdContextProvider implements TenantIdProvider {
+public class TenantIdContextProvider implements org.re.tenant.TenantIdProvider {
     @Override
     @Nullable
     public Long getCurrentTenantId() {

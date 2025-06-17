@@ -2,7 +2,7 @@ package org.re.security.userdetails;
 
 import lombok.RequiredArgsConstructor;
 import org.re.employee.domain.EmployeeRepository;
-import org.re.hq.tenant.TenantIdProvider;
+import org.re.tenant.TenantIdProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
