@@ -20,5 +20,8 @@ public class MdtCycleLogService {
     public void addCycleLogs(TransactionUUID tuid, MdtAddCycleLogRequest dto, MdtLogRequestTimeInfo timeInfo) {
         var car = carDomainService.getCarById(dto.carId());
         car.updateLocation(dto.getLastLocation());
+
+        var mdtLogs = dto.toMdtLogList(tuid, timeInfo);
+        mdtLogRepository.saveAll(mdtLogs);
     }
 }
