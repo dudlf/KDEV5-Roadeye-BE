@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.re.driving.converter.DrivingHistoryStatusConverter;
 import org.re.mdtlog.converter.TransactionIdConverter;
 import org.re.mdtlog.domain.TransactionUUID;
 
