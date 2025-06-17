@@ -4,8 +4,8 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.re.hq.car.CarFixture;
-import org.re.hq.car.domain.Car;
+import org.re.car.CarFixture;
+import org.re.car.domain.Car;
 import org.re.hq.company.domain.Company;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 

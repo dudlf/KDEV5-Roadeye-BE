@@ -1,7 +1,7 @@
 package org.re.hq.driving.domain;
 
 import jakarta.persistence.Embeddable;
-import org.re.hq.car.domain.CarLocation;
+import org.re.car.domain.CarLocation;
 
 import java.time.LocalDateTime;
 

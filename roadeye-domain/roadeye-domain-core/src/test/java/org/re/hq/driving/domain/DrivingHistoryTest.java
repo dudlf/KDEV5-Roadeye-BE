@@ -1,7 +1,7 @@
 package org.re.hq.driving.domain;
 
 import org.junit.jupiter.api.Test;
-import org.re.hq.car.domain.CarLocation;
+import org.re.car.domain.CarLocation;
 import org.re.mdtlog.domain.TransactionUUID;
 
 import java.math.BigDecimal;

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.re.hq.car.domain.CarLocation;
+import org.re.car.domain.CarLocation;
 
 import java.time.LocalDateTime;
 
