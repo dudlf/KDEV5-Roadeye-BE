@@ -24,13 +24,13 @@ public class LocationHistory {
     private CarLocation carLocation;
 
     @Embedded
-    private org.re.location.domain.DrivingMoment drivingMoment;
+    private DrivingMoment drivingMoment;
 
     @Column
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public LocationHistory(Long drivingId, CarLocation carLocation, org.re.location.domain.DrivingMoment drivingMoment) {
+    public LocationHistory(Long drivingId, CarLocation carLocation, DrivingMoment drivingMoment) {
         this.drivingId = drivingId;
         this.carLocation = carLocation;
         this.drivingMoment = drivingMoment;

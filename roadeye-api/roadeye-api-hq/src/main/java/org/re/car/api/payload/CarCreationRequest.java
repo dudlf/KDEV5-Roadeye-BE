@@ -2,6 +2,7 @@ package org.re.car.api.payload;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.re.car.dto.CarCreationCommand;
 
 public record CarCreationRequest(
     @NonNull
@@ -13,8 +14,8 @@ public record CarCreationRequest(
     @NonNull
     Integer mileageInitial
 ) {
-    public org.re.car.dto.CarCreationCommand toCommand() {
-        return new org.re.car.dto.CarCreationCommand(
+    public CarCreationCommand toCommand() {
+        return new CarCreationCommand(
             name,
             licenseNumber,
             imageUrl,

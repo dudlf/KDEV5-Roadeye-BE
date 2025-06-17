@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(org.re.mdt.api.MdtIgnitionApi.class)
+@WebMvcTest(MdtIgnitionApi.class)
 @DisplayName("[단위 테스트] MDT 시동 Api")
 public class MdtIgnitionApiTest {
     @Autowired

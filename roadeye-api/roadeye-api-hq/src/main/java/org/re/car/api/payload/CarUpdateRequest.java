@@ -1,6 +1,7 @@
 package org.re.car.api.payload;
 
 import org.jspecify.annotations.Nullable;
+import org.re.car.dto.CarUpdateCommand;
 
 public record CarUpdateRequest(
     @Nullable
@@ -8,8 +9,8 @@ public record CarUpdateRequest(
     @Nullable
     String imageUrl
 ) {
-    public org.re.car.dto.CarUpdateCommand toCommand() {
-        return new org.re.car.dto.CarUpdateCommand(
+    public CarUpdateCommand toCommand() {
+        return new CarUpdateCommand(
             name,
             imageUrl
         );

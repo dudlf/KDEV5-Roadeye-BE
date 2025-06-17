@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import({AopAutoConfiguration.class, ManagerOnlyHandler.class})
-@WebMvcTest(org.re.car.api.CarApi.class)
+@WebMvcTest(CarApi.class)
 @AutoConfigureMockMvc
 class CarApiTest {
     @Autowired

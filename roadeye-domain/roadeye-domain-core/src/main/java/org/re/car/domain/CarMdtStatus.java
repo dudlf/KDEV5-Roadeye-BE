@@ -22,42 +22,42 @@ public class CarMdtStatus {
 
     @Convert(converter = CarIgnitionStatusConverter.class)
     @Column(nullable = false)
-    private org.re.car.domain.CarIgnitionStatus ignition;
+    private CarIgnitionStatus ignition;
 
     @Column(columnDefinition = "BINARY(16)")
     private UUID activeTuid;
 
-    public CarMdtStatus(int batteryVoltage, org.re.car.domain.CarIgnitionStatus ignition, UUID activeTuid) {
+    public CarMdtStatus(int batteryVoltage, CarIgnitionStatus ignition, UUID activeTuid) {
         this.batteryVoltage = batteryVoltage;
         this.ignition = ignition;
         this.activeTuid = activeTuid;
     }
 
     public static CarMdtStatus create() {
-        return new CarMdtStatus(Integers.ZERO, org.re.car.domain.CarIgnitionStatus.OFF, null);
+        return new CarMdtStatus(Integers.ZERO, CarIgnitionStatus.OFF, null);
     }
 
     public void turnOnIgnition(UUID transactionId) {
-        if (this.ignition != org.re.car.domain.CarIgnitionStatus.OFF) {
+        if (this.ignition != CarIgnitionStatus.OFF) {
             throw new DomainException(CarDomainException.IGNITION_IS_NOT_OFF);
         }
-        this.ignition = org.re.car.domain.CarIgnitionStatus.ON;
+        this.ignition = CarIgnitionStatus.ON;
         this.activeTuid = transactionId;
     }
 
     public void turnOffIgnition(UUID transactionId) {
-        if (this.ignition != org.re.car.domain.CarIgnitionStatus.ON) {
+        if (this.ignition != CarIgnitionStatus.ON) {
             throw new DomainException(CarDomainException.IGNITION_IS_NOT_ON);
         }
         if (!this.activeTuid.equals(transactionId)) {
             throw new DomainException(CarDomainException.TRANSACTION_ID_MISMATCH);
         }
-        this.ignition = org.re.car.domain.CarIgnitionStatus.OFF;
+        this.ignition = CarIgnitionStatus.OFF;
         this.activeTuid = null;
     }
 
     public void resetIgnitionStatus() {
-        this.ignition = org.re.car.domain.CarIgnitionStatus.OFF;
+        this.ignition = CarIgnitionStatus.OFF;
         this.activeTuid = null;
     }
 }

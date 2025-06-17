@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest({org.re.company.api.CompanyQuoteApi.class})
+@WebMvcTest({CompanyQuoteApi.class})
 @AutoConfigureMockMvc(addFilters = false)
 class CompanyQuoteApiTest {
     @Autowired

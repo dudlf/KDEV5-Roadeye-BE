@@ -22,7 +22,7 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(org.re.mdt.api.MdtCycleLogApi.class)
+@WebMvcTest(MdtCycleLogApi.class)
 @DisplayName("[단위 테스트] MDT 주기 정보 수집 Api")
 public class MdtCycleLogApiTest {
     @Autowired

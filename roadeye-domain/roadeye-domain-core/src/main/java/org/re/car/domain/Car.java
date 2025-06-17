@@ -20,31 +20,31 @@ public class Car extends BaseEntity {
     private Company company;
 
     @Embedded
-    private org.re.car.domain.CarProfile profile;
+    private CarProfile profile;
 
     @Embedded
-    private org.re.car.domain.CarLocation location;
+    private CarLocation location;
 
     @Embedded
-    private org.re.car.domain.CarMileage mileage;
+    private CarMileage mileage;
 
     @Embedded
-    private org.re.car.domain.CarMdtStatus mdtStatus;
+    private CarMdtStatus mdtStatus;
 
     @Column(length = 512)
     private String disableReason;
 
     private LocalDateTime shippedAt;
 
-    private Car(Company company, org.re.car.domain.CarProfile carProfile, int mileageInitial) {
+    private Car(Company company, CarProfile carProfile, int mileageInitial) {
         this.company = company;
         this.profile = carProfile;
-        this.location = org.re.car.domain.CarLocation.create();
-        this.mdtStatus = org.re.car.domain.CarMdtStatus.create();
-        this.mileage = new org.re.car.domain.CarMileage(mileageInitial);
+        this.location = CarLocation.create();
+        this.mdtStatus = CarMdtStatus.create();
+        this.mileage = new CarMileage(mileageInitial);
     }
 
-    public static Car of(Company company, org.re.car.domain.CarProfile carProfile, int mileageInitial) {
+    public static Car of(Company company, CarProfile carProfile, int mileageInitial) {
         return new Car(company, carProfile, mileageInitial);
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarService {
     private final CompanyDomainService companyDomainService;
-    private final org.re.car.service.CarDomainService carDomainService;
+    private final CarDomainService carDomainService;
 
     public Page<Car> getCars(TenantId tenantId, Pageable pageable) {
         var company = companyDomainService.findById(tenantId.value());
