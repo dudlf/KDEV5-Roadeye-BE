@@ -2,7 +2,7 @@ package org.re.car.repository;
 
 import org.re.car.domain.Car;
 import org.re.car.domain.CarIgnitionStatus;
-import org.re.hq.domain.common.EntityLifecycleStatus;
+import org.re.common.domain.EntityLifecycleStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,7 +2,7 @@ package org.re.company.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.re.hq.domain.common.PersistenceEnum;
+import org.re.common.domain.PersistenceEnum;
 
 @Getter
 @RequiredArgsConstructor

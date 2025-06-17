@@ -2,9 +2,9 @@ package org.re.company.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.re.common.dto.PageResponse;
 import org.re.company.dto.QuoteResponse;
 import org.re.company.service.CompanyQuoteService;
-import org.re.hq.common.dto.PageResponse;
 import org.re.security.userdetails.PlatformAdminUserDetails;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;

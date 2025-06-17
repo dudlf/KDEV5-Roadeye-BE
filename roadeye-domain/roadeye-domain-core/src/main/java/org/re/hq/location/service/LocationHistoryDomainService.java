@@ -2,7 +2,7 @@ package org.re.hq.location.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.re.hq.domain.common.DomainService;
+import org.re.common.domain.DomainService;
 import org.re.hq.location.domain.LocationHistory;
 import org.re.hq.location.domain.LocationHistoryRepository;
 

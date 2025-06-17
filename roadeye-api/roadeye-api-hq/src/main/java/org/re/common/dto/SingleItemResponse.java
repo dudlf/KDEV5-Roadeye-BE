@@ -1,8 +1,8 @@
-package org.re.hq.common.dto;
+package org.re.common.dto;
 
 import java.util.function.Function;
 
-public class SingleItemResponse<T> extends SuccessResponse<T> {
+public class SingleItemResponse<T> extends org.re.common.dto.SuccessResponse<T> {
     public SingleItemResponse(T data) {
         super(data);
     }

@@ -1,4 +1,4 @@
-package org.re.hq.common.dto;
+package org.re.common.dto;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Getter
-public class PageResponse<T> extends SuccessResponse<List<T>> {
+public class PageResponse<T> extends org.re.common.dto.SuccessResponse<List<T>> {
     private final PageInfo pageInfo;
 
     private PageResponse(List<T> data, PageInfo pageInfo) {

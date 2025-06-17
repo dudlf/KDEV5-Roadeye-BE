@@ -1,7 +1,7 @@
 package org.re.company.exception;
 
 import lombok.Getter;
-import org.re.hq.domain.exception.DomainExceptionCode;
+import org.re.common.exception.DomainExceptionCode;
 
 @Getter
 public enum CompanyQuoteDomainException implements DomainExceptionCode {

@@ -1,9 +1,9 @@
-package org.re.hq.common.dto;
+package org.re.common.dto;
 
 import java.util.List;
 import java.util.function.Function;
 
-public class ListResponse<T> extends SuccessResponse<List<T>> {
+public class ListResponse<T> extends org.re.common.dto.SuccessResponse<List<T>> {
     public ListResponse(List<T> data) {
         super(data);
     }

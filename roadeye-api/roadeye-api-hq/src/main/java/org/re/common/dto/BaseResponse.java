@@ -1,4 +1,4 @@
-package org.re.hq.common.dto;
+package org.re.common.dto;
 
 public abstract class BaseResponse {
 }

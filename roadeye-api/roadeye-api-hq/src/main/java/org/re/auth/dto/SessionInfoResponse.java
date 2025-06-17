@@ -2,7 +2,7 @@ package org.re.auth.dto;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
-import org.re.hq.common.dto.SuccessResponse;
+import org.re.common.dto.SuccessResponse;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

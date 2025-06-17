@@ -1,4 +1,4 @@
-package org.re.hq.domain.exception;
+package org.re.common.exception;
 
 public interface DomainExceptionCode {
     String getCode();

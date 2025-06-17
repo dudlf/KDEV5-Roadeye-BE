@@ -2,14 +2,14 @@ package org.re.company.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.re.common.domain.DomainService;
+import org.re.common.exception.DomainException;
 import org.re.company.domain.Company;
 import org.re.company.domain.CompanyQuote;
 import org.re.company.exception.CompanyDomainException;
 import org.re.company.repository.CompanyRepository;
 import org.re.employee.domain.EmployeeCredentials;
 import org.re.employee.service.EmployeeDomainService;
-import org.re.hq.domain.common.DomainService;
-import org.re.hq.domain.exception.DomainException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

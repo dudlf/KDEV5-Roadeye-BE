@@ -1,10 +1,10 @@
 package org.re.company.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.re.common.dto.SingleItemResponse;
 import org.re.company.dto.CompanyQuoteCreationRequest;
 import org.re.company.dto.QuoteResponse;
 import org.re.company.service.CompanyQuoteService;
-import org.re.hq.common.dto.SingleItemResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

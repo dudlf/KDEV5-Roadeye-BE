@@ -1,15 +1,15 @@
-package org.re.hq.common.dto;
+package org.re.common.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.re.common.exception.DomainException;
+import org.re.common.exception.DomainExceptionCode;
 import org.re.exception.AppException;
 import org.re.exception.AppExceptionCode;
-import org.re.hq.domain.exception.DomainException;
-import org.re.hq.domain.exception.DomainExceptionCode;
 
 @Getter
 @RequiredArgsConstructor
-public class ErrorResponse extends BaseResponse {
+public class ErrorResponse extends org.re.common.dto.BaseResponse {
     private final ErrorData error;
 
     public record ErrorData(

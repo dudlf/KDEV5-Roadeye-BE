@@ -1,7 +1,7 @@
 package org.re.car.exception;
 
 import lombok.Getter;
-import org.re.hq.domain.exception.DomainExceptionCode;
+import org.re.common.exception.DomainExceptionCode;
 
 @Getter
 public enum CarDomainException implements DomainExceptionCode {

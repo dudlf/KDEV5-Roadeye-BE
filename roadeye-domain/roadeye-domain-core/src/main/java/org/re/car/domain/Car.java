@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.car.dto.CarUpdateCommand;
+import org.re.common.domain.BaseEntity;
 import org.re.company.domain.Company;
-import org.re.hq.domain.common.BaseEntity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

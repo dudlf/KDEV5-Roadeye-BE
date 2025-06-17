@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import org.re.common.domain.BaseEntity;
 import org.re.employee.dto.UpdateEmployeeCommand;
-import org.re.hq.domain.common.BaseEntity;
 import org.re.util.Integers;
 
 @Entity

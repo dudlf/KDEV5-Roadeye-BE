@@ -2,10 +2,10 @@ package org.re.employee.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.re.common.exception.DomainException;
 import org.re.employee.domain.*;
 import org.re.employee.dto.UpdateEmployeeCommand;
 import org.re.employee.exception.EmployeeDomainException;
-import org.re.hq.domain.exception.DomainException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

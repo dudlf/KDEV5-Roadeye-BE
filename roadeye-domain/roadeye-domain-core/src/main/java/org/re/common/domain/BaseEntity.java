@@ -1,4 +1,4 @@
-package org.re.hq.domain.common;
+package org.re.common.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

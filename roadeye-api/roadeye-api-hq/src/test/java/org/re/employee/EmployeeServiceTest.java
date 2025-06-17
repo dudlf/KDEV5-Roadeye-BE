@@ -2,11 +2,11 @@ package org.re.employee;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.re.common.exception.DomainException;
 import org.re.employee.domain.EmployeeCredentials;
 import org.re.employee.domain.EmployeeMetadata;
 import org.re.employee.domain.EmployeeRole;
 import org.re.employee.service.EmployeeService;
-import org.re.hq.domain.exception.DomainException;
 import org.re.tenant.TenantId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -3,7 +3,7 @@ package org.re.hq.driving.domain;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.re.hq.domain.common.PersistenceEnum;
+import org.re.common.domain.PersistenceEnum;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

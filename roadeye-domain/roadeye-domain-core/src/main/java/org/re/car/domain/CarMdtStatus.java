@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.car.converter.CarIgnitionStatusConverter;
 import org.re.car.exception.CarDomainException;
-import org.re.hq.domain.exception.DomainException;
+import org.re.common.exception.DomainException;
 import org.re.util.Integers;
 
 import java.util.UUID;

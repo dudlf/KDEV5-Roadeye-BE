@@ -6,10 +6,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.re.admin.domain.PlatformAdmin;
+import org.re.common.domain.BaseEntity;
+import org.re.common.exception.DomainException;
 import org.re.company.converter.CompanyQuoteStatusConverter;
 import org.re.company.exception.CompanyQuoteDomainException;
-import org.re.hq.domain.common.BaseEntity;
-import org.re.hq.domain.exception.DomainException;
 
 import java.time.LocalDateTime;
 
