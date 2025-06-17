@@ -1,10 +1,10 @@
-package org.re.hq.location.service;
+package org.re.location.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.re.common.domain.DomainService;
-import org.re.hq.location.domain.LocationHistory;
-import org.re.hq.location.domain.LocationHistoryRepository;
+import org.re.location.domain.LocationHistory;
+import org.re.location.domain.LocationHistoryRepository;
 
 @DomainService
 @Transactional

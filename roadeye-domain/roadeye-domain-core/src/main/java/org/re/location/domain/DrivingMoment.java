@@ -1,4 +1,4 @@
-package org.re.hq.location.domain;
+package org.re.location.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

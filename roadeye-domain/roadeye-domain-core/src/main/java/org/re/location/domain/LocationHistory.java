@@ -1,4 +1,4 @@
-package org.re.hq.location.domain;
+package org.re.location.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,13 +24,13 @@ public class LocationHistory {
     private CarLocation carLocation;
 
     @Embedded
-    private DrivingMoment drivingMoment;
+    private org.re.location.domain.DrivingMoment drivingMoment;
 
     @Column
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public LocationHistory(Long drivingId, CarLocation carLocation, DrivingMoment drivingMoment) {
+    public LocationHistory(Long drivingId, CarLocation carLocation, org.re.location.domain.DrivingMoment drivingMoment) {
         this.drivingId = drivingId;
         this.carLocation = carLocation;
         this.drivingMoment = drivingMoment;
