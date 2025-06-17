@@ -13,19 +13,19 @@ allprojects {
     version = '0.0.1'
 
     dependencies {
-        implementation 'org.jspecify:jspecify:1.0.0'
+        implementation("org.jspecify:jspecify:1.0.0")
 
-        compileOnly 'org.projectlombok:lombok'
-        annotationProcessor 'org.projectlombok:lombok'
+        compileOnly("org.projectlombok:lombok")
+        annotationProcessor("org.projectlombok:lombok")
 
-        testImplementation 'org.mockito:mockito-subclass'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        testImplementation("org.mockito:mockito-subclass")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 
     repositories {
         mavenCentral()
     }
-    
+
     tasks.named('test') {
         jvmArgs += "-Xshare:off"
         jvmArgs += "-XX:+EnableDynamicAgentLoading"
