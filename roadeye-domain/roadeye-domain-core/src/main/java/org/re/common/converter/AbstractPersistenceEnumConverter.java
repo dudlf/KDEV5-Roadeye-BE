@@ -1,6 +1,7 @@
-package org.re.common.domain;
+package org.re.common.converter;
 
 import jakarta.persistence.AttributeConverter;
+import org.re.common.domain.PersistenceEnum;
 
 import java.util.Objects;
 

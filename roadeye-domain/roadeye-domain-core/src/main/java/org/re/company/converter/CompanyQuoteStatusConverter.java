@@ -1,7 +1,7 @@
 package org.re.company.converter;
 
 import jakarta.persistence.Converter;
-import org.re.common.domain.AbstractPersistenceEnumConverter;
+import org.re.common.converter.AbstractPersistenceEnumConverter;
 import org.re.company.domain.CompanyQuoteStatus;
 
 @Converter
