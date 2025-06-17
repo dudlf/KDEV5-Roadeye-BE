@@ -1,6 +1,6 @@
-package org.re.hq.admin.repository;
+package org.re.admin.repository;
 
-import org.re.hq.admin.domain.PlatformAdmin;
+import org.re.admin.domain.PlatformAdmin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

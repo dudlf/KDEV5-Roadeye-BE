@@ -1,4 +1,4 @@
-package org.re.hq.admin.domain;
+package org.re.admin.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

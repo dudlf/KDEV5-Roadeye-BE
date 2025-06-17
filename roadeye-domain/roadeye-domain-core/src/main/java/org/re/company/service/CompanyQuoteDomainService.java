@@ -2,13 +2,13 @@ package org.re.company.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.re.admin.domain.PlatformAdmin;
 import org.re.company.domain.Company;
 import org.re.company.domain.CompanyQuote;
 import org.re.company.domain.CompanyQuoteStatus;
 import org.re.company.dto.CompanyQuoteRequestCommand;
 import org.re.company.exception.CompanyQuoteDomainException;
 import org.re.company.repository.CompanyQuoteRepository;
-import org.re.hq.admin.domain.PlatformAdmin;
 import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.exception.DomainException;
 import org.springframework.data.domain.Page;

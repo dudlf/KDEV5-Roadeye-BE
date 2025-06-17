@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.re.hq.admin.PlatformAdminFixture;
-import org.re.hq.admin.domain.PlatformAdmin;
+import org.re.admin.PlatformAdminFixture;
+import org.re.admin.domain.PlatformAdmin;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 

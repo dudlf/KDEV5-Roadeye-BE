@@ -1,6 +1,6 @@
-package org.re.hq.admin;
+package org.re.admin;
 
-import org.re.hq.admin.domain.PlatformAdmin;
+import org.re.admin.domain.PlatformAdmin;
 
 public class PlatformAdminFixture {
     public static PlatformAdmin create() {

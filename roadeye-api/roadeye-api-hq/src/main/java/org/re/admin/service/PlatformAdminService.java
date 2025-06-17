@@ -1,8 +1,8 @@
-package org.re.hq.admin.service;
+package org.re.admin.service;
 
 import lombok.RequiredArgsConstructor;
-import org.re.hq.admin.domain.PlatformAdmin;
-import org.re.hq.admin.repository.PlatformAdminRepository;
+import org.re.admin.domain.PlatformAdmin;
+import org.re.admin.repository.PlatformAdminRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
