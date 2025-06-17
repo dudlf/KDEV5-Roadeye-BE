@@ -1,4 +1,4 @@
-package org.re.app.hello;
+package org.re.test.controller;
 
 import org.re.domain.common.CommonAppExceptionCode;
 import org.re.exception.AppException;
