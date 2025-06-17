@@ -1,4 +1,4 @@
-package org.re.hq.driving.domain;
+package org.re.driving.domain;
 
 import jakarta.persistence.Embeddable;
 import org.re.car.domain.CarLocation;

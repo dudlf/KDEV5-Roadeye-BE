@@ -1,4 +1,4 @@
-package org.re.hq.driving.domain;
+package org.re.driving.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

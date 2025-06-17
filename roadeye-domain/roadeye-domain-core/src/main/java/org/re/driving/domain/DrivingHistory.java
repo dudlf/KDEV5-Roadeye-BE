@@ -1,4 +1,4 @@
-package org.re.hq.driving.domain;
+package org.re.driving.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,8 +19,8 @@ public class DrivingHistory {
     private Long id;
 
     @Column(nullable = false)
-    @Convert(converter = DrivingHistoryStatusConverter.class)
-    private DrivingHistoryStatus status;
+    @Convert(converter = org.re.driving.domain.DrivingHistoryStatusConverter.class)
+    private org.re.driving.domain.DrivingHistoryStatus status;
 
     @Convert(converter = TransactionIdConverter.class)
     private TransactionUUID txUid;
@@ -32,7 +32,7 @@ public class DrivingHistory {
         @AttributeOverride(name = "location.latitude", column = @Column(name = "previous_latitude")),
         @AttributeOverride(name = "location.longitude", column = @Column(name = "previous_longitude"))
     })
-    private DrivingSnapShot previousDrivingSnapShot;
+    private org.re.driving.domain.DrivingSnapShot previousDrivingSnapShot;
 
     @Nullable
     @Embedded
@@ -44,22 +44,22 @@ public class DrivingHistory {
     })
     private DrivingSnapShot endDrivingSnapShot;
 
-    public DrivingHistory(DrivingHistoryStatus status, TransactionUUID txUid, DrivingSnapShot previousDrivingSnapShot) {
+    public DrivingHistory(org.re.driving.domain.DrivingHistoryStatus status, TransactionUUID txUid, org.re.driving.domain.DrivingSnapShot previousDrivingSnapShot) {
         this.status = status;
         this.txUid = txUid;
         this.previousDrivingSnapShot = previousDrivingSnapShot;
     }
 
-    public static DrivingHistory of(TransactionUUID txUid, DrivingSnapShot drivingSnapShot) {
-        return new DrivingHistory(DrivingHistoryStatus.DRIVING, txUid, drivingSnapShot);
+    public static DrivingHistory of(TransactionUUID txUid, org.re.driving.domain.DrivingSnapShot drivingSnapShot) {
+        return new DrivingHistory(org.re.driving.domain.DrivingHistoryStatus.DRIVING, txUid, drivingSnapShot);
     }
 
-    public void end(DrivingSnapShot drivingSnapShot) {
+    public void end(org.re.driving.domain.DrivingSnapShot drivingSnapShot) {
         // TODO do convert Domain Exception
-        if (status != DrivingHistoryStatus.DRIVING) {
+        if (status != org.re.driving.domain.DrivingHistoryStatus.DRIVING) {
             throw new IllegalArgumentException("Cannot end DrivingHistory because the status is not DRIVING");
         }
-        this.status = DrivingHistoryStatus.ENDED;
+        this.status = org.re.driving.domain.DrivingHistoryStatus.ENDED;
         this.endDrivingSnapShot = drivingSnapShot;
     }
 }
