@@ -1,4 +1,4 @@
-package org.re.hq.config;
+package org.re.config;
 
 import lombok.RequiredArgsConstructor;
 import org.re.hq.web.filter.TenantIdContextFilter;

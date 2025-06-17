@@ -1,4 +1,4 @@
-package org.re.hq.config;
+package org.re.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Priority;
