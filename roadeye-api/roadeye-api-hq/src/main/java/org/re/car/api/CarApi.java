@@ -3,7 +3,7 @@ package org.re.car.api;
 import lombok.RequiredArgsConstructor;
 import org.re.car.api.payload.CarCreationRequest;
 import org.re.car.api.payload.CarDetailsResponse;
-import org.re.car.api.payload.CarResponse;
+import org.re.car.api.payload.CarInfoSimple;
 import org.re.car.api.payload.CarUpdateRequest;
 import org.re.car.domain.CarIgnitionStatus;
 import org.re.car.service.CarService;
@@ -22,9 +22,9 @@ public class CarApi {
     private final CarService carService;
 
     @GetMapping
-    public PageResponse<CarResponse> getCars(TenantId tenantId, Pageable pageable) {
+    public PageResponse<CarInfoSimple> getCars(TenantId tenantId, Pageable pageable) {
         var page = carService.getCars(tenantId, pageable);
-        return PageResponse.of(page, CarResponse::from);
+        return PageResponse.of(page, CarInfoSimple::from);
     }
 
     @GetMapping("/all")
@@ -40,9 +40,9 @@ public class CarApi {
     }
 
     @GetMapping("/search/ignition")
-    public PageResponse<CarResponse> getCarsByIgnition(TenantId tenantId, @RequestParam CarIgnitionStatus status, Pageable pageable) {
+    public PageResponse<CarInfoSimple> getCarsByIgnition(TenantId tenantId, @RequestParam CarIgnitionStatus status, Pageable pageable) {
         var page = carService.searchByIgnitionStatus(tenantId, status, pageable);
-        return PageResponse.of(page, CarResponse::from);
+        return PageResponse.of(page, CarInfoSimple::from);
     }
 
     @GetMapping("/count/ignition")
@@ -53,20 +53,20 @@ public class CarApi {
 
     @ManagerOnly
     @PostMapping
-    public SingleItemResponse<CarResponse> createCar(TenantId tenantId, @RequestBody CarCreationRequest request) {
+    public SingleItemResponse<CarInfoSimple> createCar(TenantId tenantId, @RequestBody CarCreationRequest request) {
         var createdCar = carService.createCar(tenantId, request);
-        return SingleItemResponse.of(createdCar, CarResponse::from);
+        return SingleItemResponse.of(createdCar, CarInfoSimple::from);
     }
 
     @ManagerOnly
     @PatchMapping("/{carId}")
-    public SingleItemResponse<CarResponse> updateCarProfile(
+    public SingleItemResponse<CarInfoSimple> updateCarProfile(
         TenantId tenantId,
         @PathVariable Long carId,
         @RequestBody CarUpdateRequest request
     ) {
         var updatedCar = carService.updateCarProfile(tenantId, carId, request);
-        return SingleItemResponse.of(updatedCar, CarResponse::from);
+        return SingleItemResponse.of(updatedCar, CarInfoSimple::from);
     }
 
     @ManagerOnly

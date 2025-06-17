@@ -4,7 +4,7 @@ import org.re.car.domain.Car;
 
 import java.time.LocalDateTime;
 
-public record CarResponse(
+public record CarInfoSimple(
     Long id,
     String name,
     String licenseNumber,
@@ -12,8 +12,8 @@ public record CarResponse(
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-    public static CarResponse from(Car car) {
-        return new CarResponse(
+    public static CarInfoSimple from(Car car) {
+        return new CarInfoSimple(
             car.getId(),
             car.getProfile().getName(),
             car.getProfile().getLicenseNumber(),
