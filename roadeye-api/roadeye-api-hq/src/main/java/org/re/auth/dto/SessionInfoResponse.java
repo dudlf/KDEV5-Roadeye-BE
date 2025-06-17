@@ -1,4 +1,4 @@
-package org.re.hq.auth.dto;
+package org.re.auth.dto;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;

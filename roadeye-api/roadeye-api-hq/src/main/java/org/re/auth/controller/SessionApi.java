@@ -1,8 +1,8 @@
-package org.re.hq.auth.controller;
+package org.re.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.re.hq.auth.dto.SessionInfoResponse;
+import org.re.auth.dto.SessionInfoResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
