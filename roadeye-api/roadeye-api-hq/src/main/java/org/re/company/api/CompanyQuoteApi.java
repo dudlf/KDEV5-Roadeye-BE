@@ -3,7 +3,7 @@ package org.re.company.api;
 import lombok.RequiredArgsConstructor;
 import org.re.common.api.payload.SingleItemResponse;
 import org.re.company.api.payload.CompanyQuoteCreationRequest;
-import org.re.company.api.payload.QuoteResponse;
+import org.re.company.api.payload.QuoteInfoSimple;
 import org.re.company.service.CompanyQuoteService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,10 +17,10 @@ public class CompanyQuoteApi {
     private final CompanyQuoteService quoteService;
 
     @PostMapping
-    public SingleItemResponse<QuoteResponse> createQuote(
+    public SingleItemResponse<QuoteInfoSimple> createQuote(
         @RequestBody CompanyQuoteCreationRequest request
     ) {
         var quote = quoteService.createQuote(request);
-        return SingleItemResponse.of(quote, QuoteResponse::from);
+        return SingleItemResponse.of(quote, QuoteInfoSimple::from);
     }
 }

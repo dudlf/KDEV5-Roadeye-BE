@@ -3,7 +3,7 @@ package org.re.company.api;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.re.common.api.payload.PageResponse;
-import org.re.company.api.payload.QuoteResponse;
+import org.re.company.api.payload.QuoteInfoSimple;
 import org.re.company.service.CompanyQuoteService;
 import org.re.security.userdetails.PlatformAdminUserDetails;
 import org.springframework.data.domain.Pageable;
@@ -16,32 +16,32 @@ public class CompanyQuoteAdminApi {
     private final CompanyQuoteService quoteService;
 
     @GetMapping
-    public PageResponse<QuoteResponse> findAll(Pageable pageable) {
+    public PageResponse<QuoteInfoSimple> findAll(Pageable pageable) {
         var page = quoteService.findAll(pageable);
-        return PageResponse.of(page, QuoteResponse::from);
+        return PageResponse.of(page, QuoteInfoSimple::from);
     }
 
     @GetMapping("/{quoteId}")
-    public QuoteResponse findById(@PathVariable Long quoteId) {
+    public QuoteInfoSimple findById(@PathVariable Long quoteId) {
         var quote = quoteService.findById(quoteId);
-        return QuoteResponse.from(quote);
+        return QuoteInfoSimple.from(quote);
     }
 
     @PostMapping("/{quoteId}/approve")
-    public QuoteResponse approveQuote(
+    public QuoteInfoSimple approveQuote(
         @NonNull PlatformAdminUserDetails userDetails,
         @PathVariable Long quoteId
     ) {
         var quote = quoteService.approveQuote(userDetails, quoteId);
-        return QuoteResponse.from(quote);
+        return QuoteInfoSimple.from(quote);
     }
 
     @PostMapping("/{quoteId}/reject")
-    public QuoteResponse rejectQuote(
+    public QuoteInfoSimple rejectQuote(
         @NonNull PlatformAdminUserDetails userDetails,
         @PathVariable Long quoteId
     ) {
         var quote = quoteService.rejectQuote(userDetails, quoteId);
-        return QuoteResponse.from(quote);
+        return QuoteInfoSimple.from(quote);
     }
 }

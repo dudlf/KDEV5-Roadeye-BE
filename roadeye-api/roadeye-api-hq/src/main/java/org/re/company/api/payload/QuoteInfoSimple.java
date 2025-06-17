@@ -3,7 +3,7 @@ package org.re.company.api.payload;
 import org.re.company.domain.CompanyQuote;
 import org.re.company.domain.CompanyQuoteStatus;
 
-public record QuoteResponse(
+public record QuoteInfoSimple(
     Long id,
     String companyName,
     CompanyQuoteStatus status,
@@ -11,9 +11,9 @@ public record QuoteResponse(
     String companyBusinessNumber,
     String companyEmail
 ) {
-    public static QuoteResponse from(CompanyQuote quote) {
+    public static QuoteInfoSimple from(CompanyQuote quote) {
         var info = quote.getQuoteInfo();
-        return new QuoteResponse(
+        return new QuoteInfoSimple(
             quote.getId(),
             info.getCompanyName(),
             quote.getQuoteStatus(),
