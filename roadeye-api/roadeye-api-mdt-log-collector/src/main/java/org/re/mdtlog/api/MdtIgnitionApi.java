@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/ignition")
+@RequiredArgsConstructor
 public class MdtIgnitionApi {
     private final MdtIgnitionService mdtIgnitionService;
 

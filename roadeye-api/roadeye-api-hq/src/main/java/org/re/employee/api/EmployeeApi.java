@@ -13,8 +13,8 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/employees")
+@RequiredArgsConstructor
 public class EmployeeApi {
 
     private final EmployeeService employeeService;
