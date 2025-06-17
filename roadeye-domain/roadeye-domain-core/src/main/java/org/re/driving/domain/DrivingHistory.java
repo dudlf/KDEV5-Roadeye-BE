@@ -14,7 +14,6 @@ import org.re.mdtlog.domain.TransactionUUID;
 @Table(name = "car_driving_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DrivingHistory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

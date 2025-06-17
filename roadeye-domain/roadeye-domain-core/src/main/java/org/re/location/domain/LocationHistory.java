@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Table(name = "car_location_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LocationHistory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
