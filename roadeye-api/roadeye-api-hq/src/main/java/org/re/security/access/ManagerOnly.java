@@ -1,4 +1,4 @@
-package org.re.hq.security.access;
+package org.re.security.access;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

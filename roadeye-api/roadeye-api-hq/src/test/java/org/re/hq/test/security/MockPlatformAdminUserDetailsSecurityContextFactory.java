@@ -3,7 +3,7 @@ package org.re.hq.test.security;
 import org.mockito.Mockito;
 import org.re.admin.PlatformAdminFixture;
 import org.re.admin.domain.PlatformAdmin;
-import org.re.hq.security.userdetails.PlatformAdminUserDetails;
+import org.re.security.userdetails.PlatformAdminUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

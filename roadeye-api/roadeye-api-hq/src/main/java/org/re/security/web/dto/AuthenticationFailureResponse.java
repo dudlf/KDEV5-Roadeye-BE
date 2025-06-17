@@ -1,4 +1,4 @@
-package org.re.hq.security.web.dto;
+package org.re.security.web.dto;
 
 import org.springframework.security.core.AuthenticationException;
 

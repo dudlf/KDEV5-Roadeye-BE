@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.re.admin.service.PlatformAdminService;
 import org.re.company.domain.CompanyQuote;
 import org.re.company.dto.CompanyQuoteCreationRequest;
-import org.re.hq.security.userdetails.PlatformAdminUserDetails;
+import org.re.security.userdetails.PlatformAdminUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;

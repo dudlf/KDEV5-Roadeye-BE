@@ -1,7 +1,7 @@
 package org.re.hq.web.method.support;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.re.hq.security.userdetails.CompanyUserDetails;
+import org.re.security.userdetails.CompanyUserDetails;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

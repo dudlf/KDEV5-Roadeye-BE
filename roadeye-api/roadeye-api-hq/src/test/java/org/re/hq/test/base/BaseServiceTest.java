@@ -2,7 +2,7 @@ package org.re.hq.test.base;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.re.hq.security.access.ManagerOnlyHandler;
+import org.re.security.access.ManagerOnlyHandler;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Import;

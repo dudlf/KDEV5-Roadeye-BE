@@ -1,4 +1,4 @@
-package org.re.hq.security.domain;
+package org.re.security.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

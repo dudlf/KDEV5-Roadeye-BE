@@ -1,4 +1,4 @@
-package org.re.hq.security.web.authentication;
+package org.re.security.web.authentication;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

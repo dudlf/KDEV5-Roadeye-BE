@@ -1,10 +1,10 @@
-package org.re.hq.security.web.authentication;
+package org.re.security.web.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.re.hq.security.web.dto.AuthenticationFailureResponse;
+import org.re.security.web.dto.AuthenticationFailureResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;

@@ -1,4 +1,4 @@
-package org.re.hq.security.web.authentication;
+package org.re.security.web.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -6,12 +6,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.re.hq.security.userdetails.CompanyUserDetails;
-import org.re.hq.security.userdetails.PlatformAdminUserDetails;
-import org.re.hq.security.web.dto.AuthenticationSuccessResponse;
 import org.re.hq.web.method.support.CompanyUserDetailsArgumentResolver;
 import org.re.hq.web.method.support.PlatformAdminUserDetailsArgumentResolver;
 import org.re.hq.web.method.support.TenantIdArgumentResolver;
+import org.re.security.userdetails.CompanyUserDetails;
+import org.re.security.userdetails.PlatformAdminUserDetails;
+import org.re.security.web.dto.AuthenticationSuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;

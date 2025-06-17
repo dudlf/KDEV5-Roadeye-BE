@@ -1,4 +1,4 @@
-package org.re.hq.security;
+package org.re.security;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.junit.jupiter.api.BeforeEach;

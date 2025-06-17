@@ -3,7 +3,7 @@ package org.re.hq.test.security;
 import org.re.employee.domain.Employee;
 import org.re.employee.domain.EmployeeCredentials;
 import org.re.employee.domain.EmployeeMetadata;
-import org.re.hq.security.userdetails.CompanyUserDetails;
+import org.re.security.userdetails.CompanyUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

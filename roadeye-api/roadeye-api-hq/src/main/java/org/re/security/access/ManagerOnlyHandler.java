@@ -1,8 +1,8 @@
-package org.re.hq.security.access;
+package org.re.security.access;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.re.hq.security.userdetails.CompanyUserDetails;
+import org.re.security.userdetails.CompanyUserDetails;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class ManagerOnlyHandler {
-    @Before("@annotation(org.re.hq.security.access.ManagerOnly)")
+    @Before("@annotation(org.re.security.access.ManagerOnly)")
     public void before() {
         var context = SecurityContextHolder.getContext();
         if (context.getAuthentication() == null || !context.getAuthentication().isAuthenticated()) {
