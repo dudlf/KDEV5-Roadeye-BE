@@ -1,4 +1,4 @@
-package org.re.hq.web.method.support;
+package org.re.web.method.support;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.re.tenant.TenantId;

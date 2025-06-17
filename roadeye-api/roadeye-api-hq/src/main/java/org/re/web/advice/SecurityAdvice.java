@@ -1,4 +1,4 @@
-package org.re.hq.web.advice;
+package org.re.web.advice;
 
 import org.re.domain.common.CommonAppExceptionCode;
 import org.re.exception.AppException;

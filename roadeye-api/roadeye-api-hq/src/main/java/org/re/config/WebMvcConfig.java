@@ -1,10 +1,10 @@
 package org.re.config;
 
 import lombok.RequiredArgsConstructor;
-import org.re.hq.web.filter.TenantIdContextFilter;
-import org.re.hq.web.method.support.CompanyUserDetailsArgumentResolver;
-import org.re.hq.web.method.support.PlatformAdminUserDetailsArgumentResolver;
-import org.re.hq.web.method.support.TenantIdArgumentResolver;
+import org.re.web.filter.TenantIdContextFilter;
+import org.re.web.method.support.CompanyUserDetailsArgumentResolver;
+import org.re.web.method.support.PlatformAdminUserDetailsArgumentResolver;
+import org.re.web.method.support.TenantIdArgumentResolver;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

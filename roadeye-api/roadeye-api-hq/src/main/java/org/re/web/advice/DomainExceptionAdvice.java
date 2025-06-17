@@ -1,4 +1,4 @@
-package org.re.hq.web.advice;
+package org.re.web.advice;
 
 import org.re.hq.common.dto.ErrorResponse;
 import org.re.hq.domain.exception.DomainException;

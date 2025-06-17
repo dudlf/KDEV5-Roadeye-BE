@@ -3,7 +3,7 @@ package org.re.tenant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.re.hq.test.controller.TenantIdTestController;
-import org.re.hq.web.method.support.TenantIdArgumentResolver;
+import org.re.web.method.support.TenantIdArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
