@@ -1,4 +1,4 @@
-package org.re.car.controller;
+package org.re.car.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import({AopAutoConfiguration.class, ManagerOnlyHandler.class})
-@WebMvcTest(org.re.car.controller.CarApi.class)
+@WebMvcTest(org.re.car.api.CarApi.class)
 @AutoConfigureMockMvc
 class CarApiTest {
     @Autowired

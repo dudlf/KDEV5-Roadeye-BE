@@ -1,4 +1,4 @@
-package org.re.test.controller;
+package org.re.test.api;
 
 import org.jspecify.annotations.Nullable;
 import org.re.tenant.TenantId;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-public class TenantIdTestController {
+public class TenantIdTestApi {
     @GetMapping("/test/tenant-id")
     public Object testTenantId(
         @Nullable TenantId tenantId

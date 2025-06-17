@@ -1,4 +1,4 @@
-package org.re.test.controller;
+package org.re.test.api;
 
 import org.re.common.exception.AppException;
 import org.re.common.exception.CommonAppExceptionCode;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-public class HelloController {
+public class HelloApi {
     @GetMapping("/hello")
     public Object hello() {
         return Map.of("message", "Hello, World!");

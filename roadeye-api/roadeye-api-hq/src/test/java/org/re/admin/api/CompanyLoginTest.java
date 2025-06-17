@@ -1,4 +1,4 @@
-package org.re.admin.controller;
+package org.re.admin.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

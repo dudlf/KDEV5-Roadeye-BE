@@ -4,7 +4,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.re.employee.domain.EmployeeRole;
-import org.re.test.controller.HelloController;
+import org.re.test.api.HelloApi;
 import org.re.test.security.MockCompanyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     },
     useDefaultFilters = false
 )
-@WebMvcTest(HelloController.class)
+@WebMvcTest(HelloApi.class)
 public class ManagerOnlyTest {
     @Autowired
     WebApplicationContext wac;

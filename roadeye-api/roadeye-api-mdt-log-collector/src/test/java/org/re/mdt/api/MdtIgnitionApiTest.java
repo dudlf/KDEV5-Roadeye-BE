@@ -1,4 +1,4 @@
-package org.re.mdt.controller;
+package org.re.mdt.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -26,9 +26,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MdtIgnitionController.class)
-@DisplayName("[단위 테스트] MDT 시동 Controller")
-class MdtIgnitionControllerTest {
+@WebMvcTest(org.re.mdt.api.MdtIgnitionApi.class)
+@DisplayName("[단위 테스트] MDT 시동 Api")
+public class MdtIgnitionApiTest {
     @Autowired
     MockMvc mockMvc;
 

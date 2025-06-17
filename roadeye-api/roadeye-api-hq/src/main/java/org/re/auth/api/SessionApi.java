@@ -1,4 +1,4 @@
-package org.re.auth.controller;
+package org.re.auth.api;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

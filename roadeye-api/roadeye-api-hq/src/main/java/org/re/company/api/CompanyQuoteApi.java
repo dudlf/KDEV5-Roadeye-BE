@@ -1,4 +1,4 @@
-package org.re.company.controller;
+package org.re.company.api;
 
 import lombok.RequiredArgsConstructor;
 import org.re.common.dto.SingleItemResponse;

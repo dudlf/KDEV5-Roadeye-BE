@@ -1,4 +1,4 @@
-package org.re.mdt.controller;
+package org.re.mdt.api;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cycle-log")
-public class MdtCycleLogController {
+public class MdtCycleLogApi {
     private final MdtCycleLogService cycleLogService;
 
     @PostMapping

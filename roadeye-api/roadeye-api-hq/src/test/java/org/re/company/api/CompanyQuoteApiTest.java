@@ -1,4 +1,4 @@
-package org.re.company.controller;
+package org.re.company.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest({CompanyQuoteApi.class})
+@WebMvcTest({org.re.company.api.CompanyQuoteApi.class})
 @AutoConfigureMockMvc(addFilters = false)
 class CompanyQuoteApiTest {
     @Autowired

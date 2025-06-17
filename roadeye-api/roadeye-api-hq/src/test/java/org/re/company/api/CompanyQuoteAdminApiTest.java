@@ -1,4 +1,4 @@
-package org.re.company.controller;
+package org.re.company.api;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CompanyQuoteAdminApi.class)
+@WebMvcTest(org.re.company.api.CompanyQuoteAdminApi.class)
 class CompanyQuoteAdminApiTest extends BaseWebMvcTest {
     @MockitoBean
     CompanyQuoteService companyQuoteService;

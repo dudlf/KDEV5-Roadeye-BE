@@ -1,4 +1,4 @@
-package org.re.car.controller;
+package org.re.car.api;
 
 import lombok.RequiredArgsConstructor;
 import org.re.car.domain.CarIgnitionStatus;

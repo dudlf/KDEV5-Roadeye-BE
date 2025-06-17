@@ -2,7 +2,7 @@ package org.re.tenant;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.re.test.controller.TenantIdTestController;
+import org.re.test.api.TenantIdTestApi;
 import org.re.web.method.support.TenantIdArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(
-    value = {TenantIdTestController.class},
+    value = {TenantIdTestApi.class},
     excludeAutoConfiguration = {SecurityAutoConfiguration.class}
 )
 public class TenantIdTest {

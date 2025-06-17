@@ -1,4 +1,4 @@
-package org.re.mdt.controller;
+package org.re.mdt.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MdtCycleLogControllerIntegrationTest {
+public class MdtCycleLogApiIntegrationTest {
     @Autowired
     MockMvc mvc;
 

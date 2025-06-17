@@ -1,4 +1,4 @@
-package org.re.mdt.controller;
+package org.re.mdt.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -22,9 +22,9 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MdtCycleLogController.class)
-@DisplayName("[단위 테스트] MDT 주기 정보 수집 Controller")
-class MdtCycleLogControllerTest {
+@WebMvcTest(org.re.mdt.api.MdtCycleLogApi.class)
+@DisplayName("[단위 테스트] MDT 주기 정보 수집 Api")
+public class MdtCycleLogApiTest {
     @Autowired
     MockMvc mvc;
 
