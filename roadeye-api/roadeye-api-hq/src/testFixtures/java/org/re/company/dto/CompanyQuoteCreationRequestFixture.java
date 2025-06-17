@@ -1,6 +1,4 @@
-package org.re.hq.compnay.dto;
-
-import org.re.company.dto.CompanyQuoteCreationRequest;
+package org.re.company.dto;
 
 public class CompanyQuoteCreationRequestFixture {
     public static CompanyQuoteCreationRequest create() {
