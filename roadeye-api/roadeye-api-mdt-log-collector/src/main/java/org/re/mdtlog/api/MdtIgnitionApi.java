@@ -3,7 +3,7 @@ package org.re.mdtlog.api;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.re.common.api.payload.BaseMdtLogMdtResponse;
+import org.re.common.api.payload.BaseMdtLogResponse;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
 import org.re.mdtlog.api.payload.MdtIgnitionOffRequest;
 import org.re.mdtlog.api.payload.MdtIgnitionOnRequest;
@@ -28,25 +28,25 @@ public class MdtIgnitionApi {
         value = "/on",
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public BaseMdtLogMdtResponse ignitionOn(
+    public BaseMdtLogResponse ignitionOn(
         @Valid @RequestBody MdtIgnitionOnRequest dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
         TransactionUUID tuid
     ) {
         mdtIgnitionService.ignitionOn(tuid, dto, timeInfo);
-        return new BaseMdtLogMdtResponse(dto.carId());
+        return new BaseMdtLogResponse(dto.carId());
     }
 
     @PostMapping(
         value = "/off",
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public BaseMdtLogMdtResponse ignitionOn(
+    public BaseMdtLogResponse ignitionOn(
         @Valid @RequestBody MdtIgnitionOffRequest dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
         TransactionUUID tuid
     ) {
         mdtIgnitionService.ignitionOff(tuid, dto, timeInfo);
-        return new BaseMdtLogMdtResponse(dto.carId());
+        return new BaseMdtLogResponse(dto.carId());
     }
 }

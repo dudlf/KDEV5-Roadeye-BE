@@ -3,7 +3,7 @@ package org.re.mdtlog.api;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.re.common.api.payload.BaseMdtLogMdtResponse;
+import org.re.common.api.payload.BaseMdtLogResponse;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
 import org.re.mdtlog.api.payload.MdtAddCycleLogRequest;
 import org.re.mdtlog.domain.TransactionUUID;
@@ -20,12 +20,12 @@ public class MdtCycleLogApi {
     private final MdtCycleLogService cycleLogService;
 
     @PostMapping
-    public BaseMdtLogMdtResponse addCycleLogs(
+    public BaseMdtLogResponse addCycleLogs(
         @Valid @RequestBody MdtAddCycleLogRequest dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
         TransactionUUID tuid
     ) {
         cycleLogService.addCycleLogs(tuid, dto, timeInfo);
-        return new BaseMdtLogMdtResponse(dto.carId());
+        return new BaseMdtLogResponse(dto.carId());
     }
 }
