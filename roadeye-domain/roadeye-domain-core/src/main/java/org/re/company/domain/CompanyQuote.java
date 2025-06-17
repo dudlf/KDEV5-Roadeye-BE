@@ -28,7 +28,7 @@ public class CompanyQuote extends BaseEntity {
     private LocalDateTime requestedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = true)
+    @JoinColumn
     private PlatformAdmin approver;
 
     @Column
