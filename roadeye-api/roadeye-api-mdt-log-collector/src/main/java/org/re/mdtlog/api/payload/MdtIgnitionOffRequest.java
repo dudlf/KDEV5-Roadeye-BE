@@ -3,10 +3,7 @@ package org.re.mdtlog.api.payload;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
@@ -43,6 +40,7 @@ public record MdtIgnitionOffRequest(
     @JsonFormat(pattern = "yyyyMMddHHmmss")
     LocalDateTime ignitionOffTime,
 
+    @NotNull
     @JsonProperty("gcd")
     @JsonDeserialize(using = MdtLogGpsConditionDeserializer.class)
     MdtLogGpsCondition gpsCondition,
