@@ -11,6 +11,15 @@ public class MdtLogGpsConditionDeserializer extends JsonDeserializer<MdtLogGpsCo
     @Override
     public MdtLogGpsCondition deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String value = p.getText();
-        return MdtLogGpsCondition.of(value);
+        return getEnumMember(value);
+    }
+
+    private MdtLogGpsCondition getEnumMember(String value) {
+        for (var enumMember : MdtLogGpsCondition.values()) {
+            if (enumMember.getCode().equals(value)) {
+                return enumMember;
+            }
+        }
+        return null;
     }
 }
