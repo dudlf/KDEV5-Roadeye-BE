@@ -3,5 +3,8 @@ dependencies {
 
     runtimeOnly("com.h2database:h2:2.2.220")
 
+    implementation("io.github.openfeign.querydsl:querydsl-jpa")
+    annotationProcessor("io.github.openfeign.querydsl:querydsl-apt:${dependencyManagement.managedVersions["io.github.openfeign.querydsl:querydsl-apt"]}:jpa")
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

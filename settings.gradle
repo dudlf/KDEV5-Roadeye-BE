@@ -19,3 +19,5 @@ include 'roadeye-monitoring'
 
 include 'roadeye-domain:roadeye-domain-core'
 include 'roadeye-notification'
+
+include 'roadeye-infra:roadeye-infra-jpa'

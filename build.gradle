@@ -25,7 +25,7 @@ allprojects {
     repositories {
         mavenCentral()
     }
-    
+
     tasks.named('test') {
         jvmArgs += "-Xshare:off"
         jvmArgs += "-XX:+EnableDynamicAgentLoading"
@@ -43,4 +43,14 @@ subprojects {
     bootJar.enabled = true
     jar.enabled = true
     dependencies {}
+
+    dependencyManagement {
+        dependencies {
+            dependencySet("io.github.openfeign.querydsl:7.0") {
+                entry("querydsl-apt")
+                entry("querydsl-core")
+                entry("querydsl-jpa")
+            }
+        }
+    }
 }
