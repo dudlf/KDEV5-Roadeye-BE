@@ -15,10 +15,6 @@ public class PageResponse<T> extends SuccessResponse<List<T>> {
         this.pageInfo = pageInfo;
     }
 
-    public static <T> PageResponse<T> of(Page<T> page) {
-        return new PageResponse<>(page.getContent(), PageInfo.of(page));
-    }
-
     public static <T, R> PageResponse<R> of(Page<T> page, Function<T, R> mapper) {
         List<R> mappedContent = page.getContent().stream()
             .map(mapper)
