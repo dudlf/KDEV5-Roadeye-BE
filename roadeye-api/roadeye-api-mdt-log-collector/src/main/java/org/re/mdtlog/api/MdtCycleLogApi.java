@@ -1,13 +1,13 @@
-package org.re.mdt.api;
+package org.re.mdtlog.api;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.re.common.api.payload.BaseMdtLogMdtResponse;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
-import org.re.mdt.api.payload.MdtAddCycleLogRequest;
-import org.re.mdt.service.MdtCycleLogService;
+import org.re.mdtlog.api.payload.MdtAddCycleLogRequest;
 import org.re.mdtlog.domain.TransactionUUID;
+import org.re.mdtlog.service.MdtCycleLogService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

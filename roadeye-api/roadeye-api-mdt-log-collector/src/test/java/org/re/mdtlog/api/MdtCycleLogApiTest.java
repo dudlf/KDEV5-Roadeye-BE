@@ -1,13 +1,13 @@
-package org.re.mdt.api;
+package org.re.mdtlog.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
-import org.re.mdt.api.payload.MdtAddCycleLogRequest;
-import org.re.mdt.service.MdtCycleLogService;
+import org.re.mdtlog.api.payload.MdtAddCycleLogRequest;
 import org.re.mdtlog.domain.TransactionUUID;
+import org.re.mdtlog.service.MdtCycleLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;

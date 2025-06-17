@@ -1,4 +1,4 @@
-package org.re.mdt.api.payload;
+package org.re.mdtlog.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,7 +17,7 @@ import org.re.web.databind.MdtLogGpsConditionDeserializer;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record MdtIgnitionOnRequest(
+public record MdtIgnitionOffRequest(
     @JsonProperty("mdn")
     String carId,
 
@@ -38,6 +38,10 @@ public record MdtIgnitionOnRequest(
     @JsonProperty("onTime")
     @JsonFormat(pattern = "yyyyMMddHHmmss")
     LocalDateTime ignitionOnTime,
+
+    @JsonProperty("offTime")
+    @JsonFormat(pattern = "yyyyMMddHHmmss")
+    LocalDateTime ignitionOffTime,
 
     @JsonProperty("gcd")
     @JsonDeserialize(using = MdtLogGpsConditionDeserializer.class)
@@ -68,7 +72,7 @@ public record MdtIgnitionOnRequest(
     @Max(9999999)
     int mdtMileageSum
 ) {
-    public MdtLog toMdtLog(TransactionUUID tuid, MdtLogRequestTimeInfo tInfo) {
+    public MdtLog toMdtLog(TransactionUUID tuid, MdtLogRequestTimeInfo timeInfo) {
         return MdtLog.builder()
             .eventType(MdtLogEventType.IGNITION)
             .txUid(tuid)
@@ -78,15 +82,16 @@ public record MdtIgnitionOnRequest(
             .packetVer(packetVersion)
             .deviceId(deviceId)
             .mdtIgnitionOnTime(ignitionOnTime)
+            .mdtIgnitionOffTime(ignitionOffTime)
             .gpsCond(gpsCondition)
             .gpsLat(gpsLatitude)
             .gpsLon(gpsLongitude)
             .mdtAngle(mdtAngle)
             .mdtSpeed(mdtSpeed)
             .mdtMileageSum(mdtMileageSum)
-            .occurredAt(ignitionOnTime)
-            .sentAt(tInfo.sentAt())
-            .receivedAt(tInfo.receivedAt())
+            .occurredAt(ignitionOffTime)
+            .sentAt(timeInfo.sentAt())
+            .receivedAt(timeInfo.receivedAt())
             .build();
     }
 }

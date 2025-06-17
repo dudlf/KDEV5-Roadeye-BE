@@ -1,9 +1,9 @@
-package org.re.mdt.service;
+package org.re.mdtlog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
-import org.re.mdt.api.payload.MdtIgnitionOffRequest;
-import org.re.mdt.api.payload.MdtIgnitionOnRequest;
+import org.re.mdtlog.api.payload.MdtIgnitionOffRequest;
+import org.re.mdtlog.api.payload.MdtIgnitionOnRequest;
 import org.re.mdtlog.domain.MdtLogRepository;
 import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.stereotype.Service;

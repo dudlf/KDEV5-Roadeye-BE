@@ -18,6 +18,6 @@ dependencies {
 
 jib {
     container {
-        mainClass = "org.re.MdtCollectorApplication"
+        mainClass = "org.re.mdtlogCollectorApplication"
     }
 }

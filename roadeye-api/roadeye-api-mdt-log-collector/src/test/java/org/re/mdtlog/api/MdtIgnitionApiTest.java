@@ -1,4 +1,4 @@
-package org.re.mdt.api;
+package org.re.mdtlog.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -8,10 +8,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
 import org.re.common.exception.MdtLogExceptionCode;
-import org.re.mdt.api.payload.MdtIgnitionOffRequest;
-import org.re.mdt.api.payload.MdtIgnitionOnRequest;
-import org.re.mdt.service.MdtIgnitionService;
+import org.re.mdtlog.api.payload.MdtIgnitionOffRequest;
+import org.re.mdtlog.api.payload.MdtIgnitionOnRequest;
 import org.re.mdtlog.domain.TransactionUUID;
+import org.re.mdtlog.service.MdtIgnitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;

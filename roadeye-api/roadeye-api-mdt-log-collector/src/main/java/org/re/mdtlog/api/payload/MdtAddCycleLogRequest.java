@@ -1,4 +1,4 @@
-package org.re.mdt.api.payload;
+package org.re.mdtlog.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
