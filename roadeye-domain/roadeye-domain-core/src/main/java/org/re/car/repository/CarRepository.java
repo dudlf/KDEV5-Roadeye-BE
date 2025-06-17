@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
+    Optional<Car> findByIdAndStatus(Long carId, EntityLifecycleStatus entityLifecycleStatus);
+
     Page<Car> findByCompanyIdAndStatus(Long companyId, EntityLifecycleStatus entityLifecycleStatus, Pageable pageable);
 
     List<Car> findAllByCompanyIdAndStatus(Long companyId, EntityLifecycleStatus entityLifecycleStatus);
@@ -37,5 +39,4 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     Long countByCompanyIdAndIgnitionStatusAndStatus(Long companyId, CarIgnitionStatus ignitionStatus, EntityLifecycleStatus entityLifecycleStatus);
 
     Optional<Car> findByCompanyIdAndIdAndStatus(Long companyId, Long id, EntityLifecycleStatus status);
-
 }

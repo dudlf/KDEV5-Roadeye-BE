@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 public record MdtIgnitionOnRequest(
     @JsonProperty("mdn")
-    String carId,
+    Long carId,
 
     @JsonProperty("tid")
     String terminalId,

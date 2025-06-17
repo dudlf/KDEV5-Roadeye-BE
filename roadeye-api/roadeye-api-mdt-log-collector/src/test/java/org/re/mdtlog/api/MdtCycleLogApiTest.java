@@ -63,7 +63,7 @@ public class MdtCycleLogApiTest {
 
     private Map<String, Object> createCycleLogRequest() {
         var params = new HashMap<String, Object>();
-        params.put("mdn", "car-001");
+        params.put("mdn", 1L);
         params.put("tid", "term-002");
         params.put("mid", "manu-003");
         params.put("pv", 1);

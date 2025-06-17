@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 import org.re.car.converter.CarIgnitionStatusConverter;
 import org.re.car.exception.CarDomainException;
 import org.re.common.exception.DomainException;
+import org.re.mdtlog.converter.TransactionIdConverter;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.re.util.Integers;
-
-import java.util.UUID;
 
 @Embeddable
 @Getter
@@ -24,10 +24,11 @@ public class CarMdtStatus {
     @Column(nullable = false)
     private CarIgnitionStatus ignition;
 
+    @Convert(converter = TransactionIdConverter.class)
     @Column(columnDefinition = "BINARY(16)")
-    private UUID activeTuid;
+    private TransactionUUID activeTuid;
 
-    public CarMdtStatus(int batteryVoltage, CarIgnitionStatus ignition, UUID activeTuid) {
+    public CarMdtStatus(int batteryVoltage, CarIgnitionStatus ignition, TransactionUUID activeTuid) {
         this.batteryVoltage = batteryVoltage;
         this.ignition = ignition;
         this.activeTuid = activeTuid;
@@ -37,7 +38,7 @@ public class CarMdtStatus {
         return new CarMdtStatus(Integers.ZERO, CarIgnitionStatus.OFF, null);
     }
 
-    public void turnOnIgnition(UUID transactionId) {
+    public void turnOnIgnition(TransactionUUID transactionId) {
         if (this.ignition != CarIgnitionStatus.OFF) {
             throw new DomainException(CarDomainException.IGNITION_IS_NOT_OFF);
         }
@@ -45,7 +46,7 @@ public class CarMdtStatus {
         this.activeTuid = transactionId;
     }
 
-    public void turnOffIgnition(UUID transactionId) {
+    public void turnOffIgnition(TransactionUUID transactionId) {
         if (this.ignition != CarIgnitionStatus.ON) {
             throw new DomainException(CarDomainException.IGNITION_IS_NOT_ON);
         }

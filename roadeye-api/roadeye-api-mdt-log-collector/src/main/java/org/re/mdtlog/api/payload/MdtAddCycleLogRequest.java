@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.re.car.domain.CarLocation;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
@@ -21,7 +22,7 @@ import java.util.List;
 public record MdtAddCycleLogRequest(
     @JsonProperty("mdn")
     @NotNull
-    String carId,
+    Long carId,
 
     @JsonProperty("tid")
     @NotNull
@@ -83,6 +84,11 @@ public record MdtAddCycleLogRequest(
                 }
             )
             .toList();
+    }
+
+    public CarLocation getLastLocation() {
+        var lastLog = cycleLogList.getLast();
+        return new CarLocation(lastLog.gpsLatitude, lastLog.gpsLongitude);
     }
 
     @Builder(access = AccessLevel.PACKAGE)
