@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-public record CarDetailsResponse(
+public record CarInfoDetails(
     Long id,
     Long companyId,
     String name,
@@ -24,8 +24,8 @@ public record CarDetailsResponse(
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-    public static CarDetailsResponse from(Car car) {
-        return new CarDetailsResponse(
+    public static CarInfoDetails from(Car car) {
+        return new CarInfoDetails(
             car.getId(),
             car.getCompany().getId(),
             car.getProfile().getName(),

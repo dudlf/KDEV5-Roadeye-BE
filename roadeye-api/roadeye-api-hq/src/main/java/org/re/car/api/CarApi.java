@@ -2,7 +2,7 @@ package org.re.car.api;
 
 import lombok.RequiredArgsConstructor;
 import org.re.car.api.payload.CarCreationRequest;
-import org.re.car.api.payload.CarDetailsResponse;
+import org.re.car.api.payload.CarInfoDetails;
 import org.re.car.api.payload.CarInfoSimple;
 import org.re.car.api.payload.CarUpdateRequest;
 import org.re.car.domain.CarIgnitionStatus;
@@ -28,15 +28,15 @@ public class CarApi {
     }
 
     @GetMapping("/all")
-    public ListResponse<CarDetailsResponse> getAllCars(TenantId tenantId) {
+    public ListResponse<CarInfoDetails> getAllCars(TenantId tenantId) {
         var page = carService.getAllCars(tenantId);
-        return ListResponse.of(page, CarDetailsResponse::from);
+        return ListResponse.of(page, CarInfoDetails::from);
     }
 
     @GetMapping("/{carId}")
-    public SingleItemResponse<CarDetailsResponse> getCarById(TenantId tenantId, @PathVariable Long carId) {
+    public SingleItemResponse<CarInfoDetails> getCarById(TenantId tenantId, @PathVariable Long carId) {
         var car = carService.getCarById(tenantId, carId);
-        return SingleItemResponse.of(car, CarDetailsResponse::from);
+        return SingleItemResponse.of(car, CarInfoDetails::from);
     }
 
     @GetMapping("/search/ignition")
