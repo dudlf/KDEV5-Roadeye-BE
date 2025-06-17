@@ -12,12 +12,12 @@ import org.re.hq.company.domain.Company;
 import org.re.hq.domain.common.DomainService;
 import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.re.hq.domain.exception.DomainException;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @DomainService
 @Transactional
@@ -38,6 +38,11 @@ public class CarDomainService {
     public Page<Car> getCarsByStatus(Company company, EntityLifecycleStatus status, Pageable pageable) {
         var companyId = company.getId();
         return carRepository.findByCompanyIdAndStatus(companyId, status, pageable);
+    }
+
+    public Car getCarById(Long carId) {
+        return carRepository.findByIdAndStatus(carId, EntityLifecycleStatus.ACTIVE)
+            .orElseThrow(() -> new DomainException(CarDomainException.CAR_NOT_FOUND));
     }
 
     public Car getCarById(Company company, Long carId) {
@@ -71,12 +76,12 @@ public class CarDomainService {
         return car;
     }
 
-    public Car turnOnIgnition(Car car, UUID transactionId) {
+    public Car turnOnIgnition(Car car, TransactionUUID transactionId) {
         car.turnOnIgnition(transactionId);
         return car;
     }
 
-    public Car turnOffIgnition(Car car, UUID transactionId) {
+    public Car turnOffIgnition(Car car, TransactionUUID transactionId) {
         car.turnOffIgnition(transactionId);
         return car;
     }

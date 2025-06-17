@@ -8,7 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-public class MdtTransactionIdResolver implements HandlerMethodArgumentResolver {
+public class TransactionUUIDResolver implements HandlerMethodArgumentResolver {
     private static final String HEADER_NAME = "X-TUID";
 
     @Override

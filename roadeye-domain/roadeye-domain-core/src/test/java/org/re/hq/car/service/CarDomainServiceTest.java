@@ -10,6 +10,7 @@ import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.company.domain.Company;
 import org.re.hq.domain.common.EntityLifecycleStatus;
 import org.re.hq.test.supports.WithCompany;
+import org.re.mdtlog.domain.TransactionUUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -19,7 +20,7 @@ import java.util.UUID;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Import({CarDomainService.class})
 @DataJpaTest
@@ -250,7 +251,8 @@ class CarDomainServiceTest {
             // 차량 시동 ON 상태 등록
             for (int i = 0; i < numOnCars; i++) {
                 var car = carDomainService.createCar(company, creationCommand);
-                carDomainService.turnOnIgnition(car, UUID.randomUUID());
+                var tuid = new TransactionUUID(UUID.randomUUID().toString());
+                carDomainService.turnOnIgnition(car, tuid);
             }
 
             // when
@@ -280,7 +282,8 @@ class CarDomainServiceTest {
             // 차량 시동 ON 상태 등록
             for (int i = 0; i < numOnCars; i++) {
                 var car = carDomainService.createCar(company, creationCommand);
-                carDomainService.turnOnIgnition(car, UUID.randomUUID());
+                var tuid = new TransactionUUID(UUID.randomUUID().toString());
+                carDomainService.turnOnIgnition(car, tuid);
             }
 
             // when
@@ -438,7 +441,7 @@ class CarDomainServiceTest {
         void 시동OFF_상태에서_시동ON_테스트(Company company) {
             // given
             var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = UUID.randomUUID();
+            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
 
             // when
             var car = carDomainService.createCar(company, creationCommand);
@@ -454,7 +457,7 @@ class CarDomainServiceTest {
         void 시동킬때_트랜잭션ID_설정_테스트(Company company) {
             // given
             var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = UUID.randomUUID();
+            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
 
             // when
             var car = carDomainService.createCar(company, creationCommand);
@@ -470,7 +473,7 @@ class CarDomainServiceTest {
         void 시동ON_상태에서_시동OFF_테스트(Company company) {
             // given
             var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = UUID.randomUUID();
+            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
 
             // when
             var car = carDomainService.createCar(company, creationCommand);
@@ -487,8 +490,8 @@ class CarDomainServiceTest {
         void 시동끄기_트랜잭션ID_일치_테스트(Company company) {
             // given
             var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = UUID.randomUUID();
-            var wrongTransactionId = UUID.randomUUID();
+            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
+            var wrongTransactionId = new TransactionUUID(UUID.randomUUID().toString());
 
             // when
             var car = carDomainService.createCar(company, creationCommand);
@@ -507,7 +510,7 @@ class CarDomainServiceTest {
         void 시동끄기_후_트랜잭션ID_null_테스트(Company company) {
             // given
             var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = UUID.randomUUID();
+            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
 
             // when
             var car = carDomainService.createCar(company, creationCommand);
@@ -524,7 +527,7 @@ class CarDomainServiceTest {
         void 시동상태_초기화_테스트(Company company) {
             // given
             var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = UUID.randomUUID();
+            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
 
             // when
             var car = carDomainService.createCar(company, creationCommand);
@@ -541,7 +544,7 @@ class CarDomainServiceTest {
         void 시동상태_초기화_후_트랜잭션ID_null_테스트(Company company) {
             // given
             var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = UUID.randomUUID();
+            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
 
             // when
             var car = carDomainService.createCar(company, creationCommand);

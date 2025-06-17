@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import org.re.hq.car.dto.CarUpdateCommand;
 import org.re.hq.company.domain.Company;
 import org.re.hq.domain.common.BaseEntity;
+import org.re.mdtlog.domain.TransactionUUID;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -53,11 +53,11 @@ public class Car extends BaseEntity {
         super.disable();
     }
 
-    public void turnOnIgnition(UUID transactionId) {
+    public void turnOnIgnition(TransactionUUID transactionId) {
         this.mdtStatus.turnOnIgnition(transactionId);
     }
 
-    public void turnOffIgnition(UUID transactionId) {
+    public void turnOffIgnition(TransactionUUID transactionId) {
         this.mdtStatus.turnOffIgnition(transactionId);
     }
 
@@ -72,6 +72,10 @@ public class Car extends BaseEntity {
         if (command.imageUrl() != null) {
             profile.setImageUrl(command.imageUrl());
         }
+    }
+
+    public void updateLocation(CarLocation lastLocation) {
+        this.location = lastLocation;
     }
 }
 

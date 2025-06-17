@@ -8,11 +8,17 @@ import org.re.mdtlog.domain.TransactionUUID;
 public class TransactionIdConverter implements AttributeConverter<TransactionUUID, byte[]> {
     @Override
     public byte[] convertToDatabaseColumn(TransactionUUID attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return attribute.toBytes();
     }
 
     @Override
     public TransactionUUID convertToEntityAttribute(byte[] dbData) {
+        if (dbData == null) {
+            return null;
+        }
         return TransactionUUID.from(dbData);
     }
 }
