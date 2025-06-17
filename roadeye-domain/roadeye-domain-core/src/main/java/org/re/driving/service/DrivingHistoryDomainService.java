@@ -4,8 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.re.common.domain.DomainService;
 import org.re.driving.domain.DrivingHistory;
-import org.re.driving.domain.DrivingHistoryRepository;
 import org.re.driving.domain.DrivingSnapShot;
+import org.re.driving.repository.DrivingHistoryRepository;
 
 @DomainService
 @Transactional

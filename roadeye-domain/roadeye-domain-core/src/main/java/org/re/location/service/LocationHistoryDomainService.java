@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.re.common.domain.DomainService;
 import org.re.location.domain.LocationHistory;
-import org.re.location.domain.LocationHistoryRepository;
+import org.re.location.repository.LocationHistoryRepository;
 
 @DomainService
 @Transactional
