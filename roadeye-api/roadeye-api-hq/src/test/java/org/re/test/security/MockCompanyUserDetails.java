@@ -1,4 +1,4 @@
-package org.re.hq.test.security;
+package org.re.test.security;
 
 import org.re.employee.domain.EmployeeRole;
 import org.springframework.security.test.context.support.WithSecurityContext;
@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({java.lang.annotation.ElementType.METHOD})
-@WithSecurityContext(factory = MockCompanyUserDetailsSecurityContextFactory.class)
+@WithSecurityContext(factory = org.re.test.security.MockCompanyUserDetailsSecurityContextFactory.class)
 public @interface MockCompanyUserDetails {
     long id() default 1L;
 

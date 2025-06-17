@@ -9,7 +9,7 @@ import org.re.company.CompanyQuoteFixture;
 import org.re.company.domain.CompanyQuoteStatus;
 import org.re.company.dto.CompanyQuoteRequestCommandFixture;
 import org.re.employee.service.EmployeeDomainService;
-import org.re.hq.test.supports.WithPlatformAdmin;
+import org.re.test.supports.WithPlatformAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;

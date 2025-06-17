@@ -1,4 +1,4 @@
-package org.re.hq.test.controller;
+package org.re.test.controller;
 
 import org.jspecify.annotations.Nullable;
 import org.re.tenant.TenantId;

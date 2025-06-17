@@ -1,7 +1,7 @@
-package org.re.hq.test.supports;
+package org.re.test.supports;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.re.hq.test.api.extension.PlatformAdminParameterResolver;
+import org.re.test.api.extension.PlatformAdminParameterResolver;
 
 import java.lang.annotation.*;
 

@@ -1,4 +1,4 @@
-package org.re.hq.test.security;
+package org.re.test.security;
 
 import org.mockito.Mockito;
 import org.re.admin.PlatformAdminFixture;
@@ -9,10 +9,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-public class MockPlatformAdminUserDetailsSecurityContextFactory implements WithSecurityContextFactory<MockPlatformAdminUserDetails> {
+public class MockPlatformAdminUserDetailsSecurityContextFactory implements WithSecurityContextFactory<org.re.test.security.MockPlatformAdminUserDetails> {
 
     @Override
-    public SecurityContext createSecurityContext(MockPlatformAdminUserDetails annotation) {
+    public SecurityContext createSecurityContext(org.re.test.security.MockPlatformAdminUserDetails annotation) {
         var user = createMockUser(annotation);
         var userDetails = PlatformAdminUserDetails.from(user);
         var context = SecurityContextHolder.createEmptyContext();
@@ -21,7 +21,7 @@ public class MockPlatformAdminUserDetailsSecurityContextFactory implements WithS
         return context;
     }
 
-    private PlatformAdmin createMockUser(MockPlatformAdminUserDetails annotation) {
+    private PlatformAdmin createMockUser(org.re.test.security.MockPlatformAdminUserDetails annotation) {
         var user = PlatformAdminFixture.create(annotation.username(), annotation.password());
         var spy = Mockito.spy(user);
         Mockito.when(spy.getId()).thenReturn(annotation.id());

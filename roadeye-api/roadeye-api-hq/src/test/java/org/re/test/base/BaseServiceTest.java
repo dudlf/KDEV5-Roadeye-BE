@@ -1,4 +1,4 @@
-package org.re.hq.test.base;
+package org.re.test.base;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

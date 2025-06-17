@@ -1,4 +1,4 @@
-package org.re.hq.test.api.extension;
+package org.re.test.api.extension;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.extension.ExtensionContext;

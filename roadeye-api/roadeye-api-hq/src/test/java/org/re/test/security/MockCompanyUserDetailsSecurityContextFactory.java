@@ -1,4 +1,4 @@
-package org.re.hq.test.security;
+package org.re.test.security;
 
 import org.re.employee.domain.Employee;
 import org.re.employee.domain.EmployeeCredentials;
@@ -9,10 +9,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-public class MockCompanyUserDetailsSecurityContextFactory implements WithSecurityContextFactory<MockCompanyUserDetails> {
+public class MockCompanyUserDetailsSecurityContextFactory implements WithSecurityContextFactory<org.re.test.security.MockCompanyUserDetails> {
 
     @Override
-    public SecurityContext createSecurityContext(MockCompanyUserDetails annotation) {
+    public SecurityContext createSecurityContext(org.re.test.security.MockCompanyUserDetails annotation) {
         var user = createMockUser(annotation);
         var userDetails = CompanyUserDetails.from(user);
         var context = SecurityContextHolder.createEmptyContext();
@@ -21,7 +21,7 @@ public class MockCompanyUserDetailsSecurityContextFactory implements WithSecurit
         return context;
     }
 
-    private Employee createMockUser(MockCompanyUserDetails annotation) {
+    private Employee createMockUser(org.re.test.security.MockCompanyUserDetails annotation) {
         var auth = new EmployeeCredentials(
             annotation.username(),
             annotation.password()
