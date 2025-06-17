@@ -1,4 +1,4 @@
-package org.re.common.domain;
+package org.re.common.stereotype;
 
 import org.springframework.stereotype.Service;
 
