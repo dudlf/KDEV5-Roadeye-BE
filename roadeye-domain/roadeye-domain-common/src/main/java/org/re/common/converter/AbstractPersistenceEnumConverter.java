@@ -25,7 +25,7 @@ public abstract class AbstractPersistenceEnumConverter<T extends Enum<T> & Persi
             if (allowsNull) {
                 return null;
             } else {
-                throw new IllegalArgumentException("Null value not allowed for " + attribute.getClass().getSimpleName());
+                throw new IllegalArgumentException("Null value not allowed for " + enumClass.getSimpleName());
             }
         }
         return attribute.getCode();
@@ -37,7 +37,7 @@ public abstract class AbstractPersistenceEnumConverter<T extends Enum<T> & Persi
             if (allowsNull) {
                 return null;
             } else {
-                throw new IllegalArgumentException("Null value not allowed for " + dbData.getClass().getSimpleName());
+                throw new IllegalArgumentException("Null value not allowed for " + enumClass.getSimpleName());
             }
         }
         return getEnumInstance(dbData);
