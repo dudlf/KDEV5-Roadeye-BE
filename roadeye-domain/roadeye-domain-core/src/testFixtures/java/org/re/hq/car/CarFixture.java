@@ -6,6 +6,7 @@ import org.re.hq.company.CompanyFixture;
 import org.re.hq.company.domain.Company;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 public class CarFixture {
@@ -26,6 +27,24 @@ public class CarFixture {
         return IntStream
             .range(0, size)
             .mapToObj((c) -> CarFixture.create())
+            .toList();
+    }
+
+    public static List<Car> createDrivingList(int size, Company company) {
+        return IntStream
+            .range(0, size)
+            .mapToObj((c) -> CarFixture.create(company))
+            .peek((c) -> {
+                var tuid = UUID.randomUUID();
+                c.getMdtStatus().turnOnIgnition(tuid);
+            })
+            .toList();
+    }
+
+    public static List<Car> createIdleList(int size, Company company) {
+        return IntStream
+            .range(0, size)
+            .mapToObj((c) -> CarFixture.create(company))
             .toList();
     }
 }

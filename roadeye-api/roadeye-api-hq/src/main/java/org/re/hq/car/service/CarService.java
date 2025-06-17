@@ -5,6 +5,7 @@ import org.re.hq.car.domain.Car;
 import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationRequest;
 import org.re.hq.car.dto.CarUpdateRequest;
+import org.re.hq.car.dto.CarsStatusResult;
 import org.re.hq.company.service.CompanyDomainService;
 import org.re.hq.tenant.TenantId;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,11 @@ public class CarService {
     public List<Car> getAllCars(TenantId tenantId) {
         var company = companyDomainService.findById(tenantId.value());
         return carDomainService.getCars(company);
+    }
+
+    public CarsStatusResult getCarsStatus(TenantId tenantId) {
+        var company = companyDomainService.findById(tenantId.value());
+        return carDomainService.getCarsStatus(company);
     }
 
     public Car getCarById(TenantId tenantId, Long carId) {

@@ -6,6 +6,7 @@ import org.re.hq.car.domain.CarIgnitionStatus;
 import org.re.hq.car.dto.CarCreationCommand;
 import org.re.hq.car.dto.CarDisableCommand;
 import org.re.hq.car.dto.CarUpdateCommand;
+import org.re.hq.car.dto.CarsStatusResult;
 import org.re.hq.car.exception.CarDomainException;
 import org.re.hq.car.repository.CarRepository;
 import org.re.hq.company.domain.Company;
@@ -33,6 +34,10 @@ public class CarDomainService {
     public List<Car> getCars(Company company) {
         var companyId = company.getId();
         return carRepository.findAllByCompanyIdAndStatus(companyId, EntityLifecycleStatus.ACTIVE);
+    }
+
+    public CarsStatusResult getCarsStatus(Company company) {
+        return carRepository.getCarsStatus(company);
     }
 
     public Page<Car> getCarsByStatus(Company company, EntityLifecycleStatus status, Pageable pageable) {
@@ -94,5 +99,4 @@ public class CarDomainService {
         car.disable(command.reason());
         return car;
     }
-
 }

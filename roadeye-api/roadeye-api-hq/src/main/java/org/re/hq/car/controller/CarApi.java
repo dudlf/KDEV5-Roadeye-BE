@@ -2,10 +2,7 @@ package org.re.hq.car.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.re.hq.car.domain.CarIgnitionStatus;
-import org.re.hq.car.dto.CarCreationRequest;
-import org.re.hq.car.dto.CarDetailsResponse;
-import org.re.hq.car.dto.CarResponse;
-import org.re.hq.car.dto.CarUpdateRequest;
+import org.re.hq.car.dto.*;
 import org.re.hq.car.service.CarService;
 import org.re.hq.common.dto.ListResponse;
 import org.re.hq.common.dto.PageResponse;
@@ -31,6 +28,12 @@ public class CarApi {
     public ListResponse<CarDetailsResponse> getAllCars(TenantId tenantId) {
         var page = carService.getAllCars(tenantId);
         return ListResponse.of(page, CarDetailsResponse::from);
+    }
+
+    @GetMapping("/status")
+    public CarStatusResponse getCarStatus(TenantId tenantId) {
+        var status = carService.getCarsStatus(tenantId);
+        return CarStatusResponse.from(status);
     }
 
     @GetMapping("/{carId}")
