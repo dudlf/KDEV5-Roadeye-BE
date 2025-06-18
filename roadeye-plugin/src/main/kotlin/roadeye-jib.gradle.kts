@@ -27,7 +27,7 @@ tasks.named<BootJar>("bootJar") {
 
 jib {
     from {
-        image = "eclipse-temurin:21-jdk"
+        image = "eclipse-temurin:21-jdk@sha256:2cc80b4288f6240734ecd1acae01d20afa56f86327b9ae207a9468363422c974"
         platforms {
             platform {
                 architecture = "arm64"
