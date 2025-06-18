@@ -2,12 +2,14 @@ package org.re.location.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.re.car.domain.CarLocation;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Entity
 @Table(name = "car_location_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
