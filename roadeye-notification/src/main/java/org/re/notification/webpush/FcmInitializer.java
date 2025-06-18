@@ -22,7 +22,7 @@ public class FcmInitializer implements ApplicationRunner {
     private String credentialsPath;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         try (InputStream serviceAccount = ResourceUtils.getURL(credentialsPath).openStream()) {
             FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))

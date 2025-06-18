@@ -1,12 +1,13 @@
 package org.re.mdtlog.domain;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.re.common.domain.PersistenceEnum;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum MdtLogGpsCondition {
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public enum MdtLogGpsCondition implements PersistenceEnum<String> {
     // @formatter:off
     NORMAL           ("A"),
     INVALID          ("V"),
@@ -16,13 +17,4 @@ public enum MdtLogGpsCondition {
     // @formatter:on
 
     private final String code;
-
-    public static MdtLogGpsCondition of(String code) {
-        for (MdtLogGpsCondition condition : values()) {
-            if (condition.getCode().equals(code)) {
-                return condition;
-            }
-        }
-        throw new IllegalArgumentException("Invalid GPS condition code: " + code);
-    }
 }

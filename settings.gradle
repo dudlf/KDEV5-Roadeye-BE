@@ -6,16 +6,16 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0"
 }
 
-
 rootProject.name = 'Roadeye'
+
 include 'roadeye-api:roadeye-api-common'
 include 'roadeye-api:roadeye-api-hq'
 include 'roadeye-api:roadeye-api-mdt-log-collector'
 
-
-include 'roadeye-emulator'
+include 'roadeye-domain:roadeye-domain-common'
+include 'roadeye-domain:roadeye-domain-core'
 
 include 'roadeye-monitoring'
-
-include 'roadeye-domain:roadeye-domain-core'
 include 'roadeye-notification'
+
+include 'roadeye-emulator'
