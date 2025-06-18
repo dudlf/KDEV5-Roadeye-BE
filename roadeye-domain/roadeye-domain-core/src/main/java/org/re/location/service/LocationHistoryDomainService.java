@@ -21,8 +21,4 @@ public class LocationHistoryDomainService {
     public List<LocationHistory> findByDrivingId(Long drivingId) {
         return locationHistoryRepository.findByDrivingId(drivingId);
     }
-
-    public List<LocationHistory> findLatestLocationHistory(List<Long> locationIds) {
-        return locationHistoryRepository.findLatestLocationHistory(locationIds);
-    }
 }
