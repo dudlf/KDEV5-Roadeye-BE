@@ -38,7 +38,7 @@ services:
     volumes:
       - ./data/mysql:/var/lib/mysql
   rabbitmq:
-    image: rabbitmq:4.1.1
+    image: rabbitmq:4.1.1-management
     ports:
       - "15672:15672"
     volumes:
