@@ -22,6 +22,9 @@ public class DrivingHistory {
     @Convert(converter = DrivingHistoryStatusConverter.class)
     private DrivingHistoryStatus status;
 
+    @Column(nullable = false)
+    private Long carId;
+
     @Convert(converter = TransactionIdConverter.class)
     private TransactionUUID txUid;
 
@@ -44,14 +47,15 @@ public class DrivingHistory {
     })
     private DrivingSnapShot endDrivingSnapShot;
 
-    public DrivingHistory(DrivingHistoryStatus status, TransactionUUID txUid, DrivingSnapShot previousDrivingSnapShot) {
+    public DrivingHistory(DrivingHistoryStatus status, TransactionUUID txUid, DrivingSnapShot previousDrivingSnapShot, Long carId) {
         this.status = status;
         this.txUid = txUid;
         this.previousDrivingSnapShot = previousDrivingSnapShot;
+        this.carId = carId;
     }
 
-    public static DrivingHistory of(TransactionUUID txUid, DrivingSnapShot drivingSnapShot) {
-        return new DrivingHistory(DrivingHistoryStatus.DRIVING, txUid, drivingSnapShot);
+    public static DrivingHistory of(TransactionUUID txUid, DrivingSnapShot drivingSnapShot, Long carId) {
+        return new DrivingHistory(DrivingHistoryStatus.DRIVING, txUid, drivingSnapShot, carId);
     }
 
     public void end(DrivingSnapShot drivingSnapShot) {

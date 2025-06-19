@@ -24,10 +24,11 @@ class DrivingHistoryTest {
     void of_정상_생성() {
         // given
         var txid = TransactionUUID.from(UUID.randomUUID().toString().getBytes());
+        var carId = 1L;
         DrivingSnapShot startSnap = createSnapShot(1000, 37.123456, 127.654321, LocalDateTime.now());
 
         // when
-        DrivingHistory history = DrivingHistory.of(txid, startSnap);
+        DrivingHistory history = DrivingHistory.of(txid, startSnap, carId);
 
         // then
         assertThat(history.getStatus()).isEqualTo(DrivingHistoryStatus.DRIVING);
@@ -40,10 +41,11 @@ class DrivingHistoryTest {
     void end_정상_상태_전이() {
         // given
         var txid = TransactionUUID.from(UUID.randomUUID().toString().getBytes());
+        var carId = 1L;
         LocalDateTime now = LocalDateTime.now();
         DrivingSnapShot startSnap = createSnapShot(1000, 37.0, 127.0, now);
         DrivingSnapShot endSnap = createSnapShot(1050, 37.1, 127.1, now.plusMinutes(30));
-        DrivingHistory history = DrivingHistory.of(txid, startSnap);
+        DrivingHistory history = DrivingHistory.of(txid, startSnap, carId);
 
         // when
         history.end(endSnap);
@@ -57,8 +59,9 @@ class DrivingHistoryTest {
     void end_이미종료된_이력_예외_발생() {
         // given
         var txid = TransactionUUID.from(UUID.randomUUID().toString().getBytes());
+        var carId = 1L;
         DrivingSnapShot startSnap = createSnapShot(2000, 37.0, 127.0, LocalDateTime.now());
-        DrivingHistory history = DrivingHistory.of(txid, startSnap);
+        DrivingHistory history = DrivingHistory.of(txid, startSnap, carId);
 
         DrivingSnapShot endSnap = createSnapShot(2100, 37.2, 127.2, LocalDateTime.now().plusHours(1));
         history.end(endSnap);
