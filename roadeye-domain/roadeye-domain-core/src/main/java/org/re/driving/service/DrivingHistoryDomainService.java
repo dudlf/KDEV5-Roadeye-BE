@@ -40,6 +40,6 @@ public class DrivingHistoryDomainService {
     }
 
     public List<DrivingHistory> getDrivingHistoryByCarId(Long carId) {
-        return drivingHistoryRepository.findByCarId(carId);
+        return drivingHistoryRepository.findByCarIdAndStatus(carId, DrivingHistoryStatus.DRIVING);
     }
 }

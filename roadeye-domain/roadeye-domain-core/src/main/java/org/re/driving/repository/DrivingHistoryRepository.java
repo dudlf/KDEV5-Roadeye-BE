@@ -9,5 +9,5 @@ import java.util.List;
 public interface DrivingHistoryRepository extends JpaRepository<DrivingHistory, Long> {
     List<DrivingHistory> findByStatus(DrivingHistoryStatus status);
 
-    List<DrivingHistory> findByCarId(Long carId);
+    List<DrivingHistory> findByCarIdAndStatus(Long carId, DrivingHistoryStatus status);
 }
