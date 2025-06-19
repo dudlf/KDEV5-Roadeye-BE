@@ -26,4 +26,7 @@ public class DrivingHistoryService {
         return locationHistoryDomainService.findByDrivingId(drivingId);
     }
 
+    public List<DrivingHistory> getCarDrivingHistoryLogs(Long carId) {
+        return drivingHistoryDomainService.getDrivingHistoryByCarId(carId);
+    }
 }

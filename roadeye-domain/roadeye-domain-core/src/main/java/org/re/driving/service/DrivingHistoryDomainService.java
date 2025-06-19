@@ -38,4 +38,8 @@ public class DrivingHistoryDomainService {
     public List<DrivingHistory> getActiveDrivingHistory(){
         return drivingHistoryRepository.findByStatus(DrivingHistoryStatus.DRIVING);
     }
+
+    public List<DrivingHistory> getDrivingHistoryByCarId(Long carId) {
+        return drivingHistoryRepository.findByCarId(carId);
+    }
 }
