@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 public class AMQPService {
     private final RabbitTemplate rabbitTemplate;
 
-    public void sendWithQueueName(String queueName, Object message) {
-        log.debug("Sending message to queue: {}", queueName);
-        rabbitTemplate.convertAndSend(queueName, message);
+    public void send(String routingKey, Object message) {
+        var exchange = rabbitTemplate.getExchange();
+        log.debug("Sending AMQP message with exchange: {}, routingKey: {}", exchange, routingKey);
+        rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
 }
