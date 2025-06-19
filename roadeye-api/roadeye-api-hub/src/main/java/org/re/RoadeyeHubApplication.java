@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MdtCollectorApplication {
+public class RoadeyeHubApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MdtCollectorApplication.class, args);
+        SpringApplication.run(RoadeyeHubApplication.class, args);
     }
 }

@@ -1,4 +1,4 @@
-package org.re.mdtlog.api.payload;
+package org.re.mdtlog.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,20 +6,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.re.car.domain.CarLocation;
-import org.re.common.api.payload.MdtLogRequestTimeInfo;
-import org.re.mdtlog.domain.MdtLog;
-import org.re.mdtlog.domain.MdtLogEventType;
+import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
-import org.re.mdtlog.domain.TransactionUUID;
-import org.re.web.databind.MdtLogGpsConditionDeserializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder(access = AccessLevel.PACKAGE)
-public record MdtAddCycleLogRequest(
+public record MdtCycleLogMessage(
     @JsonProperty("mdn")
     @NotNull
     Long carId,
@@ -53,42 +48,10 @@ public record MdtAddCycleLogRequest(
     @NotNull
     List<MdtCycleLogItem> cycleLogList
 ) {
-    public MdtAddCycleLogRequest {
+    public MdtCycleLogMessage {
         if (cycleCount != cycleLogList.size()) {
             throw new IllegalArgumentException("Cycle count mismatch");
         }
-    }
-
-    public List<MdtLog> toMdtLogList(TransactionUUID tuid, MdtLogRequestTimeInfo timeInfo) {
-        return cycleLogList.stream()
-            .map((item) -> {
-                    var occurredAtWithSec = occurredAt.plusSeconds(item.sec);
-                    return MdtLog.builder()
-                        .eventType(MdtLogEventType.CYCLE_LOG)
-                        .txUid(tuid)
-                        .carId(carId)
-                        .terminalId(terminalId)
-                        .manufactureId(manufacturerId)
-                        .packetVer(packetVersion)
-                        .deviceId(deviceId)
-                        .gpsCond(item.gpsCondition)
-                        .gpsLat(item.gpsLatitude)
-                        .gpsLon(item.gpsLongitude)
-                        .mdtAngle(item.mdtAngle)
-                        .mdtSpeed(item.mdtSpeed)
-                        .mdtMileageSum(item.mdtMileageSum)
-                        .occurredAt(occurredAtWithSec)
-                        .sentAt(timeInfo.sentAt())
-                        .receivedAt(timeInfo.receivedAt())
-                        .build();
-                }
-            )
-            .toList();
-    }
-
-    public CarLocation getLastLocation() {
-        var lastLog = cycleLogList.getLast();
-        return new CarLocation(lastLog.gpsLatitude, lastLog.gpsLongitude);
     }
 
     @Builder(access = AccessLevel.PACKAGE)

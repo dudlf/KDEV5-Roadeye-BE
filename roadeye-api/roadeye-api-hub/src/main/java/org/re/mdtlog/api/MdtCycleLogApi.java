@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.re.common.api.payload.BaseMdtLogResponse;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
-import org.re.mdtlog.api.payload.MdtAddCycleLogRequest;
 import org.re.mdtlog.domain.TransactionUUID;
+import org.re.mdtlog.dto.MdtCycleLogMessage;
 import org.re.mdtlog.service.MdtCycleLogService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +21,7 @@ public class MdtCycleLogApi {
 
     @PostMapping
     public BaseMdtLogResponse addCycleLogs(
-        @Valid @RequestBody MdtAddCycleLogRequest dto,
+        @Valid @RequestBody MdtCycleLogMessage dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
         TransactionUUID tuid
     ) {

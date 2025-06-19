@@ -1,20 +1,20 @@
-package org.re.mdtlog.api.payload;
+package org.re.mdtlog.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.validation.constraints.*;
-import org.re.common.api.payload.MdtLogRequestTimeInfo;
-import org.re.mdtlog.domain.MdtLog;
-import org.re.mdtlog.domain.MdtLogEventType;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
-import org.re.mdtlog.domain.TransactionUUID;
-import org.re.web.databind.MdtLogGpsConditionDeserializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record MdtIgnitionOnRequest(
+public record MdtIgnitionOnMessage(
     @JsonProperty("mdn")
     Long carId,
 
@@ -66,25 +66,4 @@ public record MdtIgnitionOnRequest(
     @Max(9999999)
     int mdtMileageSum
 ) {
-    public MdtLog toMdtLog(TransactionUUID tuid, MdtLogRequestTimeInfo tInfo) {
-        return MdtLog.builder()
-            .eventType(MdtLogEventType.IGNITION)
-            .txUid(tuid)
-            .carId(carId)
-            .terminalId(terminalId)
-            .manufactureId(manufacturerId)
-            .packetVer(packetVersion)
-            .deviceId(deviceId)
-            .mdtIgnitionOnTime(ignitionOnTime)
-            .gpsCond(gpsCondition)
-            .gpsLat(gpsLatitude)
-            .gpsLon(gpsLongitude)
-            .mdtAngle(mdtAngle)
-            .mdtSpeed(mdtSpeed)
-            .mdtMileageSum(mdtMileageSum)
-            .occurredAt(ignitionOnTime)
-            .sentAt(tInfo.sentAt())
-            .receivedAt(tInfo.receivedAt())
-            .build();
-    }
 }

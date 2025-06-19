@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.re.common.api.payload.BaseMdtLogResponse;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
-import org.re.mdtlog.api.payload.MdtIgnitionOffRequest;
-import org.re.mdtlog.api.payload.MdtIgnitionOnRequest;
 import org.re.mdtlog.domain.TransactionUUID;
+import org.re.mdtlog.dto.MdtIgnitionOffMessage;
+import org.re.mdtlog.dto.MdtIgnitionOnMessage;
 import org.re.mdtlog.service.MdtIgnitionService;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -23,13 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MdtIgnitionApi {
     private final MdtIgnitionService mdtIgnitionService;
 
-    // TODO JSON_VALUE 없애기
-    @PostMapping(
-        value = "/on",
-        consumes = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PostMapping(value = "/on", consumes = MediaType.APPLICATION_JSON_VALUE)
     public BaseMdtLogResponse ignitionOn(
-        @Valid @RequestBody MdtIgnitionOnRequest dto,
+        @Valid @RequestBody MdtIgnitionOnMessage dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
         TransactionUUID tuid
     ) {
@@ -37,12 +33,9 @@ public class MdtIgnitionApi {
         return new BaseMdtLogResponse(dto.carId());
     }
 
-    @PostMapping(
-        value = "/off",
-        consumes = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PostMapping(value = "/off", consumes = MediaType.APPLICATION_JSON_VALUE)
     public BaseMdtLogResponse ignitionOn(
-        @Valid @RequestBody MdtIgnitionOffRequest dto,
+        @Valid @RequestBody MdtIgnitionOffMessage dto,
         @NotNull MdtLogRequestTimeInfo timeInfo,
         TransactionUUID tuid
     ) {

@@ -1,4 +1,4 @@
-package org.re.web.databind;
+package org.re.mdtlog.databind;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
