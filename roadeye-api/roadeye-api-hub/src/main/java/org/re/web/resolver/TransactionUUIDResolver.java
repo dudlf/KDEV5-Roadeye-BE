@@ -28,6 +28,6 @@ public class TransactionUUIDResolver implements HandlerMethodArgumentResolver {
         if (tuid == null) {
             return null;
         }
-        return new TransactionUUID(tuid);
+        return TransactionUUID.from(tuid);
     }
 }

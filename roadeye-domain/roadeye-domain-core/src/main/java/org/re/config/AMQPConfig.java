@@ -1,5 +1,6 @@
 package org.re.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +16,11 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @RequiredArgsConstructor
 public class AMQPConfig {
+    private final ObjectMapper objectMapper;
+
     @Bean
     public MessageConverter jackson2JsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
+        return new Jackson2JsonMessageConverter(objectMapper);
     }
 
     @Bean
