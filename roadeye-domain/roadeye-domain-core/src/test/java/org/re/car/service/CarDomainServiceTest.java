@@ -469,60 +469,6 @@ class CarDomainServiceTest {
         }
 
         @Test
-        @DisplayName("시동 ON 상태에서만 시동 OFF가 가능해야 한다.")
-        void 시동ON_상태에서_시동OFF_테스트(Company company) {
-            // given
-            var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
-
-            // when
-            var car = carDomainService.createCar(company, creationCommand);
-            carDomainService.turnOnIgnition(car, transactionId);
-            var updatedCar = carDomainService.turnOffIgnition(car, transactionId);
-
-            // then
-            assertThat(updatedCar).isNotNull();
-            assertThat(updatedCar.getMdtStatus().getIgnition()).isEqualTo(CarIgnitionStatus.OFF);
-        }
-
-        @Test
-        @DisplayName("트랜잭션 ID가 일치하지 않으면 시동 OFF가 실패해야 한다.")
-        void 시동끄기_트랜잭션ID_일치_테스트(Company company) {
-            // given
-            var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
-            var wrongTransactionId = new TransactionUUID(UUID.randomUUID().toString());
-
-            // when
-            var car = carDomainService.createCar(company, creationCommand);
-            carDomainService.turnOnIgnition(car, transactionId);
-
-            // then
-            assertThrows(
-                Exception.class, () -> {
-                    carDomainService.turnOffIgnition(car, wrongTransactionId);
-                }
-            );
-        }
-
-        @Test
-        @DisplayName("시동을 끈 후 트랜잭션 ID가 null이 되어야 한다.")
-        void 시동끄기_후_트랜잭션ID_null_테스트(Company company) {
-            // given
-            var creationCommand = CarCreationCommandFixture.create();
-            var transactionId = new TransactionUUID(UUID.randomUUID().toString());
-
-            // when
-            var car = carDomainService.createCar(company, creationCommand);
-            carDomainService.turnOnIgnition(car, transactionId);
-            var updatedCar = carDomainService.turnOffIgnition(car, transactionId);
-
-            // then
-            assertThat(updatedCar).isNotNull();
-            assertThat(updatedCar.getMdtStatus().getActiveTuid()).isNull();
-        }
-
-        @Test
         @DisplayName("시동 상태를 초기화할 수 있어야 한다.")
         void 시동상태_초기화_테스트(Company company) {
             // given

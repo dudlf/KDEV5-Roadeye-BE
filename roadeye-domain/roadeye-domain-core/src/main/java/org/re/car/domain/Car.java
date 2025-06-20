@@ -76,10 +76,6 @@ public class Car extends BaseEntity {
         }
     }
 
-    public void turnOffIgnition(TransactionUUID transactionUUID) {
-        this.mdtStatus.turnOffIgnition(transactionUUID);
-    }
-
     public void turnOffIgnition(MdtEventMessage<MdtIgnitionOffMessage> message) {
         var payload = message.payload();
         this.mdtStatus.turnOffIgnition(message.transactionId());

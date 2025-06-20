@@ -81,11 +81,6 @@ public class CarDomainService {
         return car;
     }
 
-    public Car turnOffIgnition(Car car, TransactionUUID transactionId) {
-        car.turnOffIgnition(transactionId);
-        return car;
-    }
-
     public Car resetIgnitionStatus(Car car) {
         car.resetIgnitionStatus();
         return car;
