@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
-import org.re.car.domain.CarLocation;
 import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.databind.MdtLogGpsConditionSerializer;
 import org.re.mdtlog.domain.MdtLog;
@@ -73,10 +72,6 @@ public record MdtIgnitionOffMessage(
     @Max(9999999)
     int mdtMileageSum
 ) {
-    public CarLocation getLocation() {
-        return new CarLocation(gpsLatitude, gpsLongitude);
-    }
-
     public MdtLog toLogEntry(TransactionUUID transactionUUID, LocalDateTime sentAt, LocalDateTime receivedAt) {
         return MdtLog.builder()
             .packetVer(packetVersion)
