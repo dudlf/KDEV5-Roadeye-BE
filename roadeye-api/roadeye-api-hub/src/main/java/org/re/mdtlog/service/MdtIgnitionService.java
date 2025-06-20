@@ -6,12 +6,10 @@ import org.re.car.service.CarDomainService;
 import org.re.common.api.payload.MdtLogRequestTimeInfo;
 import org.re.common.exception.AppException;
 import org.re.common.exception.MdtLogExceptionCode;
-import org.re.config.AMQPConfig;
 import org.re.mdtlog.domain.TransactionUUID;
-import org.re.mdtlog.dto.MdtEventMessage;
 import org.re.mdtlog.dto.MdtIgnitionOffMessage;
 import org.re.mdtlog.dto.MdtIgnitionOnMessage;
-import org.re.messaging.amqp.AMQPService;
+import org.re.mdtlog.messaging.MdtLogMessagingService;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,12 +17,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MdtIgnitionService {
     private final CarDomainService carDomainService;
-    private final AMQPService AMQPService;
+    private final MdtLogMessagingService mdtLogMessagingService;
 
     public void ignitionOn(TransactionUUID tuid, MdtIgnitionOnMessage dto, MdtLogRequestTimeInfo timeInfo) {
-        var routingKey = AMQPConfig.QueueNames.MDT_IGNITION_ON;
-        var message = new MdtEventMessage<>(tuid, dto, timeInfo.sentAt(), timeInfo.receivedAt());
-        AMQPService.send(routingKey, message);
+        mdtLogMessagingService.send(tuid, dto, timeInfo);
     }
 
     public void ignitionOff(TransactionUUID tuid, MdtIgnitionOffMessage dto, MdtLogRequestTimeInfo timeInfo) {
@@ -33,8 +29,6 @@ public class MdtIgnitionService {
             throw new AppException(MdtLogExceptionCode.TUID_ERROR);
         }
 
-        var routingKey = AMQPConfig.QueueNames.MDT_IGNITION_OFF;
-        var message = new MdtEventMessage<>(tuid, dto, timeInfo.sentAt(), timeInfo.receivedAt());
-        AMQPService.send(routingKey, message);
+        mdtLogMessagingService.send(tuid, dto, timeInfo);
     }
 }
