@@ -252,7 +252,7 @@ class CarDomainServiceTest {
                 assertThat(car.getProfile().getName()).isEqualTo(command.name());
                 assertThat(car.getProfile().getLicenseNumber()).isEqualTo(command.licenseNumber());
                 assertThat(car.getProfile().getImageUrl()).isEqualTo(command.imageUrl());
-                assertThat(car.getMileage().getInitial()).isEqualTo(command.mileageInitial());
+                assertThat(car.getMdtStatus().getMileageInitial()).isEqualTo(command.mileageInitial());
             }
 
             @Test

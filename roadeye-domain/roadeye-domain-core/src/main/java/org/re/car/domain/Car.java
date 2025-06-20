@@ -25,27 +25,19 @@ public class Car extends BaseEntity {
     private CarProfile profile;
 
     @Embedded
-    private CarLocation location;
-
-    @Embedded
-    private CarMileage mileage;
-
-    @Embedded
     private CarMdtStatus mdtStatus;
 
     @Column(length = 512)
     private String disableReason;
 
-    private Car(Company company, CarProfile carProfile, int mileageInitial) {
+    private Car(Company company, CarProfile carProfile) {
         this.company = company;
         this.profile = carProfile;
-        this.location = CarLocation.create();
         this.mdtStatus = CarMdtStatus.create();
-        this.mileage = new CarMileage(mileageInitial);
     }
 
-    public static Car of(Company company, CarProfile carProfile, int mileageInitial) {
-        return new Car(company, carProfile, mileageInitial);
+    public static Car of(Company company, CarProfile carProfile) {
+        return new Car(company, carProfile);
     }
 
     public void disable(String reason) {
@@ -55,12 +47,12 @@ public class Car extends BaseEntity {
 
     public void turnOnIgnition(MdtEventMessage<MdtIgnitionOnMessage> message) {
         var payload = message.payload();
-        this.location = payload.getLocation();
+        this.mdtStatus.setLocation(payload.getLocation());
         this.mdtStatus.turnOnIgnition(message.transactionId());
         this.mdtStatus.setAngle(payload.mdtAngle());
         this.mdtStatus.setSpeed(payload.mdtSpeed());
         this.mdtStatus.setIgnitionOnTime(payload.ignitionOnTime());
-        this.mileage.setTotal(payload.mdtMileageSum());
+        this.mdtStatus.setMileageSum(payload.mdtMileageSum());
         switch (payload.gpsCondition()) {
             case NORMAL, NOT_ATTACHED -> {
                 this.mdtStatus.setGpsCondition(payload.gpsCondition());
@@ -89,13 +81,13 @@ public class Car extends BaseEntity {
                 // ??
             }
         }
-        this.mileage.setTotal(payload.mdtMileageSum());
+        this.mdtStatus.setMileageSum(payload.mdtMileageSum());
     }
 
     public void updateMdtStatus(MdtEventMessage<MdtCycleLogMessage> message) {
         var lastEvent = message.payload().cycleLogList().getLast();
-        this.location = lastEvent.toCarLocation();
 
+        this.mdtStatus.setLocation(lastEvent.toCarLocation());
         switch (lastEvent.gpsCondition()) {
             case NORMAL, INVALID, NOT_ATTACHED -> {
                 this.mdtStatus.setGpsCondition(lastEvent.gpsCondition());
@@ -107,8 +99,7 @@ public class Car extends BaseEntity {
         this.mdtStatus.setAngle(lastEvent.mdtAngle());
         this.mdtStatus.setSpeed(lastEvent.mdtSpeed());
         this.mdtStatus.setBatteryVoltage(lastEvent.batteryVoltage());
-
-        this.mileage.setTotal(lastEvent.mdtMileageSum());
+        this.mdtStatus.setMileageSum(lastEvent.mdtMileageSum());
     }
 
     public void update(CarUpdateCommand command) {

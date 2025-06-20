@@ -3,6 +3,7 @@ package org.re.car.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,17 @@ public class CarMdtStatus {
     @Setter(AccessLevel.PACKAGE)
     @Column(nullable = false)
     private int speed;
+
+    @Column(nullable = false)
+    private int mileageInitial;
+
+    @Setter(AccessLevel.PACKAGE)
+    @Column(nullable = false)
+    private int mileageSum;
+
+    @Setter(AccessLevel.PACKAGE)
+    @Embedded
+    private CarLocation location = CarLocation.create();
 
     @Setter(AccessLevel.PACKAGE)
     @Convert(converter = MdtLogGpsConditionConverter.class)

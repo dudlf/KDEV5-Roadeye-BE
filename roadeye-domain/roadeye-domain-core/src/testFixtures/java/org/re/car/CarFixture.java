@@ -22,8 +22,7 @@ public class CarFixture {
 
     public static Car create(Company company, String carName) {
         var profile = new CarProfile(carName, "123가123", "imageUrl");
-        var initialMileage = 0;
-        return Car.of(company, profile, initialMileage);
+        return Car.of(company, profile);
     }
 
     public static List<Car> createList(int size) {
