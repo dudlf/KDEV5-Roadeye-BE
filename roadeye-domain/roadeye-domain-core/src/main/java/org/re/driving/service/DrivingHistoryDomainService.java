@@ -8,8 +8,11 @@ import org.re.driving.domain.DrivingHistory;
 import org.re.driving.domain.DrivingHistoryStatus;
 import org.re.driving.repository.DrivingHistoryRepository;
 import org.re.mdtlog.domain.TransactionUUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @DomainService
@@ -29,13 +32,5 @@ public class DrivingHistoryDomainService {
 
     public Page<DrivingHistory> findAll(Pageable pageable) {
         return drivingHistoryRepository.findAll(pageable);
-    }
-
-    public List<DrivingHistory> getActiveDrivingHistory(){
-        return drivingHistoryRepository.findByStatus(DrivingHistoryStatus.DRIVING);
-    }
-
-    public List<DrivingHistory> getDrivingHistoryByCarId(Long carId) {
-        return drivingHistoryRepository.findByCarIdAndStatus(carId, DrivingHistoryStatus.DRIVING);
     }
 }
