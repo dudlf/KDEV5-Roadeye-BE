@@ -3,9 +3,11 @@ package org.re.mdtlog.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
 import org.re.car.domain.CarLocation;
 import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
+import org.re.mdtlog.databind.MdtLogGpsConditionSerializer;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
@@ -42,6 +44,7 @@ public record MdtIgnitionOffMessage(
 
     @NotNull
     @JsonProperty("gcd")
+    @JsonSerialize(using = MdtLogGpsConditionSerializer.class)
     @JsonDeserialize(using = MdtLogGpsConditionDeserializer.class)
     MdtLogGpsCondition gpsCondition,
 
