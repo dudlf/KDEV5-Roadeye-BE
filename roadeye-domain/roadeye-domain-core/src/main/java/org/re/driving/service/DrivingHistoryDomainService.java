@@ -2,10 +2,14 @@ package org.re.driving.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.re.car.domain.Car;
 import org.re.common.stereotype.DomainService;
 import org.re.driving.domain.DrivingHistory;
-import org.re.driving.domain.DrivingSnapShot;
+import org.re.driving.domain.DrivingHistoryStatus;
 import org.re.driving.repository.DrivingHistoryRepository;
+import org.re.mdtlog.domain.TransactionUUID;
+
+import java.time.LocalDateTime;
 
 @DomainService
 @Transactional
@@ -13,16 +17,12 @@ import org.re.driving.repository.DrivingHistoryRepository;
 public class DrivingHistoryDomainService {
     private final DrivingHistoryRepository drivingHistoryRepository;
 
-    public void save(DrivingHistory drivingHistory) {
+    public void createNew(Car car, LocalDateTime driveStartAt) {
+        var drivingHistory = DrivingHistory.createNew(car, driveStartAt);
         drivingHistoryRepository.save(drivingHistory);
     }
 
-    public void update(DrivingHistory drivingHistory, DrivingSnapShot drivingSnapShot) {
-        drivingHistory.end(drivingSnapShot);
-    }
-
-    public DrivingHistory findById(Long id) {
-        return drivingHistoryRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("DrivingHistory not found"));
+    public DrivingHistory findHistoryInProgress(Car car, TransactionUUID transactionUUID) {
+        return drivingHistoryRepository.findByCarAndTxUidAndStatus(car, transactionUUID, DrivingHistoryStatus.DRIVING);
     }
 }
