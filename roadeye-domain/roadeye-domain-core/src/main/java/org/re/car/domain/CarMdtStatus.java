@@ -10,7 +10,9 @@ import lombok.Setter;
 import org.re.car.converter.CarIgnitionStatusConverter;
 import org.re.car.exception.CarDomainException;
 import org.re.common.exception.DomainException;
+import org.re.mdtlog.converter.MdtLogGpsConditionConverter;
 import org.re.mdtlog.converter.TransactionIdConverter;
+import org.re.mdtlog.domain.MdtLogGpsCondition;
 import org.re.mdtlog.domain.TransactionUUID;
 import org.re.util.Integers;
 
@@ -20,6 +22,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarMdtStatus {
+    @Setter(AccessLevel.PACKAGE)
     @Column(nullable = false)
     private int batteryVoltage;
 
@@ -30,6 +33,11 @@ public class CarMdtStatus {
     @Setter(AccessLevel.PACKAGE)
     @Column(nullable = false)
     private int speed;
+
+    @Setter(AccessLevel.PACKAGE)
+    @Convert(converter = MdtLogGpsConditionConverter.class)
+    @Column(nullable = false)
+    private MdtLogGpsCondition gpsCondition = MdtLogGpsCondition.NOT_ATTACHED;
 
     @Setter(AccessLevel.PACKAGE)
     @Column

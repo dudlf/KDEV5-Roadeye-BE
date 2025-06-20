@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.re.car.domain.CarLocation;
 import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.domain.MdtLog;
 import org.re.mdtlog.domain.MdtLogEventType;
@@ -125,5 +126,8 @@ public record MdtCycleLogMessage(
         @Max(9999)
         int batteryVoltage
     ) {
+        public CarLocation toCarLocation() {
+            return new CarLocation(gpsLatitude, gpsLongitude);
+        }
     }
 }

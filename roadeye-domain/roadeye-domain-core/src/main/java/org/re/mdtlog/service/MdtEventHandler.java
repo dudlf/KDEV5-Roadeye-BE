@@ -24,8 +24,7 @@ public class MdtEventHandler {
         mdtLogService.save(logs);
 
         var car = carDomainService.getCarById(message.payload().carId());
-        var lastLocation = logs.getLast().toCarLocation();
-        car.updateLocation(lastLocation);
+        car.updateMdtStatus(message);
     }
 
     @Transactional
