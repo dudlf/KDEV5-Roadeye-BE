@@ -22,7 +22,7 @@ public class MdtLog {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "log_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID logId;
+    private UUID id;
 
     @Column(name = "packet_ver", nullable = false, columnDefinition = "SMALLINT UNSIGNED")
     private int packetVer;
