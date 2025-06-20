@@ -6,6 +6,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.re.car.converter.CarIgnitionStatusConverter;
 import org.re.car.exception.CarDomainException;
 import org.re.common.exception.DomainException;
@@ -13,12 +14,30 @@ import org.re.mdtlog.converter.TransactionIdConverter;
 import org.re.mdtlog.domain.TransactionUUID;
 import org.re.util.Integers;
 
+import java.time.LocalDateTime;
+
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CarMdtStatus {
     @Column(nullable = false)
     private int batteryVoltage;
+
+    @Setter(AccessLevel.PACKAGE)
+    @Column(nullable = false)
+    private int angle;
+
+    @Setter(AccessLevel.PACKAGE)
+    @Column(nullable = false)
+    private int speed;
+
+    @Setter(AccessLevel.PACKAGE)
+    @Column
+    private LocalDateTime ignitionOnTime;
+
+    @Setter(AccessLevel.PACKAGE)
+    @Column
+    private LocalDateTime ignitionOffTime;
 
     @Convert(converter = CarIgnitionStatusConverter.class)
     @Column(nullable = false)

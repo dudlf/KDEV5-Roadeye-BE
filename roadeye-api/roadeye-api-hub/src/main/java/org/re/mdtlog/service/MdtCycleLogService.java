@@ -18,7 +18,7 @@ public class MdtCycleLogService {
 
     public void addCycleLogs(TransactionUUID tuid, MdtCycleLogMessage dto, MdtLogRequestTimeInfo timeInfo) {
         var routingKey = AMQPConfig.QueueNames.MDT_CAR_LOCATION;
-        var message = new MdtEventMessage<>(tuid.toString(), dto, timeInfo.sentAt(), timeInfo.receivedAt());
+        var message = new MdtEventMessage<>(tuid, dto, timeInfo.sentAt(), timeInfo.receivedAt());
         AMQPService.send(routingKey, message);
     }
 }

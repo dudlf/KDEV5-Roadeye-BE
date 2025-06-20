@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
 @Getter
@@ -14,6 +15,7 @@ public class CarMileage {
     @Column(name = "mileage_initial", nullable = false)
     private int initial;
 
+    @Setter(AccessLevel.PACKAGE)
     @Column(name = "mileage_sum", nullable = false)
     private int total;
 

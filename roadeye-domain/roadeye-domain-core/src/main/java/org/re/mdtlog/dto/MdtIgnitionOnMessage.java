@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
+import org.re.car.domain.CarLocation;
 import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
+import org.re.mdtlog.domain.MdtLog;
+import org.re.mdtlog.domain.MdtLogEventType;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
+import org.re.mdtlog.domain.TransactionUUID;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -62,4 +66,29 @@ public record MdtIgnitionOnMessage(
     @Max(9999999)
     int mdtMileageSum
 ) {
+    public CarLocation getLocation() {
+        return new CarLocation(gpsLatitude, gpsLongitude);
+    }
+
+    public MdtLog toLogEntry(TransactionUUID transactionUUID, LocalDateTime sentAt, LocalDateTime receivedAt) {
+        return MdtLog.builder()
+            .packetVer(packetVersion)
+            .eventType(MdtLogEventType.IGNITION)
+            .carId(carId)
+            .terminalId(terminalId)
+            .manufactureId(manufacturerId)
+            .deviceId(deviceId)
+            .txUid(transactionUUID)
+            .gpsCond(gpsCondition)
+            .gpsLat(gpsLatitude)
+            .gpsLon(gpsLongitude)
+            .mdtAngle(mdtAngle)
+            .mdtSpeed(mdtSpeed)
+            .mdtMileageSum(mdtMileageSum)
+            .mdtIgnitionOnTime(ignitionOnTime)
+            .occurredAt(ignitionOnTime)
+            .sentAt(sentAt)
+            .receivedAt(receivedAt)
+            .build();
+    }
 }

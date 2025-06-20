@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.re.car.dto.CarUpdateCommand;
 import org.re.common.domain.BaseEntity;
 import org.re.company.domain.Company;
 import org.re.mdtlog.domain.TransactionUUID;
+import org.re.mdtlog.dto.MdtEventMessage;
+import org.re.mdtlog.dto.MdtIgnitionOffMessage;
+import org.re.mdtlog.dto.MdtIgnitionOnMessage;
 
 import java.time.LocalDateTime;
 
@@ -53,12 +57,32 @@ public class Car extends BaseEntity {
         super.disable();
     }
 
-    public void turnOnIgnition(TransactionUUID transactionId) {
-        this.mdtStatus.turnOnIgnition(transactionId);
+    public void turnOnIgnition(TransactionUUID transactionUUID) {
+        this.mdtStatus.turnOnIgnition(transactionUUID);
     }
 
-    public void turnOffIgnition(TransactionUUID transactionId) {
-        this.mdtStatus.turnOffIgnition(transactionId);
+    public void turnOnIgnition(MdtEventMessage<MdtIgnitionOnMessage> message) {
+        var payload = message.payload();
+        this.location = payload.getLocation();
+        this.mdtStatus.turnOnIgnition(message.transactionId());
+        this.mdtStatus.setAngle(payload.mdtAngle());
+        this.mdtStatus.setSpeed(payload.mdtSpeed());
+        this.mdtStatus.setIgnitionOnTime(payload.ignitionOnTime());
+        this.mileage.setTotal(payload.mdtMileageSum());
+    }
+
+    public void turnOffIgnition(TransactionUUID transactionUUID) {
+        this.mdtStatus.turnOffIgnition(transactionUUID);
+    }
+
+    public void turnOffIgnition(MdtEventMessage<MdtIgnitionOffMessage> message) {
+        var payload = message.payload();
+        this.mdtStatus.turnOffIgnition(message.transactionId());
+        this.mdtStatus.setAngle(payload.mdtAngle());
+        this.mdtStatus.setSpeed(payload.mdtSpeed());
+        this.mdtStatus.setIgnitionOnTime(payload.ignitionOnTime());
+        this.mdtStatus.setIgnitionOffTime(payload.ignitionOffTime());
+        this.mileage.setTotal(payload.mdtMileageSum());
     }
 
     public void resetIgnitionStatus() {
@@ -74,7 +98,7 @@ public class Car extends BaseEntity {
         }
     }
 
-    public void updateLocation(CarLocation lastLocation) {
+    public void updateLocation(@NonNull CarLocation lastLocation) {
         this.location = lastLocation;
     }
 }

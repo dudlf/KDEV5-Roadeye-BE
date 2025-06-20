@@ -7,7 +7,10 @@ import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
+import org.re.mdtlog.domain.MdtLog;
+import org.re.mdtlog.domain.MdtLogEventType;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
+import org.re.mdtlog.domain.TransactionUUID;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -52,6 +55,33 @@ public record MdtCycleLogMessage(
         if (cycleCount != cycleLogList.size()) {
             throw new IllegalArgumentException("Cycle count mismatch");
         }
+    }
+
+    public List<MdtLog> toLogEntries(TransactionUUID transactionUUID, LocalDateTime sentAt, @NotNull LocalDateTime receivedAt) {
+        return cycleLogList.stream()
+            .map(item -> {
+                var occurredAt = this.occurredAt.plusSeconds(item.sec());
+                return MdtLog.builder()
+                    .packetVer(packetVersion)
+                    .eventType(MdtLogEventType.CYCLE_LOG)
+                    .txUid(transactionUUID)
+                    .carId(carId)
+                    .terminalId(terminalId)
+                    .manufactureId(manufacturerId)
+                    .deviceId(deviceId)
+                    .gpsCond(item.gpsCondition())
+                    .gpsLat(item.gpsLatitude())
+                    .gpsLon(item.gpsLongitude())
+                    .mdtAngle(item.mdtAngle())
+                    .mdtSpeed(item.mdtSpeed())
+                    .mdtMileageSum(item.mdtMileageSum())
+                    .mdtBatteryVoltage(item.batteryVoltage())
+                    .occurredAt(occurredAt)
+                    .sentAt(sentAt)
+                    .receivedAt(receivedAt)
+                    .build();
+            })
+            .toList();
     }
 
     @Builder(access = AccessLevel.PACKAGE)

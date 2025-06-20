@@ -19,13 +19,13 @@ public class MdtIgnitionService {
 
     public void ignitionOn(TransactionUUID tuid, MdtIgnitionOnMessage dto, MdtLogRequestTimeInfo timeInfo) {
         var routingKey = AMQPConfig.QueueNames.MDT_IGNITION_ON;
-        var message = new MdtEventMessage<>(tuid.toString(), dto, timeInfo.sentAt(), timeInfo.receivedAt());
+        var message = new MdtEventMessage<>(tuid, dto, timeInfo.sentAt(), timeInfo.receivedAt());
         AMQPService.send(routingKey, message);
     }
 
     public void ignitionOff(TransactionUUID tuid, MdtIgnitionOffMessage dto, MdtLogRequestTimeInfo timeInfo) {
         var routingKey = AMQPConfig.QueueNames.MDT_IGNITION_OFF;
-        var message = new MdtEventMessage<>(tuid.toString(), dto, timeInfo.sentAt(), timeInfo.receivedAt());
+        var message = new MdtEventMessage<>(tuid, dto, timeInfo.sentAt(), timeInfo.receivedAt());
         AMQPService.send(routingKey, message);
     }
 }
