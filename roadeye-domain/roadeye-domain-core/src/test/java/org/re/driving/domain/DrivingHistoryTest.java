@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DrivingHistoryTest {
+
     @Test
     @DisplayName("이력 작성 종료 시 이미 작성 완료된 이력인 경우 예외가 발생해야 한다.")
     void drive_history_end_dup_test() {

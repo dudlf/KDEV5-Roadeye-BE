@@ -11,6 +11,7 @@ import org.re.mdtlog.domain.TransactionUUID;
 
 import java.time.LocalDateTime;
 
+
 @DomainService
 @Transactional
 @RequiredArgsConstructor
@@ -24,5 +25,17 @@ public class DrivingHistoryDomainService {
 
     public DrivingHistory findHistoryInProgress(Car car, TransactionUUID transactionUUID) {
         return drivingHistoryRepository.findByCarAndTxUidAndStatus(car, transactionUUID, DrivingHistoryStatus.DRIVING);
+    }
+
+    public Page<DrivingHistory> findAll(Pageable pageable) {
+        return drivingHistoryRepository.findAll(pageable);
+    }
+
+    public List<DrivingHistory> getActiveDrivingHistory(){
+        return drivingHistoryRepository.findByStatus(DrivingHistoryStatus.DRIVING);
+    }
+
+    public List<DrivingHistory> getDrivingHistoryByCarId(Long carId) {
+        return drivingHistoryRepository.findByCarIdAndStatus(carId, DrivingHistoryStatus.DRIVING);
     }
 }

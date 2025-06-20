@@ -31,6 +31,9 @@ public class DrivingHistory {
     @Convert(converter = DrivingHistoryStatusConverter.class)
     private DrivingHistoryStatus status;
 
+    @Column(nullable = false)
+    private Long carId;
+
     @Convert(converter = TransactionIdConverter.class)
     @Column(nullable = false, updatable = false)
     private TransactionUUID txUid;
@@ -64,6 +67,7 @@ public class DrivingHistory {
         this.status = status;
         this.txUid = txUid;
         this.previousDrivingSnapShot = previousDrivingSnapShot;
+        this.carId = carId;
     }
 
     public static DrivingHistory createNew(Car car, LocalDateTime driveStartAt) {
