@@ -63,6 +63,7 @@ public class Car extends BaseEntity {
         this.mdtStatus.setIgnitionOnTime(payload.ignitionOnTime());
         this.mdtStatus.setIgnitionOffTime(payload.ignitionOffTime());
         this.mdtStatus.setGpsCondition(payload.gpsCondition());
+        this.mdtStatus.setLocation(payload.toCarLocation());
         this.mdtStatus.setMileageSum(payload.mdtMileageSum());
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
+import org.re.car.domain.CarLocation;
 import org.re.mdtlog.databind.MdtLogGpsConditionDeserializer;
 import org.re.mdtlog.databind.MdtLogGpsConditionSerializer;
 import org.re.mdtlog.domain.MdtLog;
@@ -93,5 +94,9 @@ public record MdtIgnitionOffMessage(
             .sentAt(sentAt)
             .receivedAt(receivedAt)
             .build();
+    }
+
+    public CarLocation toCarLocation() {
+        return new CarLocation(gpsLatitude, gpsLongitude);
     }
 }
