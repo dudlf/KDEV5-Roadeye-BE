@@ -8,7 +8,6 @@ import org.re.car.dto.CarUpdateCommand;
 import org.re.common.domain.BaseEntity;
 import org.re.company.domain.Company;
 import org.re.mdtlog.domain.MdtLogGpsCondition;
-import org.re.mdtlog.domain.TransactionUUID;
 import org.re.mdtlog.dto.MdtCycleLogMessage;
 import org.re.mdtlog.dto.MdtEventMessage;
 import org.re.mdtlog.dto.MdtIgnitionOffMessage;
@@ -54,10 +53,6 @@ public class Car extends BaseEntity {
         super.disable();
     }
 
-    public void turnOnIgnition(TransactionUUID transactionUUID) {
-        this.mdtStatus.turnOnIgnition(transactionUUID);
-    }
-
     public void turnOnIgnition(MdtEventMessage<MdtIgnitionOnMessage> message) {
         var payload = message.payload();
         this.location = payload.getLocation();
@@ -95,10 +90,6 @@ public class Car extends BaseEntity {
             }
         }
         this.mileage.setTotal(payload.mdtMileageSum());
-    }
-
-    public void resetIgnitionStatus() {
-        this.mdtStatus.resetIgnitionStatus();
     }
 
     public void updateMdtStatus(MdtEventMessage<MdtCycleLogMessage> message) {
