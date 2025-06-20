@@ -14,8 +14,6 @@ import org.re.mdtlog.dto.MdtEventMessage;
 import org.re.mdtlog.dto.MdtIgnitionOffMessage;
 import org.re.mdtlog.dto.MdtIgnitionOnMessage;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,8 +36,6 @@ public class Car extends BaseEntity {
 
     @Column(length = 512)
     private String disableReason;
-
-    private LocalDateTime shippedAt;
 
     private Car(Company company, CarProfile carProfile, int mileageInitial) {
         this.company = company;
