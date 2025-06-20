@@ -78,17 +78,11 @@ public class CarMdtStatus {
     }
 
     public void turnOnIgnition(TransactionUUID transactionId) {
-        if (this.ignition != CarIgnitionStatus.OFF) {
-            throw new DomainException(CarDomainException.IGNITION_IS_NOT_OFF);
-        }
         this.ignition = CarIgnitionStatus.ON;
         this.activeTuid = transactionId;
     }
 
     public void turnOffIgnition(TransactionUUID transactionId) {
-        if (this.ignition != CarIgnitionStatus.ON) {
-            throw new DomainException(CarDomainException.IGNITION_IS_NOT_ON);
-        }
         if (!this.activeTuid.equals(transactionId)) {
             throw new DomainException(CarDomainException.TRANSACTION_ID_MISMATCH);
         }
