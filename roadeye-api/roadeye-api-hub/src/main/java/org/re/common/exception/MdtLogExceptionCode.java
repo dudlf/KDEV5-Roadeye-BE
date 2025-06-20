@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 public enum MdtLogExceptionCode implements AppExceptionCode {
     // @formatter:off
     Success("000", "Success"),
+    TUID_ERROR("108", "TUID error")
     ;
     // @formatter:on
 
